@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+
+class AuthOpd
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        if(role('opd') && role_only("owner") == false && role_only("admin") == false){
+            $exp = explode("/", $request->path());
+            if($exp[max(count($exp)-3, 0)] == "data"){
+                $nip = $exp[count($exp)-1];
+            }else{
+                $nip = array_key_exists(2, $exp) ? $exp[2] : "";
+            }
+
+
+            if($nip != "" && is_numeric($nip) && get_kode_skpd($nip) != auth()->user()->kepala_divisi_id){
+                abort(403);
+            }
+        }
+
+        return $next($request);
+    }
+}
