@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('ms_lembur', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->tinyInteger('jam')->unique();
             $table->string('kode_tunjangan')->nullable();
             $table->string('pengali')->nullable();

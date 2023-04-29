@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('riwayat_bahasa', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('nip');
             $table->string('nama_bahasa');
             $table->string('penguasaan');

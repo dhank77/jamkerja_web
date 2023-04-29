@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('visit_lokasi', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_visit');
             $table->string('nama');
             $table->string('kordinat');

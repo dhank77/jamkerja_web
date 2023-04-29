@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('payroll_tambah', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_payroll');
             $table->string('nip');
             $table->string('kode_tambahan')->nullable();

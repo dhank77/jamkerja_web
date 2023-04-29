@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('data_presensi', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('nip');
             $table->string('kode_tingkat')->nullable();
             $table->string('kode_shift')->nullable();

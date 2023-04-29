@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('nip');
             $table->string('player_id');
             $table->timestamps();

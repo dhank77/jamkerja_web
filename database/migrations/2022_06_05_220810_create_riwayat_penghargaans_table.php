@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('riwayat_penghargaan', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('nip');
             $table->string('kode_penghargaan');
             $table->string('oleh')->nullable();

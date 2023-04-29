@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('ms_potongan', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_potongan');
             $table->string('nama');
             $table->timestamps();

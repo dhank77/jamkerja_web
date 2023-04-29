@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('cuti', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_cuti');
             $table->string('nama');
             $table->integer('hari')->comment('durasi lama cuti');

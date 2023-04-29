@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('reimbursement', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_reimbursement');
             $table->string('nama');
             $table->timestamps();

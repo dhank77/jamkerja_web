@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('skpd', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_skpd');
             $table->string('nama');
             $table->string('singkatan');

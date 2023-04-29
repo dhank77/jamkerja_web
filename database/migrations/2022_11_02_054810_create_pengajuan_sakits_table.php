@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('data_pengajuan_sakit', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('nip');
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');

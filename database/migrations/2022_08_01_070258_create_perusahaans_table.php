@@ -15,12 +15,15 @@ return new class extends Migration
     {
         Schema::create('perusahaan', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan')->comment('uuid')->unique();
             $table->string('nama');
-            $table->text('alamat');
+            $table->text('alamat')->nullable();
             $table->text('kontak')->nullable();
-            $table->string('logo');
+            $table->string('logo')->nullable();
             $table->string('direktur')->nullable();
             $table->string('nomor')->nullable();
+            $table->string('status')->default('basic')->comment('basic : absensi saja, pro: lengkap');
+            $table->timestamp('expired_at');
             $table->timestamps();
         });
     }

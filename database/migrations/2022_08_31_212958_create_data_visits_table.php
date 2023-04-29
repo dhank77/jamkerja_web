@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('data_visit', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('nip');
             $table->string('kode_visit');
             $table->timestamp('tanggal');

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('ijin', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string("kode_ijin");
             $table->string("nama");
             $table->timestamps();

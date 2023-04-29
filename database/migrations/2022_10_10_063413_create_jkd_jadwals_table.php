@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('jkd_jadwal', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_jkd');
             $table->string('nip');
             $table->date('tanggal');

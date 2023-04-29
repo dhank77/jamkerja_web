@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('riwayat_spt', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('nip');
             $table->year('tahun');
             $table->string('jenis_spt');

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('daftar_kurang_payroll', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_kurang');
             $table->tinyInteger('is_periode');
             $table->tinyInteger('bulan')->nullable();

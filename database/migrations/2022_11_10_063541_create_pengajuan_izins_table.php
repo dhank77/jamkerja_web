@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('data_pengajuan_izin', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('nip');
             $table->string('kode_izin');
             $table->date('tanggal_mulai');

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('generate_payroll', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_payroll');
             $table->string('kode_skpd')->nullable()->comment("null berarti semua dinas");
             $table->tinyInteger('bulan');

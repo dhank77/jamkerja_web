@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('jam_kerja_statis', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_jam_kerja');
             $table->string('nama');
             $table->tinyInteger('hari');

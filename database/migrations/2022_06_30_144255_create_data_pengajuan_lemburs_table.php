@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('data_pengajuan_lembur', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('nip');
             $table->date('tanggal');
             $table->string('jam_mulai');

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('ms_tambahan', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_tambah');
             $table->string('nama');
             $table->tinyInteger('satuan')->comment('0: Rupiah, 1: Persen')->default(0);

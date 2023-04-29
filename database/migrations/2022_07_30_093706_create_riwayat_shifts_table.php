@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('riwayat_shift', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_shift');
             $table->string('nip');
             $table->string('nomor_surat');

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('riwayat_jabatan', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('nip');
             $table->tinyInteger('jenis_jabatan');
             $table->string('kode_tingkat');

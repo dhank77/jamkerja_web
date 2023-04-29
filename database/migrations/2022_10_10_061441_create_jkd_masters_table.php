@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('jkd_master', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_jkd');
             $table->string('nama');
             $table->string('jam_datang');

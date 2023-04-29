@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('data_payroll', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_payroll');
             $table->tinyInteger('bulan');
             $table->year('tahun');

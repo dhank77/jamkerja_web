@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('tingkat', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_skpd');
             $table->string('parent_id')->nullable();
             $table->string('kode_tingkat')->unique();

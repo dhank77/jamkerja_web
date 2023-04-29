@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('jks_pegawai', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_jam_kerja');
             $table->string('nip');
             $table->timestamps();

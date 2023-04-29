@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('riwayat_lhkpn', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('nip');
             $table->date('tanggal_pelaporan');
             $table->string('jenis_form');

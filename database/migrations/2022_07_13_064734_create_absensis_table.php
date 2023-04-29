@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('ms_absensi', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->tinyInteger('menit');
             $table->tinyInteger('keterangan')->comment("1 : datang, 2 pulang");
             $table->string('kode_tunjangan')->nullable();
