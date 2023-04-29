@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('ms_absensi_permenit', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_perusahaan');
             $table->string('kode_eselon')->nullable();
             $table->double('potongan');
             $table->string('keterangan');
