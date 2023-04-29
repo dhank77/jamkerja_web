@@ -2950,7 +2950,7 @@ export default function Authenticated({ children }) {
                                                 <div
                                                     className={`menu-item ${
                                                         route().current(
-                                                            "perusahaan.index"
+                                                            "perusahaan.*"
                                                         )
                                                             ? "show"
                                                             : ""
@@ -2959,7 +2959,7 @@ export default function Authenticated({ children }) {
                                                     <Link
                                                         className={`menu-link ${
                                                             route().current(
-                                                                "perusahaan.index"
+                                                                "perusahaan.*"
                                                             )
                                                                 ? "active"
                                                                 : ""

@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('direktur')->nullable();
             $table->string('nomor')->nullable();
             $table->string('status')->default('basic')->comment('basic : absensi saja, pro: lengkap');
-            $table->timestamp('expired_at');
+            $table->integer('jumlah_pegawai')->default(0);
+            $table->date('expired_at');
             $table->timestamps();
         });
     }

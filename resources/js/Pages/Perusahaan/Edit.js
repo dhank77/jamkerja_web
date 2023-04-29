@@ -13,8 +13,13 @@ export default function Edit({ errors, perusahaan }) {
         kontak: perusahaan.kontak,
         direktur: perusahaan.direktur,
         nomor: perusahaan.nomor,
+        jumlah_pegawai: perusahaan.jumlah_pegawai,
+        status: perusahaan.status ?? 'basic',
+        expired_at: perusahaan.expired_at,
         id: perusahaan.id
     })
+
+    console.log(values);
 
     const changeValue = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
@@ -40,6 +45,9 @@ export default function Edit({ errors, perusahaan }) {
                         </li>
                         <li className="breadcrumb-item text-gray-500">Data</li>
                     </ul>
+                </div>
+                <div className="d-flex align-items-center py-2 py-md-1" >
+                    <Link href={route('perusahaan.index')} className="btn btn-dark"><b>Kembali</b></Link>
                 </div>
             </div>
             <div className="card mb-5 mb-xl-8">
@@ -76,6 +84,24 @@ export default function Edit({ errors, perusahaan }) {
                                     <label htmlFor="nomor" className="form-label">Nomor Pegawai Direktur</label>
                                     <input type="text" name="nomor" id="nomor" className="mt-1 form-control form-control-lg form-control-solid" onChange={changeValue} value={values.nomor} />
                                     {errors.nomor && <div className="text-danger">{errors.nomor}</div>}
+                                </div>
+                                <div className="col-lg-12 mb-4">
+                                    <label htmlFor="status" className="form-label">Layanan</label>
+                                    <select className="mt-1 form-control form-control-lg form-control-solid" onChange={changeValue} value={values.status}>
+                                        <option value="basic">Basic (Rp. 2000 / Pegawai)</option>
+                                        <option value="premium">Premium (Rp. 5000 / Pegawai)</option>
+                                    </select>
+                                    {errors.status && <div className="text-danger">{errors.status}</div>}
+                                </div>
+                                <div className="col-lg-6 mb-4">
+                                    <label htmlFor="expired_at" className="form-label">Tanggal Expired</label>
+                                    <input type="date" name="expired_at" id="expired_at" className="mt-1 form-control form-control-lg form-control-solid" onChange={changeValue} value={values.expired_at} />
+                                    {errors.expired_at && <div className="text-danger">{errors.expired_at}</div>}
+                                </div>
+                                <div className="col-lg-6 mb-4">
+                                    <label htmlFor="jumlah_pegawai" className="form-label">Jumlah Pegawai</label>
+                                    <input type="number" min="0" name="jumlah_pegawai" id="jumlah_pegawai" className="mt-1 form-control form-control-lg form-control-solid" onChange={changeValue} value={values.jumlah_pegawai} />
+                                    {errors.jumlah_pegawai && <div className="text-danger">{errors.jumlah_pegawai}</div>}
                                 </div>
                                 <div className="col-lg-12 mb-4">
                                     <label htmlFor="logo" className="form-label required">Logo Perusahaan</label>

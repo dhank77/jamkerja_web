@@ -121,6 +121,8 @@ Route::middleware(['auth'])
             ->middleware('role:admin|owner')
             ->group(function () {
                 Route::get('', 'index')->name('index');
+                Route::get('add', 'add')->name('add');
+                Route::get('edit/{perusahaan}', 'edit')->name('edit');
                 Route::post('update', 'update')->name('update');
             });
 
