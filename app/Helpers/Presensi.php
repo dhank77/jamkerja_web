@@ -310,8 +310,7 @@ function kehadiran_free_summary($bulan, $tahun)
 
     $kehadiran = PresensiFree::whereDate('tanggal', '<=',  $tanggal_selesai)
                             ->whereDate('tanggal',  '>=', $tanggal_mulai)
-                            // whereMonth('tanggal', $bulan)
-                            // ->whereYear("tanggal", $tahun)
+                            ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
                             ->get();
 
     $tcm = 0;

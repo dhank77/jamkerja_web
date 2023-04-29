@@ -60,8 +60,6 @@ export default function Index({ pegawai }) {
                                             Foto
                                         </th>
                                         <th>
-                                            No. Pegawai
-                                            <br />
                                             Nama Lengkap
                                         </th>
                                         <th>
@@ -92,7 +90,6 @@ export default function Index({ pegawai }) {
                                                 </div>
                                             </td>
                                             <td>
-                                                <Link href={route(key, u.nip)} className="text-dark fw-bolder text-hover-primary fs-6">{u.nip}</Link> <br />
                                                 <Link href={route(key, u.nip)} className="text-dark fw-bolder text-hover-primary fs-6">{u.name}</Link>
                                             </td>
                                             <td>

@@ -25,7 +25,20 @@ class AuthOpd
             }
 
 
-            if($nip != "" && is_numeric($nip) && get_kode_skpd($nip) != auth()->user()->kepala_divisi_id){
+            if($nip != "" && get_kode_skpd($nip) != auth()->user()->kepala_divisi_id){
+                abort(403);
+            }
+        }
+
+        if(role('admin') && role_only("owner") == false){
+            $exp = explode("/", $request->path());
+            if($exp[max(count($exp)-3, 0)] == "data"){
+                $nip = $exp[count($exp)-1];
+            }else{
+                $nip = array_key_exists(2, $exp) ? $exp[2] : "";
+            }
+
+            if($nip != "" && get_kode_perusahaan($nip) != auth()->user()->kode_perusahaan){
                 abort(403);
             }
         }

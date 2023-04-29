@@ -17,7 +17,7 @@ export default function Index({ pegawai }) {
                 </div>
                 <div className="card-body p-0">
                     <div className="table-responsive">
-                        <table className="table table-flush align-middle table-row-bordered table-row-solid gy-4 gs-9">
+                        <table className="table align-middle table-row-bordered table-row-solid gy-4 gs-9">
                             <tbody className="fw-6 fw-bold text-gray-600">
                                 <tr>
                                     <td>

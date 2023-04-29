@@ -37,23 +37,27 @@ class DashboardController extends Controller
         // die;
 
         $role = role('opd');
-        // Card
-        $pegawai = User::role('pegawai')
-            ->when($role, function ($qr) {
-                $user = auth()->user()->jabatan_akhir;
-                $jabatan = array_key_exists('0', $user->toArray()) ? $user[0] : null;
-                $skpd = '';
-                if ($jabatan) {
-                    $skpd = $jabatan->kode_skpd;
-                }
 
-                $qr->join('riwayat_jabatan', function ($qt) use ($skpd) {
-                    $qt->on('riwayat_jabatan.nip', 'users.nip')
-                        ->where('riwayat_jabatan.kode_skpd', $skpd)
-                        ->where('riwayat_jabatan.is_akhir', 1);
-                });
-            })
-            ->count();
+        $qryPegawai = User::role('pegawai')
+        ->when($role, function ($qr) {
+            $user = auth()->user()->jabatan_akhir;
+            $jabatan = array_key_exists('0', $user->toArray()) ? $user[0] : null;
+            $skpd = '';
+            if ($jabatan) {
+                $skpd = $jabatan->kode_skpd;
+            }
+
+            $qr->join('riwayat_jabatan', function ($qt) use ($skpd) {
+                $qt->on('riwayat_jabatan.nip', 'users.nip')
+                    ->where('riwayat_jabatan.kode_skpd', $skpd)
+                    ->where('riwayat_jabatan.is_akhir', 1);
+            });
+        })
+        ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+        ->get();
+        // Card
+        $pegawai = $qryPegawai->count();
+
         $presensi = PresensiFree::whereDate('presensi_free.tanggal', date("Y-m-d"))
                     ->when($role, function ($qr) {
                         $user = auth()->user()->jabatan_akhir;
@@ -69,6 +73,7 @@ class DashboardController extends Controller
                                 ->where('riwayat_jabatan.is_akhir', 1);
                         });
                     })
+                    ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
                     ->count();
         $bulan = PresensiFree::whereMonth('presensi_free.tanggal', date("m"))
                 ->when($role, function ($qr) {
@@ -85,6 +90,7 @@ class DashboardController extends Controller
                             ->where('riwayat_jabatan.is_akhir', 1);
                     });
                 })
+                ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
                 ->count();
         $tahun = PresensiFree::whereYear('presensi_free.tanggal', date("Y"))
                 ->when($role, function ($qr) {
@@ -101,38 +107,13 @@ class DashboardController extends Controller
                             ->where('riwayat_jabatan.is_akhir', 1);
                     });
                 })
+                ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
                 ->count();
 
         // Grafik Jenis Kelamin
         $jenis_kelamin = [
-            User::role('pegawai')->where("jenis_kelamin", 'perempuan')->when($role, function ($qr) {
-                $user = auth()->user()->jabatan_akhir;
-                $jabatan = array_key_exists('0', $user->toArray()) ? $user[0] : null;
-                $skpd = '';
-                if ($jabatan) {
-                    $skpd = $jabatan->kode_skpd;
-                }
-
-                $qr->join('riwayat_jabatan', function ($qt) use ($skpd) {
-                    $qt->on('riwayat_jabatan.nip', 'users.nip')
-                        ->where('riwayat_jabatan.kode_skpd', $skpd)
-                        ->where('riwayat_jabatan.is_akhir', 1);
-                });
-            })->count(),
-            User::role('pegawai')->where("jenis_kelamin", 'laki-laki')->when($role, function ($qr) {
-                $user = auth()->user()->jabatan_akhir;
-                $jabatan = array_key_exists('0', $user->toArray()) ? $user[0] : null;
-                $skpd = '';
-                if ($jabatan) {
-                    $skpd = $jabatan->kode_skpd;
-                }
-
-                $qr->join('riwayat_jabatan', function ($qt) use ($skpd) {
-                    $qt->on('riwayat_jabatan.nip', 'users.nip')
-                        ->where('riwayat_jabatan.kode_skpd', $skpd)
-                        ->where('riwayat_jabatan.is_akhir', 1);
-                });
-            })->count(),
+            $qryPegawai->where("jenis_kelamin", 'perempuan')->count(),
+            $qryPegawai->where("jenis_kelamin", 'laki-laki')->count(),
         ];
 
         // Grafik Pendidikan (ex agama)
@@ -142,24 +123,25 @@ class DashboardController extends Controller
         foreach ($dataAgama as $value) {
             array_push($label_agama, ucfirst($value->nama));
             $jumlah = User::role('pegawai')
-            ->leftJoin('riwayat_pendidikan', 'riwayat_pendidikan.nip', 'users.nip')
-            ->when($role, function ($qr) {
-                $user = auth()->user()->jabatan_akhir;
-                $jabatan = array_key_exists('0', $user->toArray()) ? $user[0] : null;
-                $skpd = '';
-                if ($jabatan) {
-                    $skpd = $jabatan->kode_skpd;
-                }
+                            ->leftJoin('riwayat_pendidikan', 'riwayat_pendidikan.nip', 'users.nip')
+                            ->when($role, function ($qr) {
+                                $user = auth()->user()->jabatan_akhir;
+                                $jabatan = array_key_exists('0', $user->toArray()) ? $user[0] : null;
+                                $skpd = '';
+                                if ($jabatan) {
+                                    $skpd = $jabatan->kode_skpd;
+                                }
 
-                $qr->join('riwayat_jabatan', function ($qt) use ($skpd) {
-                    $qt->on('riwayat_jabatan.nip', 'users.nip')
-                        ->where('riwayat_jabatan.kode_skpd', $skpd)
-                        ->where('riwayat_jabatan.is_akhir', 1);
-                });
-            })
-            ->where('riwayat_pendidikan.is_akhir', 1)
-            ->where('riwayat_pendidikan.kode_pendidikan', $value->kode_pendidikan)
-            ->count();
+                                $qr->join('riwayat_jabatan', function ($qt) use ($skpd) {
+                                    $qt->on('riwayat_jabatan.nip', 'users.nip')
+                                        ->where('riwayat_jabatan.kode_skpd', $skpd)
+                                        ->where('riwayat_jabatan.is_akhir', 1);
+                                });
+                            })
+                            ->where('riwayat_pendidikan.is_akhir', 1)
+                            ->where('riwayat_pendidikan.kode_pendidikan', $value->kode_pendidikan)
+                            ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+                            ->count();
             array_push($agama, $jumlah);
         }
 
@@ -219,6 +201,7 @@ class DashboardController extends Controller
                                     ->where('is_akhir', 1);
                             });
                         })
+                        ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
                         ->get();
         
         $jks = JamKerjaStatis::where("hari", date("w"))
@@ -240,7 +223,8 @@ class DashboardController extends Controller
                                     ->where('kode_skpd', $skpd)
                                     ->where('is_akhir', 1);
                             });
-                        });
+                        })
+                        ->where('jam_kerja_statis.kode_perusahaan', auth()->user()->kode_perusahaan);
 
         $pegawaiLibur = JkdJadwal::select("users.name")
                             ->leftJoin("users", "users.nip", "jkd_jadwal.nip")
@@ -259,6 +243,7 @@ class DashboardController extends Controller
                                         ->where('is_akhir', 1);
                                 });
                             })
+                            ->where('jkd_jadwal.kode_perusahaan', auth()->user()->kode_perusahaan)
                             ->union($jks)
                             ->get();
 
@@ -281,6 +266,7 @@ class DashboardController extends Controller
                                                         ->where('is_akhir', 1);
                                                 });
                                             })
+                                            ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
                                             ->get();
 
         $cutiHariIni = DataPengajuanCuti::where("status", 1)
@@ -302,6 +288,7 @@ class DashboardController extends Controller
                                                         ->where('is_akhir', 1);
                                                 });
                                             })
+                                            ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
                                             ->get();
                                             
         $izinHariIni = PengajuanIzin::where("status", 1)
@@ -323,6 +310,7 @@ class DashboardController extends Controller
                                                         ->where('is_akhir', 1);
                                                 });
                                             })
+                                            ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
                                             ->get();
 
         DashboardSakitResource::withoutWrapping();
@@ -349,6 +337,7 @@ class DashboardController extends Controller
                                                     ->where('is_akhir', 1);
                                             });
                                         })
+                                        ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
                                         ->get();
 
         $kunjungan = DataVisit::selectRaw("data_visit.id as id, users.name as nama, users.nip as nip, data_visit.tanggal, data_visit.judul, data_visit.keterangan, data_visit.kordinat, data_visit.lokasi, data_visit.foto, data_visit.created_at")
@@ -365,6 +354,7 @@ class DashboardController extends Controller
                 })
                 ->whereDate('data_visit.tanggal', date('Y-m-d'))
                 ->whereNull('users.deleted_at')
+                ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
                 ->get();
 
        $presensi_summary = kehadiran_free_summary(date('m'), date('Y'));

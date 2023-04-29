@@ -38,6 +38,7 @@ class PegawaiController extends Controller
                         ->where('is_akhir', 1);
                 });
             })
+            ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
             ->paginate($limit);
 
         $pegawai->appends(request()->all());
@@ -68,6 +69,7 @@ class PegawaiController extends Controller
             ->where('tingkat.kode_skpd', $skpd)
             ->orderBy('name')
             ->whereNull('riwayat_jabatan.deleted_at')
+            ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
             ->get();
         SelectResource::withoutWrapping();
         $pegawai = SelectResource::collection($pegawai);
@@ -112,7 +114,6 @@ class PegawaiController extends Controller
     public function store()
     {
         $rules = [
-            'nip' => 'required',
             'nik' => 'required',
             'name' => 'required',
             'gelar_depan' => 'nullable',
@@ -133,13 +134,15 @@ class PegawaiController extends Controller
 
         if (!request('id')) {
             $rules['nik'] = 'required|unique:users,deleted_at,NULL';
-            $rules['nip'] = 'required|unique:users,deleted_at,NULL';
         }
-
+        
+        
         $data = request()->validate($rules);
-
+        
         if (!request('id')) {
-            $data['password'] = password_hash(request('nip'), PASSWORD_BCRYPT);
+            $data['nip'] = generateUUID();
+            $data['kode_perusahaan'] = auth()->user()->kode_perusahaan;
+            $data['password'] = password_hash(request('email'), PASSWORD_BCRYPT);
             $cr = User::create($data);
             $cr->assignRole('pegawai');
         } else {

@@ -71,13 +71,6 @@ export default function Add({ errors, pegawai }) {
                 <div className="card-body py-3">
                     <form onSubmit={submit}>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Nomor Pegawai</label>
-                            <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="nip" disabled={values.id != undefined ? true : false} type="number" onChange={updateData} value={values.nip} className="form-control form-control-lg form-control-solid" />
-                            </div>
-                            {errors.nip && <div className="text-danger">{errors.nip}</div>}
-                        </div>
-                        <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Nomor KTP</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <input name="nik" disabled={values.id != undefined ? true : false} type="number" onChange={updateData} value={values.nik} className="form-control form-control-lg form-control-solid" />
@@ -179,7 +172,8 @@ export default function Add({ errors, pegawai }) {
                         <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Email</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="email" type="text" onChange={updateData} value={values.email} className="form-control form-control-lg form-control-solid" />
+                                <input name="email" disabled={values.id != undefined ? true : false} type="text" onChange={updateData} value={values.email} className="form-control form-control-lg form-control-solid" />
+                                <span className='text-danger'>Password default adalah alamat email</span>
                             </div>
                             {errors.email && <div className="text-danger">{errors.email}</div>}
                         </div>

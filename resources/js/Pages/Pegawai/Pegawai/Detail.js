@@ -107,8 +107,6 @@ export default function Detail({ pegawai, children }) {
                                             <div className="d-flex align-items-center mb-1">
                                                 <a href="#" className="text-gray-800 text-hover-primary fs-2 fw-bolder me-3">{pegawai?.name}
                                                 </a>
-                                                <span className="badge badge-light-success me-auto fs-3 p-4">{pegawai.nip}
-                                                </span>
                                             </div>
                                             <div className="d-flex flex-wrap fw-bold mb-2 fs-5 text-gray-600">Tempat Lahir : {pegawai?.tempat_lahir}</div>
                                             <div className="d-flex flex-wrap fw-bold mb-2 fs-5 text-gray-600">Tanggal Lahir : {pegawai?.tanggal_lahir}</div>
@@ -155,9 +153,9 @@ export default function Detail({ pegawai, children }) {
                                         <li className="nav-item my-1">
                                             <Link preserveScroll className={`btn btn-success btn-active-dark btn-active-color-secondary fw-boldest fs-8 fs-lg-base nav-link px-3 px-lg-8 mx-1 text-uppercase ${route().current('pegawai.kordinat*') ? 'active' : ''}`} href={route('pegawai.kordinat.index', pegawai.nip)}><i class="fa fa-map-marker mr-1"></i> Data Kordinat</Link>
                                         </li>
-                                        {/* <li className="nav-item my-1">
+                                        <li className="nav-item my-1">
                                             <Link preserveScroll className={`btn btn-success btn-active-dark btn-active-color-secondary fw-boldest fs-8 fs-lg-base nav-link px-3 px-lg-8 mx-1 text-uppercase ${route().current('pegawai.wajah*') ? 'active' : ''}`} href={route('pegawai.wajah.index', pegawai.nip)}><i class="fa fa-smile mr-1"></i> Data Wajah</Link>
-                                        </li> */}
+                                        </li>
 
                                     </ul>
                                 </div>

@@ -212,6 +212,11 @@ function get_kode_skpd($nip)
     return "";
 }
 
+function get_kode_perusahaan($nip)
+{
+    return User::where('nip', $nip)->value('kode_perusahaan');
+}
+
 function get_jabatan_from_nip($nip)
 {
     return RiwayatJabatan::select("tingkat.nama")

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>SBC ABSENSI</title>
+    <title>JamKerja.ID</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" />
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
@@ -14,7 +14,7 @@
             style="background-image: url(assets/media/illustrations/dozzy-1/18.png)">
             <div class="d-flex flex-column flex-column-fluid text-center p-10 py-lg-20">
                 <a href="{{ url('/') }}" class="mb-10 pt-lg-20" style="font-size:60px">
-                    SBC ABSENSI
+                    JamKerja.ID
                 </a>
                 <div class="pt-lg-10">
                     <h1 class="fw-bolder fs-4x text-gray-800 mb-10">Halaman Tidak ditemukan!</h1>

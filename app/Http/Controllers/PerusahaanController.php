@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PerusahaanResource;
 use App\Models\Perusahaan;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 class PerusahaanController extends Controller
 {
     public function index()
     {
+
+        if(role_only('admin')){
+            $perusahaan = Perusahaan::where('kode_perusahaan', auth()->user()->kode_perusahaan)->first();
+
+            return inertia('Perusahaan/Edit', compact('perusahaan'));
+        }
+
         $perusahaan = Perusahaan::latest()->get();
 
         $search = request('s');
@@ -41,6 +49,7 @@ class PerusahaanController extends Controller
     public function update()
     {
         $data = request()->validate([
+            'email' => 'required',
             'nama' => 'required',
             'alamat' => 'required',
             'kontak' => 'nullable',
@@ -64,7 +73,19 @@ class PerusahaanController extends Controller
         }
 
         if(!$id){
-            $data['kode_perusahaan'] = generateUUID();
+            $uuid = generateUUID();
+            $data['kode_perusahaan'] = $uuid;
+
+            $user = [
+                'kode_perusahaan' => $uuid,
+                'name' => $data['nama'],
+                'email' => $data['email'],
+                'password' => password_hash($data['email'], PASSWORD_BCRYPT),
+                'status_perusahaan' => $data['status'],
+            ];
+
+            $peg = User::create($user);
+            $peg->assignRole('admin');
         }
         if($id){
             $up = Perusahaan::where('id', $id)->update($data);
