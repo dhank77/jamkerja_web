@@ -45,7 +45,7 @@ export default function Detail({ pegawai, children }) {
     return (
         <div>
             <div className="d-flex flex-column flex-column-fluid">
-                <div className="toolbar mb-5 mb-lg-7" id="kt_toolbar">
+                <div className="toolbar mb-5 mb-lg-7 d-flex justify-content-between" id="kt_toolbar">
                     <div className="page-title d-flex flex-column me-3">
                         <h1 className="d-flex text-dark fw-bolder my-1 fs-3">Pegawai</h1>
                         <ul className="breadcrumb breadcrumb-dot fw-bold text-gray-600 fs-7 my-1">

@@ -20,7 +20,7 @@ export default function Add({ users }) {
 
     return (
         <div>
-            <div className="toolbar mb-5 mb-lg-7">
+            <div className="toolbar mb-5 mb-lg-7 d-flex justify-content-between">
                 <div className="page-title d-flex flex-column me-3">
                     <h1 className="d-flex text-dark fw-bolder my-1 fs-3">Manajemen User</h1>
                     <ul className="breadcrumb breadcrumb-dot fw-bold text-gray-600 fs-7 my-1">

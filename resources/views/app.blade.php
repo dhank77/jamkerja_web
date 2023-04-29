@@ -54,7 +54,7 @@ $logo = get_logo();
     @inertiaHead
 </head>
 
-<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed" style="background-color: #f3f7f9;">
+<body id="kt_body" data-kt-app-header-fixed-mobile="true" data-kt-app-toolbar-enabled="true" data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true" class="app-default" style="background-color: #f3f7f9;">
     @inertia
 
     @env('local')

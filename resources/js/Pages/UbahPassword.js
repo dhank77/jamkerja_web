@@ -25,7 +25,7 @@ export default function UbahPassword() {
     }
 
     return (
-        <div className="card mb-5 mb-xl-8">
+        <div className="card mt-10 mb-5 mb-xl-8">
             <div className="card-header border-0 pt-5">
                 <h3 className="card-title align-items-start flex-column">
                     <span className="card-label fw-bolder fs-3 mb-1">Ubah Password</span>

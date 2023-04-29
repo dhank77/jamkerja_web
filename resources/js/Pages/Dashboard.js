@@ -2,7 +2,6 @@ import React from 'react';
 import Authenticated from '@/Layouts/Authenticated';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Link } from '@inertiajs/inertia-react';
 import DateNowIndo from '@/Components/Date/DateNowIndo';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -65,7 +64,7 @@ export default function Dashboard(props) {
     };
 
     return (
-        <div className="content flex-column-fluid" id="kt_content">
+        <div className="content flex-column-fluid mt-10" id="kt_content">
             <div className="row gy-5 g-xl-10">
                 <div className="col-sm-3 col-xl-3 mb-xl-10">
                     <div className="card h-lg-100">
