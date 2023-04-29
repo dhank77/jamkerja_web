@@ -1,13 +1,23 @@
-import React from 'react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import { Link } from '@inertiajs/inertia-react';
+import React from "react";
+import ApplicationLogo from "@/Components/ApplicationLogo";
+import { Link } from "@inertiajs/inertia-react";
 
 export default function Guest({ children }) {
     return (
-        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+        <div
+            className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0"
+            style={{ backgroundColor: "#B0C4DE", minHeight: "100vh" }}
+        >
             <div>
-                <Link href="/">
-                    <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
+                <Link href="/" className="d-flex flex-column justify-content-center align-items-center">
+                    <div>
+                        <img
+                            alt="Logo"
+                            src="/logo.png"
+                            className="h-60px h-lg-80px"
+                        />
+                    </div>
+                    <h1 className="text-dark">JamKerja.ID</h1>
                 </Link>
             </div>
 

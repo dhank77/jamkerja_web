@@ -1,13 +1,13 @@
-import React from 'react';
-import Button from '@/Components/Button';
-import Guest from '@/Layouts/Guest';
-import Input from '@/Components/Input';
-import ValidationErrors from '@/Components/ValidationErrors';
-import { Head, useForm } from '@inertiajs/inertia-react';
+import React from "react";
+import Button from "@/Components/Button";
+import Guest from "@/Layouts/Guest";
+import Input from "@/Components/Input";
+import ValidationErrors from "@/Components/ValidationErrors";
+import { Head, Link, useForm } from "@inertiajs/inertia-react";
 
 export default function ForgotPassword({ status }) {
     const { data, setData, post, processing, errors } = useForm({
-        email: '',
+        email: "",
     });
 
     const onHandleChange = (event) => {
@@ -17,36 +17,55 @@ export default function ForgotPassword({ status }) {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('password.email'));
+        post(route("password.email"));
     };
 
     return (
         <Guest>
             <Head title="Forgot Password" />
 
-            <div className="mb-4 text-sm text-gray-500 leading-normal">
-                Forgot your password? No problem. Just let us know your email address and we will email you a password
-                reset link that will allow you to choose a new one.
-            </div>
-
-            {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
-
-            <ValidationErrors errors={errors} />
+            {status && (
+                <div className="mb-4 font-medium text-sm text-green-600">
+                    {status}
+                </div>
+            )}
 
             <form onSubmit={submit}>
-                <Input
-                    type="text"
-                    name="email"
-                    value={data.email}
-                    className="mt-1 block w-full"
-                    isFocused={true}
-                    handleChange={onHandleChange}
-                />
+                <br />
+                <h6 className="text-center">Halaman Reset Password</h6>
+                <br />
+                <br />
+                <div className="fv-row mb-4">
+                    <label className="form-label fs-6 fw-bolder text-dark">
+                        Email
+                    </label>
+                    <Input
+                        type="text"
+                        name="email"
+                        value={data.email}
+                        className="form-control form-control-lg form-control-solid"
+                        isFocused={true}
+                        handleChange={onHandleChange}
+                    />
+                    <ValidationErrors errors={errors} />
+                </div>
 
-                <div className="flex items-center justify-end mt-4">
-                    <Button className="ml-4" processing={processing}>
-                        Email Password Reset Link
-                    </Button>
+                <div>
+                    <button
+                        type="submit"
+                        className="btn btn-lg btn-primary w-100 mb-5"
+                    >
+                        Reset Password
+                    </button>
+                    <br />
+                    <hr />
+                    <br />
+                    <Link
+                        href={route("login")}
+                        className="btn btn-lg btn-danger w-100 mb-5"
+                    >
+                        Kembali Kehalaman Login
+                    </Link>
                 </div>
             </form>
         </Guest>
