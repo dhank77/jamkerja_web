@@ -75,17 +75,21 @@ class PayrollTunjanganContoller extends Controller
     public function store()
     {
         $rules = [
-            'kode_tunjangan' => 'required',
             'nama' => 'required',
         ];
 
-        if(!request('id')){
-            $rules['kode_tunjangan'] = 'required|unique:ms_tunjangan';
-        }
-
         $data = request()->validate($rules);
 
-        $cr = Tunjangan::updateOrCreate(['id' => request('id')], $data);
+        if(!request('id')){
+            $data['kode_tunjangan'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+        }
+
+        if(request('id')){
+            $cr = Tunjangan::where('id', request('id'))->update($data);
+        }else{
+            $cr = Tunjangan::create($data);
+        }
 
         if ($cr) {
             return redirect(route('master.payroll.tunjangan.index'))->with([

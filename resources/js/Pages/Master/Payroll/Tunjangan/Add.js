@@ -46,13 +46,6 @@ export default function Add({ errors, tunjangan }) {
                 <div className="card-body py-3">
                     <form onSubmit={submit}>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Kode Tunjangan</label>
-                            <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="kode_tunjangan" disabled={values.id != undefined ? true : false} type="number" onChange={updateData} value={values.kode_tunjangan} className="form-control form-control-lg form-control-solid" />
-                            </div>
-                            {errors.kode_tunjangan && <div className="text-danger">{errors.kode_tunjangan}</div>}
-                        </div>
-                        <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Nama Tunjangan</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <input name="nama" type="text" onChange={updateData} value={values.nama} className="form-control form-control-lg form-control-solid" />
