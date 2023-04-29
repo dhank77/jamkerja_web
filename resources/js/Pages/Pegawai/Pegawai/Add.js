@@ -165,7 +165,7 @@ export default function Add({ errors, pegawai }) {
                         <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">No Telepon / WA</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="no_hp" type="text" onChange={updateData} value={values.no_hp} className="form-control form-control-lg form-control-solid" />
+                                <input name="no_hp" type="number" onChange={updateData} value={values.no_hp} className="form-control form-control-lg form-control-solid" />
                             </div>
                             {errors.no_hp && <div className="text-danger">{errors.no_hp}</div>}
                         </div>

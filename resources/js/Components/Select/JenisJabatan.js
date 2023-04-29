@@ -1,7 +1,7 @@
 import React from 'react'
 import Select from 'react-select'
 
-export default function JenisJabatan({ onchangeHandle, valueHandle }) {
+export default function JenisJabatan({ onchangeHandle, valueHandle, className = '' }) {
 
     const options = [
         { value : '1', jenis_jabatan: '1', label: 'Struktural' },
@@ -10,6 +10,6 @@ export default function JenisJabatan({ onchangeHandle, valueHandle }) {
     ]
 
   return (
-    <Select options={options} className="z-40" onChange={onchangeHandle} value={options.filter(obj => (obj.jenis_jabatan == valueHandle))} />
+    <Select options={options} className={className == '' ? 'z-40' : className} onChange={onchangeHandle} value={options.filter(obj => (obj.jenis_jabatan == valueHandle))} />
   )
 }

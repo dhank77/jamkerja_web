@@ -303,12 +303,6 @@ export default function Detail({ pegawai, children }) {
                                     <div className="row">
                                         <div class="col-lg-6">
                                             <div className="row mb-7">
-                                                <label className="col-lg-4 fw-bold text-muted">Nomor Pegawai</label>
-                                                <div className="col-lg-8">
-                                                    <span className="fw-bolder fs-6 text-gray-800">{pegawai.nip}</span>
-                                                </div>
-                                            </div>
-                                            <div className="row mb-7">
                                                 <label className="col-lg-4 fw-bold text-muted">Nama Lengkap</label>
                                                 <div className="col-lg-8">
                                                     <span className="fw-bolder fs-6 text-gray-800">{pegawai.gelar_depan} {pegawai.name} {pegawai.gelar_belakang}</span>

@@ -1199,36 +1199,6 @@ export default function Authenticated({ children }) {
                                                         <div
                                                             className={`menu-item ${
                                                                 route().current(
-                                                                    "master.tingkat*"
-                                                                )
-                                                                    ? "show"
-                                                                    : ""
-                                                            }`}
-                                                        >
-                                                            <Link
-                                                                className={`menu-link ${
-                                                                    route().current(
-                                                                        "master.tingkat*"
-                                                                    )
-                                                                        ? "active"
-                                                                        : ""
-                                                                }`}
-                                                                href={route(
-                                                                    "master.tingkat.index"
-                                                                )}
-                                                            >
-                                                                <span className="menu-bullet">
-                                                                    <span className="bullet bullet-dot" />
-                                                                </span>
-                                                                <span className="menu-title">
-                                                                    Tingkat
-                                                                    Jabatan
-                                                                </span>
-                                                            </Link>
-                                                        </div>
-                                                        <div
-                                                            className={`menu-item ${
-                                                                route().current(
                                                                     "master.eselon*"
                                                                 )
                                                                     ? "show"
@@ -1252,6 +1222,36 @@ export default function Authenticated({ children }) {
                                                                 </span>
                                                                 <span className="menu-title">
                                                                     Level
+                                                                    Jabatan
+                                                                </span>
+                                                            </Link>
+                                                        </div>
+                                                        <div
+                                                            className={`menu-item ${
+                                                                route().current(
+                                                                    "master.tingkat*"
+                                                                )
+                                                                    ? "show"
+                                                                    : ""
+                                                            }`}
+                                                        >
+                                                            <Link
+                                                                className={`menu-link ${
+                                                                    route().current(
+                                                                        "master.tingkat*"
+                                                                    )
+                                                                        ? "active"
+                                                                        : ""
+                                                                }`}
+                                                                href={route(
+                                                                    "master.tingkat.index"
+                                                                )}
+                                                            >
+                                                                <span className="menu-bullet">
+                                                                    <span className="bullet bullet-dot" />
+                                                                </span>
+                                                                <span className="menu-title">
+                                                                    Tingkat
                                                                     Jabatan
                                                                 </span>
                                                             </Link>

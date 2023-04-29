@@ -651,7 +651,7 @@ Route::middleware(['auth'])
 
         Route::prefix('master')
             ->name("master.")
-            ->middleware('role:admin|owner')
+            ->middleware(['role:admin|owner', 'auth_opd'])
             ->group(function () {
 
                 Route::prefix('payroll')

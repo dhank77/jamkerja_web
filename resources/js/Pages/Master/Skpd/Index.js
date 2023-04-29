@@ -42,7 +42,6 @@ export default function Index({ skpd }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>Kode</th>
                                         <th>Nama</th>
                                         <th className="min-w-140px">Singkatan</th>
                                         <th>Kordinat</th>
@@ -55,9 +54,6 @@ export default function Index({ skpd }) {
                                         <tr key={k}>
                                             <td>
                                                 {k + 1}
-                                            </td>
-                                            <td>
-                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.kode_skpd}</span>
                                             </td>
                                             <td>
                                                 <p>{u.nama}</p>

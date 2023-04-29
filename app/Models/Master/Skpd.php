@@ -13,7 +13,7 @@ class Skpd extends Model
 
     protected $table = 'skpd';
 
-    protected $fillable = ['kode_skpd', 'nama', 'singkatan', 'kordinat', 'latitude', 'longitude', 'jarak'];
+    protected $fillable = ['kode_skpd', 'kode_perusahaan', 'nama', 'singkatan', 'kordinat', 'latitude', 'longitude', 'jarak'];
 
     protected $parents = [
         'image',

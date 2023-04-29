@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
 
-export default function Skpd({ onchangeHandle, valueHandle }) {
+export default function Skpd({ onchangeHandle, valueHandle, className='' }) {
 
   const [data, setData] = useState([])
 
@@ -20,6 +20,6 @@ export default function Skpd({ onchangeHandle, valueHandle }) {
 
 
   return (
-    <Select options={data} className="z-50" onChange={onchangeHandle} value={data.filter(obj => (obj.kode_skpd == valueHandle))} />
+    <Select options={data} className={className == '' ? 'z-50' : className} onChange={onchangeHandle} value={data.filter(obj => (obj.kode_skpd == valueHandle))} />
   )
 }

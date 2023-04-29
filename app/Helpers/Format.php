@@ -503,6 +503,11 @@ function generateUUID()
     );
 }
 
+function kp()
+{
+    return auth()->user()->kode_perusahaan;
+}
+
 function getPerusahaan()
 {
     return Perusahaan::first() ?? new Perusahaan();
@@ -576,4 +581,23 @@ function getGenUsia()
         ],
     ];
     return $data;
+}
+
+function validasi_master($array)
+{
+    $namaModel = $array[1];
+    $id = $array[3];
+    if($namaModel == 'level'){
+        $namaModel = 'eselon';
+    }
+
+    $model = 'App\Models\Master\\' . ucfirst($namaModel);
+    $kode_perusahaan = $model::where('id', $id)->value('kode_perusahaan');
+
+    if($kode_perusahaan != auth()->user()->kode_perusahaan){
+        return true;
+    }else{
+        return false;
+    }
+    
 }

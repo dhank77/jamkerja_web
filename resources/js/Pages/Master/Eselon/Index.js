@@ -43,7 +43,6 @@ export default function Index({ eselon }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>Kode Level</th>
                                         <th>Nama Level</th>
                                         <th>Kordinat</th>
                                         <th>Radius (m)</th>
@@ -55,9 +54,6 @@ export default function Index({ eselon }) {
                                         <tr key={k}>
                                             <td>
                                                 {k + 1}
-                                            </td>
-                                            <td>
-                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.kode_eselon}</span>
                                             </td>
                                             <td>
                                                 <p>{u.nama}</p>

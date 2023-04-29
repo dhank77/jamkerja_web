@@ -12,7 +12,7 @@ class Eselon extends Model
 
     protected $table = 'eselon';
 
-    protected $fillable = ['kode_eselon', 'nama', 'kordinat', 'latitude', 'longitude', 'jarak'];
+    protected $fillable = ['kode_eselon', 'kode_perusahaan', 'nama', 'kordinat', 'latitude', 'longitude', 'jarak'];
 
     public function jabatan()
     {

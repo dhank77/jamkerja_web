@@ -17,6 +17,7 @@ class EselonController extends Controller
         $eselon = Eselon::when($search, function($qr, $search){
                     $qr->where('nama', 'LIKE', "%$search%");
                 })
+                ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
                 ->paginate($limit);
 
         $eselon->appends(request()->all());
@@ -34,7 +35,7 @@ class EselonController extends Controller
 
     public function json()
     {
-        $eselon = Eselon::orderBy('nama')->get();
+        $eselon = Eselon::orderBy('nama')->where('kode_perusahaan', auth()->user()->kode_perusahaan)->get();
         SelectResource::withoutWrapping();
         $eselon = SelectResource::collection($eselon);
 
@@ -49,7 +50,7 @@ class EselonController extends Controller
 
     public function reset(Eselon $eselon)
     {
-        $cr = $eselon->update([
+        $cr = $eselon->where('kode_perusahaan', auth()->user()->kode_perusahaan)->update([
             'kordinat' => null,
             'latitude' => null,
             'longitude' => null,
@@ -70,7 +71,7 @@ class EselonController extends Controller
 
     public function delete(Eselon $eselon)
     {
-        $cr = $eselon->delete();
+        $cr = $eselon->where('kode_perusahaan', auth()->user()->kode_perusahaan)->delete();
         if ($cr) {
             return redirect(route('master.eselon.index'))->with([
                 'type' => 'success',
@@ -87,7 +88,6 @@ class EselonController extends Controller
     public function store()
     {
         $rules = [
-            'kode_eselon' => 'required',
             'nama' => 'required',
             'kordinat' => 'nullable',
             'latitude' => 'nullable',
@@ -95,12 +95,12 @@ class EselonController extends Controller
             'jarak' => 'nullable',
         ];
 
-        if(!request('id')){
-            $rules['kode_eselon'] = 'required|unique:eselon';
-        }
-
         $data = request()->validate($rules);
-
+        
+        if(!request('id')){
+            $data['kode_eselon'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+        }
         $cr = Eselon::updateOrCreate(['id' => request('id')], $data);
 
         if ($cr) {

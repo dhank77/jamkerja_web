@@ -19,6 +19,7 @@ class SkpdController extends Controller
                     ->orWhere('singkatan', 'LIKE', "%$search%")
                     ->orWhereRelation('atasan', 'nama', "%$search%");
                 })
+                ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
                 ->paginate($limit);
         $skpd->appends(request()->all());
 
@@ -29,7 +30,7 @@ class SkpdController extends Controller
 
     public function json()
     {
-        $skpd = Skpd::orderBy('nama')->get();
+        $skpd = Skpd::orderBy('nama')->where('kode_perusahaan', auth()->user()->kode_perusahaan)->get();
         SelectResource::withoutWrapping();
         $skpd = SelectResource::collection($skpd);
 
@@ -40,7 +41,7 @@ class SkpdController extends Controller
     {
         $skpd = request('skpd');
 
-        $skpd = Skpd::orderBy('nama')->where('kode_atasan', $skpd)->get();
+        $skpd = Skpd::orderBy('nama')->where('kode_perusahaan', auth()->user()->kode_perusahaan)->where('kode_atasan', $skpd)->get();
         SelectResource::withoutWrapping();
         $skpd = SelectResource::collection($skpd);
 
@@ -61,7 +62,7 @@ class SkpdController extends Controller
 
     public function reset(Skpd $skpd)
     {
-        $cr = $skpd->update([
+        $cr = $skpd->where('kode_perusahaan', auth()->user()->kode_perusahaan)->update([
             'kordinat' => null,
             'latitude' => null,
             'longitude' => null,
@@ -82,7 +83,7 @@ class SkpdController extends Controller
 
     public function delete(Skpd $skpd)
     {
-        $cr = $skpd->delete();
+        $cr = $skpd->where('kode_perusahaan', auth()->user()->kode_perusahaan)->delete();
         if ($cr) {
             return redirect(route('master.skpd.index'))->with([
                 'type' => 'success',
@@ -99,7 +100,6 @@ class SkpdController extends Controller
     public function store()
     {
         $rules = [
-            'kode_skpd' => 'required',
             'nama' => 'required',
             'singkatan' => 'required',
             'kordinat' => 'nullable',
@@ -107,12 +107,13 @@ class SkpdController extends Controller
             'longitude' => 'nullable',
             'jarak' => 'nullable',
         ];
+        
+        $data = request()->validate($rules);
 
         if(!request('id')){
-            $rules['kode_skpd'] = 'required|unique:skpd';
+            $data['kode_skpd'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
         }
-
-        $data = request()->validate($rules);
 
         $cr = Skpd::updateOrCreate(['id' => request('id')], $data);
 

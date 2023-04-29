@@ -98,13 +98,6 @@ export default function Add({ errors, eselon }) {
                 <div className="card-body py-3">
                     <form onSubmit={submit}>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Kode Level</label>
-                            <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="kode_eselon" ref={kode_eselonRef} disabled={values.id != undefined ? true : false} type="number" onChange={updateData} value={values.kode_eselon} className="form-control form-control-lg form-control-solid" />
-                            </div>
-                            {errors.kode_eselon && <div className="text-danger">{errors.kode_eselon}</div>}
-                        </div>
-                        <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Nama Level</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <input name="nama" ref={namaRef} type="text" onChange={updateData} value={values.nama} className="form-control form-control-lg form-control-solid" />

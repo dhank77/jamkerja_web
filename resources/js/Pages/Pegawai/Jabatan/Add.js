@@ -77,14 +77,14 @@ export default function Add({ errors, pegawai, Rjabatan }) {
                         <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Jenis Jabatan</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <JenisJabatan valueHandle={values.jenis_jabatan} onchangeHandle={(e) => changeSelect(e, 'jenis_jabatan')} />
+                                <JenisJabatan className='z-50' valueHandle={values.jenis_jabatan} onchangeHandle={(e) => changeSelect(e, 'jenis_jabatan')} />
                             </div>
                             {errors.jenis_jabatan && <div className="text-danger">{errors.jenis_jabatan}</div>}
                         </div>
                         <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Divisi Kerja</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <Skpd onchangeHandle={(e) => changeSelect(e, 'kode_skpd')} valueHandle={values.kode_skpd} />
+                                <Skpd className='z-40' onchangeHandle={(e) => changeSelect(e, 'kode_skpd')} valueHandle={values.kode_skpd} />
                             </div>
                             {errors.kode_skpd && <div className="text-danger">{errors.kode_skpd}</div>}
                         </div>

@@ -103,13 +103,6 @@ export default function Add({ errors, skpd }) {
                 <div className="card-body py-3">
                     <form onSubmit={submit}>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Kode Divisi</label>
-                            <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="kode_skpd" disabled={values.id != undefined ? true : false} type="number" ref={kode_skpdRef} onChange={updateData} value={values.kode_skpd} className="form-control form-control-lg form-control-solid" />
-                            </div>
-                            {errors.kode_skpd && <div className="text-danger">{errors.kode_skpd}</div>}
-                        </div>
-                        <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Nama Divisi</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <input name="nama" ref={namaRef} type="text" onChange={updateData} value={values.nama} className="form-control form-control-lg form-control-solid" />

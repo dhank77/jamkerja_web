@@ -25,7 +25,7 @@ class AuthOpd
             }
 
 
-            if($nip != "" && get_kode_skpd($nip) != auth()->user()->kepala_divisi_id){
+            if($nip != "" && strlen($nip) >= 36 && get_kode_skpd($nip) != auth()->user()->kepala_divisi_id){
                 abort(403);
             }
         }
@@ -38,7 +38,11 @@ class AuthOpd
                 $nip = array_key_exists(2, $exp) ? $exp[2] : "";
             }
 
-            if($nip != "" && get_kode_perusahaan($nip) != auth()->user()->kode_perusahaan){
+            if($nip != "" && strlen($nip) >= 36 && get_kode_perusahaan($nip) != auth()->user()->kode_perusahaan){
+                abort(403);
+            }
+
+            if($exp[0] == 'master' && count($exp) == 4 && validasi_master($exp)){
                 abort(403);
             }
         }
