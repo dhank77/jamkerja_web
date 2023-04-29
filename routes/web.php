@@ -164,6 +164,7 @@ Route::middleware(['auth'])
                     ->name("wajah.")
                     ->group(function () {
                         Route::get('', 'index')->name('index');
+                        Route::post('update', 'update')->name('update');
                         Route::post('store', 'store')->name('store');
                         Route::delete('delete/{wajah}', 'delete')->name('delete');
                     });

@@ -13,7 +13,7 @@ class WajahController extends Controller
 {
     public function index(User $pegawai)
     {
-        $wajah = Wajah::where('nip', $pegawai->nip)->get();
+        $wajah = Wajah::where('nip', $pegawai->nip)->where('kode_perusahaan', kp())->get();
         WajahResource::withoutWrapping();
         $wajah = WajahResource::collection($wajah);
         return inertia('Pegawai/Wajah/Index', compact('pegawai', 'wajah'));
@@ -27,12 +27,24 @@ class WajahController extends Controller
 
         if (request()->file('file')) {
             $file = request()->file('file')->storeAs("faces/" . $pegawai->nip, $pegawai->nip . "-face-" . date("YmdHis") . "." . request()->file('file')->extension());
-            $cr = Wajah::create([
-                'nip' => $pegawai->nip,
-                'file' => $file,
-            ]);
 
-            $tr = train_image($pegawai->nip);
+            $wajah = Wajah::where('nip', $pegawai->nip)->first();
+            if($wajah){
+                if ($wajah->file) {
+                    Storage::delete($wajah->file);
+                }
+                $cr = Wajah::where('nip', $pegawai->nip)->update([
+                    'file' => $file,
+                ]);
+            }else{
+                $cr = Wajah::create([
+                    'kode_perusahaan' => kp(),
+                    'nip' => $pegawai->nip,
+                    'file' => $file,
+                ]);
+            }
+
+            // $tr = train_image($pegawai->nip);
         }else{
             $cr = 0;
         }
@@ -46,6 +58,40 @@ class WajahController extends Controller
             return redirect(route('pegawai.wajah.index', $pegawai->nip))->with([
                 'type' => 'error',
                 'messages' => "Gagal, tambahkan!"
+            ]);
+        }
+    }
+
+    public function update(User $pegawai)
+    {
+        $file = "faces/" . $pegawai->image;
+        Storage::copy($pegawai->image, $file);
+
+        $wajah = Wajah::where('nip', $pegawai->nip)->first();
+        if($wajah){
+            if ($wajah->file) {
+                Storage::delete($wajah->file);
+            }
+            $cr = Wajah::where('nip', $pegawai->nip)->update([
+                'file' => $file,
+            ]);
+        }else{
+            $cr = Wajah::create([
+                'kode_perusahaan' => kp(),
+                'nip' => $pegawai->nip,
+                'file' => $file,
+            ]);
+        }
+
+        if ($cr) {
+            return redirect(route('pegawai.wajah.index', $pegawai->nip))->with([
+                'type' => 'success',
+                'messages' => "Berhasil, diperbaharui!"
+            ]);
+        } else {
+            return redirect(route('pegawai.wajah.index', $pegawai->nip))->with([
+                'type' => 'error',
+                'messages' => "Gagal, diperbaharui!"
             ]);
         }
     }
