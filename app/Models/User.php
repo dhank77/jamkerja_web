@@ -48,6 +48,11 @@ class User extends Authenticatable
         return 'nip';
     }
 
+    public function riwayat_kgb()
+    {
+        return $this->hasMany(RiwayatKgb::class, 'nip', 'nip');
+    }
+
     public function riwayat_golongan()
     {
         return $this->hasMany(RiwayatGolongan::class, 'nip', 'nip');

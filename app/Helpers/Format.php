@@ -610,3 +610,36 @@ function validasi_master($array)
     }
     
 }
+
+function validasi_data_pegawai($array)
+{
+    $namaModel = $array[1];
+    $nip = $array[2];
+    if(count($array) == 6){
+        $id = is_integer($array[4]) ? $array[4] : $array[5];
+    }else{
+        $id = $array[4];
+    }
+    if($namaModel == 'level'){
+        $namaModel = 'eselon';
+    }
+
+    // array model tanpa kata riwayat
+    $modelNotRiwayat = ['keluarga'];
+
+    if(in_array($namaModel, $modelNotRiwayat)){
+        $model = 'App\Models\Pegawai\\' . ucfirst($namaModel);
+    }else{
+        // saat ini hanya model yang didahului riwayat
+        $model = 'App\Models\Pegawai\Riwayat' . ucfirst($namaModel);
+    }
+
+    $kode_perusahaan = $model::where('nip', $nip)->where('id', $id)->value('kode_perusahaan');
+
+    if($kode_perusahaan != auth()->user()->kode_perusahaan){
+        return true;
+    }else{
+        return false;
+    }
+    
+}

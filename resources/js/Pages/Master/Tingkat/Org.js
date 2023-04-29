@@ -36,9 +36,6 @@ export default function Org({ parent, kode_skpd, data, send, nama_skpd }) {
         setValues({ ...values, [name]: e[name] })
     }
 
-    console.log(send);
-    console.log(data);
-
     const options = {
         chart: {
             height: 600,

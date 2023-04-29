@@ -84,7 +84,7 @@ class RiwayatKgbController extends Controller
             'tanggal_tmt' => 'required',
             'is_akhir' => 'required',
             'is_private' => 'nullable',
-            'gaji_pokok' => 'nullable',
+            'gaji_pokok' => 'required',
             'masa_kerja_tahun' => 'nullable',
             'masa_kerja_bulan' => 'nullable',
         ];
@@ -107,22 +107,22 @@ class RiwayatKgbController extends Controller
             if(request()->file('file')){
                 $file = RiwayatKgb::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-kgb-" . request('nomor_surat') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-kgb-" . date("ymdhis") . ".pdf");
         }
 
-        $cr = RiwayatKgb::updateOrCreate(
-                                [
-                                    'id' => $id,
-                                    'nip' => $pegawai->nip,
-                                ],
-                                $data
-                            );
+        if($id){
+            $cr = RiwayatKgb::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatKgb::create($data);
+        }
 
         if ($cr) {
             return redirect(route('pegawai.kgb.index', $pegawai->nip))->with([

@@ -88,7 +88,7 @@ export default function Add({ errors, pegawai, Rkgb }) {
                         <Input name="tanggal_surat" type='date' required={true} values={values.tanggal_surat} onChangeHandle={updateData} />
                         <Input name="tanggal_tmt" type='date' required={true} values={values.tanggal_tmt} onChangeHandle={updateData} />
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label fw-bold fs-6">Gaji Pokok Baru</label>
+                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Gaji Pokok Baru</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <NumberFormat name="gaji_pokok" value={values.gaji_pokok} onChange={updateData} className="form-control form-control-lg form-control-solid" required thousandSeparator={'.'} decimalSeparator={','} />
                             </div>

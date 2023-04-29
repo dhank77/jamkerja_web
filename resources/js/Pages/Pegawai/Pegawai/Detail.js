@@ -114,7 +114,6 @@ export default function Detail({ pegawai, children }) {
                                                 );
                                             }}
                                             onSuccess={(response, file) => {
-                                                console.log(response);
                                                 setUploading(false);
                                                 toaster.push(
                                                     <Message type="success">

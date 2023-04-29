@@ -32,8 +32,6 @@ export default function Add({ errors, jkdMaster }) {
         Inertia.post(route('master.jamKerjaDinamis.jkdMaster.store'), values);
     }
 
-    console.log(values);
-
     return (
         <div>
             <div className="toolbar mb-5 mb-lg-7 d-flex justify-content-between">

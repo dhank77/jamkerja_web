@@ -87,7 +87,7 @@ class KeluargaController extends Controller
     public function edit(User $pegawai, $status = null, Keluarga $Rkeluarga)
     {
         $keluarga = $Rkeluarga;
-        return inertia('Pegawai/Keluarga/Add', compact('pegawai', 'keluarga'));
+        return inertia('Pegawai/Keluarga/Add', compact('pegawai', 'keluarga', 'status'));
     }
 
     public function delete(User $pegawai, Keluarga $keluarga)
@@ -201,13 +201,13 @@ class KeluargaController extends Controller
             $data['file_akta_kelahiran'] = request()->file('file_akta_kelahiran')->storeAs($pegawai->nip, $pegawai->nip . "-akta-" . request('status') . ".pdf");
         }
 
-        $cr = Keluarga::updateOrCreate(
-                                [
-                                    'id' => $id,
-                                    'nip' => $pegawai->nip,
-                                ],
-                                $data
-                            );
+        if($id){
+            $cr = Keluarga::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = Keluarga::create($data);
+        }
 
         if ($cr) {
             return redirect(route('pegawai.keluarga.index', $pegawai->nip))->with([

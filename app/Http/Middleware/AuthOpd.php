@@ -30,6 +30,7 @@ class AuthOpd
             }
         }
 
+        
         if(role('admin') && role_only("owner") == false){
             $exp = explode("/", $request->path());
             if($exp[max(count($exp)-3, 0)] == "data"){
@@ -42,7 +43,10 @@ class AuthOpd
                 abort(403);
             }
 
-            if($exp[0] == 'master' && count($exp) == 4 && validasi_master($exp)){
+            if($exp[0] == 'master' && count($exp) >= 4 && validasi_master($exp)){
+                abort(403);
+            }
+            if($exp[0] == 'pegawai' && count($exp) >= 5 && $exp[3] != 0 && validasi_data_pegawai($exp)){
                 abort(403);
             }
         }

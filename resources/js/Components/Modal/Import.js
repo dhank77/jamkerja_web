@@ -35,8 +35,6 @@ export default function Import({ route, format }) {
         Inertia.post(route, values);
     }
 
-    console.log(values);
-
     return (
         <>
             <ButtonToolbar>
