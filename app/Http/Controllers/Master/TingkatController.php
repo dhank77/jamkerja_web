@@ -17,9 +17,10 @@ class TingkatController extends Controller
         $limit = request('limit') ?? 10;
 
         $tingkat = Tingkat::when($search, function ($qr, $search) {
-            $qr->where('nama', 'LIKE', "%$search%");
-        })
-            ->paginate($limit);
+                        $qr->where('nama', 'LIKE', "%$search%");
+                    })
+                    ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+                    ->paginate($limit);
 
         $tingkat->appends(request()->all());
 
@@ -30,9 +31,13 @@ class TingkatController extends Controller
 
     public function json($skpd = null)
     {
-        $tingkat = Tingkat::with(str_repeat('children.', 99))->whereNull('parent_id')->when($skpd, function ($qr, $skpd) {
-            $qr->where('kode_skpd', $skpd);
-        })->orderBy('nama')->get();
+        $tingkat = Tingkat::with(str_repeat('children.', 99))
+                            ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+                            ->whereNull('parent_id')
+                            ->when($skpd, function ($qr, $skpd) {
+                                $qr->where('kode_skpd', $skpd);
+                            })
+                            ->orderBy('nama')->get();
         SelectTingkatResource::withoutWrapping();
         $tingkat = SelectTingkatResource::collection($tingkat);
 
@@ -42,7 +47,7 @@ class TingkatController extends Controller
     public function add()
     {
         $tingkat = new Tingkat();
-        $parent = Tingkat::with(str_repeat('children.', 99))->whereNull('parent_id')->get();
+        $parent = Tingkat::with(str_repeat('children.', 99))->where('kode_perusahaan', auth()->user()->kode_perusahaan)->whereNull('parent_id')->get();
         SelectTingkatResource::withoutWrapping();
         $parent = SelectTingkatResource::collection($parent);
         return inertia('Master/Tingkat/Add', compact('tingkat', 'parent'));
@@ -50,7 +55,7 @@ class TingkatController extends Controller
 
     public function edit(Tingkat $tingkat)
     {
-        $parent = Tingkat::with(str_repeat('children.', 99))->whereNull('parent_id')->get();
+        $parent = Tingkat::with(str_repeat('children.', 99))->where('kode_perusahaan', auth()->user()->kode_perusahaan)->whereNull('parent_id')->get();
         SelectTingkatResource::withoutWrapping();
         $parent = SelectTingkatResource::collection($parent);
         return inertia('Master/Tingkat/Add', compact('tingkat', 'parent'));
@@ -58,7 +63,7 @@ class TingkatController extends Controller
 
     public function delete(Tingkat $tingkat)
     {
-        $cr = $tingkat->delete();
+        $cr = $tingkat->where('kode_perusahaan', auth()->user()->kode_perusahaan)->delete();
         if ($cr) {
             return redirect(route('master.tingkat.index'))->with([
                 'type' => 'success',
@@ -76,13 +81,12 @@ class TingkatController extends Controller
     {
         $rules = [
             'values.nama' => 'required',
-            'values.kode_tingkat' => 'required',
             'values.kode_eselon' => 'required',
             'values.jenis_jabatan' => 'required',
             'values.kode_skpd' => 'required',
             'values.parent_id' => 'nullable',
-            'values.gaji_pokok' => 'required',
-            'values.tunjangan' => 'required',
+            'values.gaji_pokok' => 'nullable',
+            'values.tunjangan' => 'nullable',
         ];
 
         if (!request('values.id')) {
@@ -98,8 +102,12 @@ class TingkatController extends Controller
         $data = request()->validate($rules);
         $data = $data['values'];
         $data = array_merge($data, request('kordinat'));
-        $data['gaji_pokok'] = number_to_sql($data['gaji_pokok']);
-        $data['tunjangan'] = number_to_sql($data['tunjangan']);
+        $data['gaji_pokok'] = array_key_exists('gaji_pokok', $data) ? number_to_sql($data['gaji_pokok']) : 0;
+        $data['tunjangan'] = array_key_exists('tunjangan', $data) ? number_to_sql($data['tunjangan']) : 0;
+        if(!request('id')){
+            $data['kode_tingkat'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+        }
 
         if (request('values.id')) {
             $cr = Tingkat::where(['id' => request('values.id')])->update($data);
@@ -129,9 +137,9 @@ class TingkatController extends Controller
 
         $data = [];
         $jabatan = Tingkat::where('tingkat.kode_skpd', $kode_skpd)
-            ->where('tingkat.jenis_jabatan', 1)->orderBy('parent_id')->get();
+            ->where('tingkat.jenis_jabatan', 1)->where('kode_perusahaan', auth()->user()->kode_perusahaan)->orderBy('parent_id')->get();
 
-        $nama_skpd = Skpd::where('kode_skpd', $kode_skpd)->value('nama');
+        $nama_skpd = Skpd::where('kode_skpd', $kode_skpd)->where('kode_perusahaan', auth()->user()->kode_perusahaan)->value('nama');
 
         foreach ($jabatan as $jab) {
             if ($jab->parent_id != null) {
@@ -142,13 +150,14 @@ class TingkatController extends Controller
             }
         }
 
-        $parent = Tingkat::selectRaw("tingkat.kode_tingkat as ids, tingkat.nama as title, IFNULL(users.name, '-') as name, IF(image is null, '$urlPublic', CONCAT('$urlStorage/', image)) as image")
+        $parent = Tingkat::selectRaw("tingkat.kode_tingkat as ids, tingkat.nama as title, coalesce(users.name, '-') as name, coalesce(image, '$urlPublic', CONCAT('$urlStorage/', image)) as image")
             ->leftJoin('riwayat_jabatan', function ($qr) {
                 $qr->on("riwayat_jabatan.kode_tingkat", "tingkat.kode_tingkat")
                     ->leftJoin("users", "users.nip", "riwayat_jabatan.nip")
                     ->where('riwayat_jabatan.is_akhir', 1);
             })
             ->where('tingkat.kode_skpd', $kode_skpd)
+            ->where('tingkat.kode_perusahaan', auth()->user()->kode_perusahaan)
             ->orderBy('tingkat.parent_id')
             ->get()->makeHidden(['parent', 'parents'])->toArray();
 

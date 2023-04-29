@@ -592,7 +592,16 @@ function validasi_master($array)
     }
 
     $model = 'App\Models\Master\\' . ucfirst($namaModel);
-    $kode_perusahaan = $model::where('id', $id)->value('kode_perusahaan');
+    if(strlen($id) >= 36){
+        if($namaModel == 'tingkat'){
+            $field = 'kode_skpd';
+        }else{
+            $field = 'kode_' . strtolower($namaModel);
+        }
+        $kode_perusahaan = $model::where($field, $id)->value('kode_perusahaan');
+    }else{
+        $kode_perusahaan = $model::where('id', $id)->value('kode_perusahaan');
+    }
 
     if($kode_perusahaan != auth()->user()->kode_perusahaan){
         return true;

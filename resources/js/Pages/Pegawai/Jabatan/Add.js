@@ -13,7 +13,7 @@ export default function Add({ errors, pegawai, Rjabatan }) {
 
     const [values, setValues] = useState({
         kode_skpd: Rjabatan.kode_skpd,
-        kode_jabatan: Rjabatan.kode_jabatan,
+        kode_tingkat: Rjabatan.kode_tingkat,
         kode_eselon: Rjabatan.kode_eselon,
         jenis_jabatan: Rjabatan.jenis_jabatan,
         no_sk: Rjabatan.no_sk,
@@ -24,7 +24,6 @@ export default function Add({ errors, pegawai, Rjabatan }) {
         is_akhir: Rjabatan.is_akhir,
         id: Rjabatan.id,
     });
-
 
     const updateData = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value })

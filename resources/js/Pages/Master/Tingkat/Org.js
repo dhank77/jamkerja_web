@@ -37,6 +37,7 @@ export default function Org({ parent, kode_skpd, data, send, nama_skpd }) {
     }
 
     console.log(send);
+    console.log(data);
 
     const options = {
         chart: {

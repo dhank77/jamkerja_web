@@ -138,13 +138,6 @@ export default function Add({ errors, tingkat, parent }) {
                             {errors.nama && <div className="text-danger">{errors.nama}</div>}
                         </div>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Kode Jabatan</label>
-                            <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="kode_tingkat" type="text" onChange={updateData} value={values.kode_tingkat} className="form-control form-control-lg form-control-solid" />
-                            </div>
-                            {errors.kode_tingkat && <div className="text-danger">{errors.kode_tingkat}</div>}
-                        </div>
-                        <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Nama Jabatan</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <input name="nama" type="text" onChange={updateData} value={values.nama} className="form-control form-control-lg form-control-solid" />
@@ -159,14 +152,14 @@ export default function Add({ errors, tingkat, parent }) {
                             {errors.kode_eselon && <div className="text-danger">{errors.kode_eselon}</div>}
                         </div>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Gaji Pokok</label>
+                            <label className="col-lg-3 col-form-label fw-bold fs-6">Gaji Pokok</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <NumberFormat className="form-control" name="gaji_pokok" onChange={updateData} value={values.gaji_pokok} thousandSeparator={'.'} decimalSeparator={','} />
                             </div>
                             {errors.gaji_pokok && <div className="text-danger">{errors.gaji_pokok}</div>}
                         </div>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Tunjangan Jabatan</label>
+                            <label className="col-lg-3 col-form-label fw-bold fs-6">Tunjangan Jabatan</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <NumberFormat className="form-control" name="tunjangan" onChange={updateData} value={values.tunjangan} thousandSeparator={'.'} decimalSeparator={','} />
                             </div>

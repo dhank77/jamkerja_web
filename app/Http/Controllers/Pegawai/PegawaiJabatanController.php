@@ -82,7 +82,7 @@ class PegawaiJabatanController extends Controller
     public function store(User $pegawai)
     {
         $rules = [
-            'no_sk' => 'required|unique:riwayat_jabatan',
+            'no_sk' => 'nullable',
             'kode_skpd' => 'required',
             'kode_tingkat' => 'required',
             'jenis_jabatan' => 'required',
@@ -118,13 +118,14 @@ class PegawaiJabatanController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-jabatan-" . date("YmdHis") . ".pdf");
         }
 
-        $cr = RiwayatJabatan::updateOrCreate(
-            [
-                'id' => $id,
-                'nip' => $pegawai->nip,
-            ],
-            $data
-        );
+        if($id){
+            $cr = RiwayatJabatan::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatJabatan::create($data);
+        }
+
 
         if ($cr) {
             return redirect(route('pegawai.jabatan.index', $pegawai->nip))->with([

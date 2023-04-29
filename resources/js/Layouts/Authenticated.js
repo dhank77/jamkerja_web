@@ -1137,36 +1137,42 @@ export default function Authenticated({ children }) {
                                                                 : ""
                                                         }`}
                                                     >
-                                                        <div
-                                                            className={`menu-item ${
-                                                                route().current(
-                                                                    "master.status_pegawai*"
-                                                                )
-                                                                    ? "show"
-                                                                    : ""
-                                                            }`}
-                                                        >
-                                                            <Link
-                                                                className={`menu-link ${
+                                                        {auth.role.some((ar) =>
+                                                            [
+                                                                "owner",
+                                                            ].includes(ar)
+                                                        ) && (
+                                                            <div
+                                                                className={`menu-item ${
                                                                     route().current(
                                                                         "master.status_pegawai*"
                                                                     )
-                                                                        ? "active"
+                                                                        ? "show"
                                                                         : ""
                                                                 }`}
-                                                                href={route(
-                                                                    "master.status_pegawai.index"
-                                                                )}
                                                             >
-                                                                <span className="menu-bullet">
-                                                                    <span className="bullet bullet-dot" />
-                                                                </span>
-                                                                <span className="menu-title">
-                                                                    Status
-                                                                    pegawai
-                                                                </span>
-                                                            </Link>
-                                                        </div>
+                                                                <Link
+                                                                    className={`menu-link ${
+                                                                        route().current(
+                                                                            "master.status_pegawai*"
+                                                                        )
+                                                                            ? "active"
+                                                                            : ""
+                                                                    }`}
+                                                                    href={route(
+                                                                        "master.status_pegawai.index"
+                                                                    )}
+                                                                >
+                                                                    <span className="menu-bullet">
+                                                                        <span className="bullet bullet-dot" />
+                                                                    </span>
+                                                                    <span className="menu-title">
+                                                                        Status
+                                                                        pegawai
+                                                                    </span>
+                                                                </Link>
+                                                            </div>
+                                                        )}
                                                         <div
                                                             className={`menu-item ${
                                                                 route().current(
