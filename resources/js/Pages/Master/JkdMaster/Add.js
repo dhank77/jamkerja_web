@@ -58,13 +58,6 @@ export default function Add({ errors, jkdMaster }) {
                 <div className="card-body py-3">
                     <form onSubmit={submit}>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Kode Jam Kerja</label>
-                            <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="kode_jkd" disabled={values.id != undefined ? true : false} type="text" onChange={updateData} value={values.kode_jkd} className="form-control form-control-lg form-control-solid" />
-                            </div>
-                            {errors.kode_jkd && <div className="text-danger">{errors.kode_jkd}</div>}
-                        </div>
-                        <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Nama</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <input name="nama" type="text" onChange={updateData} value={values.nama} className="form-control form-control-lg form-control-solid" />

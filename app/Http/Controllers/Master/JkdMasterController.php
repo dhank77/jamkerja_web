@@ -17,6 +17,8 @@ class JkdMasterController extends Controller
         $jkdMaster = JkdMaster::when($search, function($qr, $search){
                     $qr->where('nama', 'LIKE', "%$search%");
                 })
+                ->where('kode_perusahaan', kp())
+                ->orWhereNull('kode_perusahaan')
                 ->paginate($limit);
 
         $jkdMaster->appends(request()->all());
@@ -40,7 +42,7 @@ class JkdMasterController extends Controller
 
     public function delete(JkdMaster $jkdMaster)
     {
-        $cr = $jkdMaster->delete();
+        $cr = $jkdMaster->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.jamKerjaDinamis.jkdMaster.index'))->with([
                 'type' => 'success',
@@ -57,7 +59,6 @@ class JkdMasterController extends Controller
     public function store()
     {
         $rules = [
-            'kode_jkd' => 'required',
             'nama' => 'required',
             'jam_datang' => 'required',
             'jam_pulang' => 'required',
@@ -67,13 +68,33 @@ class JkdMasterController extends Controller
             'toleransi_pulang' => 'nullable',
         ];
 
-        if(!request('id')){
-            $rules['kode_jkd'] = 'required|unique:jkd_master';
-        }
-
         $data = request()->validate($rules);
 
-        $cr = JkdMaster::updateOrCreate(['id' => request('id')], $data);
+        if(!request('id')){
+            $array = explode(' ', request('nama'));
+            if(count($array) > 1){
+                $str = "";
+                foreach ($array as $a) {
+                    $str .= strtoupper(substr($a, 0, 1));
+                }
+                $kode_jkd = $str . rand(1111, 9999);
+            }else{
+                $kode_jkd = strtoupper(substr(request('nama'), 0, 2)) . rand(1111, 9999);
+            }
+            $cek = JkdMaster::where('kode_jkd', $kode_jkd)->first();
+            if($cek){
+                return redirect(route('master.jamKerjaDinamis.jkdMaster.index'))->with([
+                    'type' => 'error',
+                    'messages' => "Terjadi Kesalahan, silahkan simpan kembali!"
+                ]);
+            }  
+            $data['kode_jkd'] = $kode_jkd;
+            $data['kode_perusahaan'] = kp();
+            $cr = JkdMaster::create($data);
+        }else{
+            $cr = JkdMaster::where('id', request('id'))->update($data);
+        }
+
 
         if ($cr) {
             return redirect(route('master.jamKerjaDinamis.jkdMaster.index'))->with([
