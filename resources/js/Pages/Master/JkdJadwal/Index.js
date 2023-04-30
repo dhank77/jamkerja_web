@@ -50,7 +50,6 @@ export default function Index({ jkdJadwal }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>No. Pegawai</th>
                                         <th>Nama</th>
                                         <th>Kode Shift</th>
                                         <th>Tanggal</th>
@@ -64,13 +63,10 @@ export default function Index({ jkdJadwal }) {
                                                 {k + 1}
                                             </td>
                                             <td>
-                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.nip}</span>
-                                            </td>
-                                            <td>
                                                 <span className="text-dark fw-bolder text-hover-primary fs-6">{u.nama}</span>
                                             </td>
                                             <td>
-                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.kode_jkd}</span>
+                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.kode_jkd} - {u.nama_jkd}</span>
                                             </td>
                                             <td>
                                                 <span className="text-dark fw-bolder text-hover-primary fs-6">{u.tanggal}</span>

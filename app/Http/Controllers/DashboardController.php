@@ -140,7 +140,7 @@ class DashboardController extends Controller
                             })
                             ->where('riwayat_pendidikan.is_akhir', 1)
                             ->where('riwayat_pendidikan.kode_pendidikan', $value->kode_pendidikan)
-                            ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+                            ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
                             ->count();
             array_push($agama, $jumlah);
         }

@@ -19,7 +19,7 @@ class JkdJadwalResource extends JsonResource
             'nip' => $this->nip,
             'nama' => $this->user?->name,
             'kode_jkd' => $this->kode_jkd,
-            'nama_jkd' => $this->jkdMaster?->nama,
+            'nama_jkd' => $this->jkd_master?->nama,
             'tanggal' => tanggal_indo($this->tanggal),
         ];
     }

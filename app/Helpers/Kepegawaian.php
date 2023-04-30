@@ -244,3 +244,8 @@ function get_kode_level_by_nip($nip)
                 ->whereNull('tingkat.deleted_at')
                 ->value('tingkat.kode_eselon');
 }
+
+function get_nip_from_ktp($no_ktp)
+{
+    return User::where('nik', $no_ktp)->value('nip');
+}

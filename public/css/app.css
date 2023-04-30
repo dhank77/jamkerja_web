@@ -619,9 +619,6 @@ select {
 .left-0 {
   left: 0px;
 }
-.bottom-0 {
-  bottom: 0px;
-}
 .z-0 {
   z-index: 0;
 }
@@ -667,18 +664,6 @@ select {
 .my-5 {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
-}
-.my-0 {
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-.my-4 {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-.mx-3 {
-  margin-left: 0.75rem;
-  margin-right: 0.75rem;
 }
 .my-7 {
   margin-top: 1.75rem;
@@ -756,17 +741,17 @@ select {
 .mb-8 {
   margin-bottom: 2rem;
 }
-.mb-6 {
-  margin-bottom: 1.5rem;
+.mt-6 {
+  margin-top: 1.5rem;
 }
-.mt-auto {
-  margin-top: auto;
+.mt-10 {
+  margin-top: 2.5rem;
 }
 .mt-1 {
   margin-top: 0.25rem;
 }
-.mt-6 {
-  margin-top: 1.5rem;
+.mb-6 {
+  margin-bottom: 1.5rem;
 }
 .mr-1 {
   margin-right: 0.25rem;
@@ -779,9 +764,6 @@ select {
 }
 .mr-10 {
   margin-right: 2.5rem;
-}
-.mt-10 {
-  margin-top: 2.5rem;
 }
 .block {
   display: block;
@@ -913,9 +895,6 @@ select {
 .flex-wrap {
   flex-wrap: wrap;
 }
-.flex-nowrap {
-  flex-wrap: nowrap;
-}
 .items-start {
   align-items: flex-start;
 }
@@ -956,9 +935,6 @@ select {
 }
 .border {
   border-width: 1px;
-}
-.border-4 {
-  border-width: 4px;
 }
 .border-0 {
   border-width: 0px;
@@ -1023,12 +999,6 @@ select {
 .p-10 {
   padding: 2.5rem;
 }
-.p-0 {
-  padding: 0px;
-}
-.p-9 {
-  padding: 2.25rem;
-}
 .p-3 {
   padding: 0.75rem;
 }
@@ -1038,11 +1008,14 @@ select {
 .p-8 {
   padding: 2rem;
 }
-.p-4 {
-  padding: 1rem;
-}
 .p-2 {
   padding: 0.5rem;
+}
+.p-9 {
+  padding: 2.25rem;
+}
+.p-0 {
+  padding: 0px;
 }
 .px-4 {
   padding-left: 1rem;
@@ -1084,17 +1057,13 @@ select {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
 }
-.px-7 {
-  padding-left: 1.75rem;
-  padding-right: 1.75rem;
-}
-.py-5 {
-  padding-top: 1.25rem;
-  padding-bottom: 1.25rem;
-}
 .py-7 {
   padding-top: 1.75rem;
   padding-bottom: 1.75rem;
+}
+.px-7 {
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
 }
 .py-3 {
   padding-top: 0.75rem;
@@ -1104,9 +1073,9 @@ select {
   padding-top: 2.5rem;
   padding-bottom: 2.5rem;
 }
-.py-0 {
-  padding-top: 0px;
-  padding-bottom: 0px;
+.py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
 }
 .pt-8 {
   padding-top: 2rem;
@@ -1122,12 +1091,6 @@ select {
 }
 .pb-2 {
   padding-bottom: 0.5rem;
-}
-.pt-2 {
-  padding-top: 0.5rem;
-}
-.pb-3 {
-  padding-bottom: 0.75rem;
 }
 .pb-5 {
   padding-bottom: 1.25rem;
@@ -1147,14 +1110,14 @@ select {
 .pt-7 {
   padding-top: 1.75rem;
 }
-.pt-9 {
-  padding-top: 2.25rem;
+.pt-6 {
+  padding-top: 1.5rem;
 }
 .pb-0 {
   padding-bottom: 0px;
 }
-.pt-6 {
-  padding-top: 1.5rem;
+.pt-9 {
+  padding-top: 2.25rem;
 }
 .text-left {
   text-align: left;
@@ -1280,9 +1243,6 @@ select {
 }
 .opacity-50 {
   opacity: 0.5;
-}
-.opacity-75 {
-  opacity: 0.75;
 }
 .shadow-sm {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);

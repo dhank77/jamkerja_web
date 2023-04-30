@@ -26,14 +26,17 @@ class JadwalImport implements ToModel, WithHeadingRow, WithValidation
         for ($i = 1; $i <= $number; $i++) {
             $tanggal = "$this->tahun-$this->bulan-$i";
 
-            $exists = JkdJadwal::where('tanggal', $tanggal)->where("nip", $row['no_pegawai'])->first();
+            $nip = get_nip_from_ktp($row['no_ktp']);
+
+            $exists = JkdJadwal::where('tanggal', $tanggal)->where("nip", $nip)->first();
 
             if ($exists) {
                 $exists->update(['kode_jkd' => $row[$i]]);
             } else {
                 JkdJadwal::create([
+                    'kode_perusahaan' => kp(),
                     'kode_jkd' => $row[$i],
-                    'nip' => $row['no_pegawai'],
+                    'nip' => $nip,
                     'tanggal' => $tanggal,
                 ]);
             }
@@ -45,7 +48,7 @@ class JadwalImport implements ToModel, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            'no_pegawai' => Rule::exists('users', 'nip'),
+            'no_ktp' => Rule::exists('users', 'nik'),
         ];
     }
 
