@@ -1138,9 +1138,9 @@ export default function Authenticated({ children }) {
                                                         }`}
                                                     >
                                                         {auth.role.some((ar) =>
-                                                            [
-                                                                "owner",
-                                                            ].includes(ar)
+                                                            ["owner"].includes(
+                                                                ar
+                                                            )
                                                         ) && (
                                                             <div
                                                                 className={`menu-item ${
@@ -1264,34 +1264,12 @@ export default function Authenticated({ children }) {
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div
-                                                    data-kt-menu-trigger="click"
-                                                    className={`menu-item menu-accordion ${
-                                                        route().current(
-                                                            "master.pendidikan*"
-                                                        ) ||
-                                                        route().current(
-                                                            "master.jurusan*"
-                                                        ) ||
-                                                        route().current(
-                                                            "master.kursus*"
-                                                        )
-                                                            ? "hover show"
-                                                            : ""
-                                                    }`}
-                                                >
-                                                    <span className="menu-link">
-                                                        <span className="menu-bullet">
-                                                            <span className="bullet bullet-dot" />
-                                                        </span>
-                                                        <span className="menu-title">
-                                                            Data Pendidikan
-                                                        </span>
-                                                        <span className="menu-arrow" />
-                                                    </span>
+                                                {auth.role.some((ar) =>
+                                                    ["owner"].includes(ar)
+                                                ) && (
                                                     <div
-                                                        className={`menu-sub menu-sub-accordion menu-active-bg ${
+                                                        data-kt-menu-trigger="click"
+                                                        className={`menu-item menu-accordion ${
                                                             route().current(
                                                                 "master.pendidikan*"
                                                             ) ||
@@ -1301,71 +1279,27 @@ export default function Authenticated({ children }) {
                                                             route().current(
                                                                 "master.kursus*"
                                                             )
-                                                                ? "show"
+                                                                ? "hover show"
                                                                 : ""
                                                         }`}
                                                     >
+                                                        <span className="menu-link">
+                                                            <span className="menu-bullet">
+                                                                <span className="bullet bullet-dot" />
+                                                            </span>
+                                                            <span className="menu-title">
+                                                                Data Pendidikan
+                                                            </span>
+                                                            <span className="menu-arrow" />
+                                                        </span>
                                                         <div
-                                                            className={`menu-item ${
+                                                            className={`menu-sub menu-sub-accordion menu-active-bg ${
                                                                 route().current(
                                                                     "master.pendidikan*"
-                                                                )
-                                                                    ? "show"
-                                                                    : ""
-                                                            }`}
-                                                        >
-                                                            <Link
-                                                                className={`menu-link ${
-                                                                    route().current(
-                                                                        "master.pendidikan*"
-                                                                    )
-                                                                        ? "active"
-                                                                        : ""
-                                                                }`}
-                                                                href={route(
-                                                                    "master.pendidikan.index"
-                                                                )}
-                                                            >
-                                                                <span className="menu-bullet">
-                                                                    <span className="bullet bullet-dot" />
-                                                                </span>
-                                                                <span className="menu-title">
-                                                                    Tingkat
-                                                                    Pendidikan
-                                                                </span>
-                                                            </Link>
-                                                        </div>
-                                                        <div
-                                                            className={`menu-item ${
+                                                                ) ||
                                                                 route().current(
                                                                     "master.jurusan*"
-                                                                )
-                                                                    ? "show"
-                                                                    : ""
-                                                            }`}
-                                                        >
-                                                            <Link
-                                                                className={`menu-link ${
-                                                                    route().current(
-                                                                        "master.jurusan*"
-                                                                    )
-                                                                        ? "active"
-                                                                        : ""
-                                                                }`}
-                                                                href={route(
-                                                                    "master.jurusan.index"
-                                                                )}
-                                                            >
-                                                                <span className="menu-bullet">
-                                                                    <span className="bullet bullet-dot" />
-                                                                </span>
-                                                                <span className="menu-title">
-                                                                    Jurusan
-                                                                </span>
-                                                            </Link>
-                                                        </div>
-                                                        <div
-                                                            className={`menu-item ${
+                                                                ) ||
                                                                 route().current(
                                                                     "master.kursus*"
                                                                 )
@@ -1373,29 +1307,98 @@ export default function Authenticated({ children }) {
                                                                     : ""
                                                             }`}
                                                         >
-                                                            <Link
-                                                                className={`menu-link ${
+                                                            <div
+                                                                className={`menu-item ${
+                                                                    route().current(
+                                                                        "master.pendidikan*"
+                                                                    )
+                                                                        ? "show"
+                                                                        : ""
+                                                                }`}
+                                                            >
+                                                                <Link
+                                                                    className={`menu-link ${
+                                                                        route().current(
+                                                                            "master.pendidikan*"
+                                                                        )
+                                                                            ? "active"
+                                                                            : ""
+                                                                    }`}
+                                                                    href={route(
+                                                                        "master.pendidikan.index"
+                                                                    )}
+                                                                >
+                                                                    <span className="menu-bullet">
+                                                                        <span className="bullet bullet-dot" />
+                                                                    </span>
+                                                                    <span className="menu-title">
+                                                                        Tingkat
+                                                                        Pendidikan
+                                                                    </span>
+                                                                </Link>
+                                                            </div>
+                                                            <div
+                                                                className={`menu-item ${
+                                                                    route().current(
+                                                                        "master.jurusan*"
+                                                                    )
+                                                                        ? "show"
+                                                                        : ""
+                                                                }`}
+                                                            >
+                                                                <Link
+                                                                    className={`menu-link ${
+                                                                        route().current(
+                                                                            "master.jurusan*"
+                                                                        )
+                                                                            ? "active"
+                                                                            : ""
+                                                                    }`}
+                                                                    href={route(
+                                                                        "master.jurusan.index"
+                                                                    )}
+                                                                >
+                                                                    <span className="menu-bullet">
+                                                                        <span className="bullet bullet-dot" />
+                                                                    </span>
+                                                                    <span className="menu-title">
+                                                                        Jurusan
+                                                                    </span>
+                                                                </Link>
+                                                            </div>
+                                                            <div
+                                                                className={`menu-item ${
                                                                     route().current(
                                                                         "master.kursus*"
                                                                     )
-                                                                        ? "active"
+                                                                        ? "show"
                                                                         : ""
                                                                 }`}
-                                                                href={route(
-                                                                    "master.kursus.index"
-                                                                )}
                                                             >
-                                                                <span className="menu-bullet">
-                                                                    <span className="bullet bullet-dot" />
-                                                                </span>
-                                                                <span className="menu-title">
-                                                                    Kursus &
-                                                                    Pelatihan
-                                                                </span>
-                                                            </Link>
+                                                                <Link
+                                                                    className={`menu-link ${
+                                                                        route().current(
+                                                                            "master.kursus*"
+                                                                        )
+                                                                            ? "active"
+                                                                            : ""
+                                                                    }`}
+                                                                    href={route(
+                                                                        "master.kursus.index"
+                                                                    )}
+                                                                >
+                                                                    <span className="menu-bullet">
+                                                                        <span className="bullet bullet-dot" />
+                                                                    </span>
+                                                                    <span className="menu-title">
+                                                                        Kursus &
+                                                                        Pelatihan
+                                                                    </span>
+                                                                </Link>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                )}
                                                 <div
                                                     data-kt-menu-trigger="click"
                                                     className={`menu-item menu-accordion ${

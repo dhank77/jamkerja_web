@@ -79,7 +79,7 @@ class RiwayatCutiController extends Controller
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-cuti-" . request('nomor_surat') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-cuti-" . date('ymdhis') . ".pdf");
         }
 
         $cr = DataPengajuanCuti::updateOrCreate(

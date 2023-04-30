@@ -17,6 +17,7 @@ class IjinController extends Controller
         $ijin = Ijin::when($search, function($qr, $search){
                     $qr->where('nama', 'LIKE', "%$search%");
                 })
+                ->where('kode_perusahaan', kp())
                 ->paginate($limit);
 
         $ijin->appends(request()->all());
@@ -28,7 +29,7 @@ class IjinController extends Controller
 
     public function json()
     {
-        $ijin = Ijin::orderBy('nama')->get();
+        $ijin = Ijin::orderBy('nama')->where('kode_perusahaan', kp())->get();
         SelectResource::withoutWrapping();
         $ijin = SelectResource::collection($ijin);
 
@@ -48,7 +49,7 @@ class IjinController extends Controller
 
     public function delete(Ijin $ijin)
     {
-        $cr = $ijin->delete();
+        $cr = $ijin->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.ijin.index'))->with([
                 'type' => 'success',
@@ -65,17 +66,18 @@ class IjinController extends Controller
     public function store()
     {
         $rules = [
-            'kode_ijin' => 'required',
             'nama' => 'required',
         ];
 
-        if(!request('id')){
-            $rules['kode_ijin'] = 'required|unique:ijin';
-        }
-
         $data = request()->validate($rules);
 
-        $cr = ijin::updateOrCreate(['id' => request('id')], $data);
+        if(!request('id')){
+            $data['kode_ijin'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+            $cr = Ijin::create($data);
+        }else{
+            $cr = Ijin::where('id', request('id'))->update($data);
+        }
 
         if ($cr) {
             return redirect(route('master.ijin.index'))->with([

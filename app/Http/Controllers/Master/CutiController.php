@@ -17,6 +17,7 @@ class CutiController extends Controller
         $cuti = Cuti::when($search, function($qr, $search){
                     $qr->where('nama', 'LIKE', "%$search%");
                 })
+                ->where('kode_perusahaan', kp())
                 ->paginate($limit);
 
         $cuti->appends(request()->all());
@@ -28,7 +29,7 @@ class CutiController extends Controller
 
     public function json()
     {
-        $cuti = Cuti::orderBy('nama')->get();
+        $cuti = Cuti::orderBy('nama')->where('kode_perusahaan', kp())->get();
         SelectResource::withoutWrapping();
         $cuti = SelectResource::collection($cuti);
 
@@ -48,7 +49,7 @@ class CutiController extends Controller
 
     public function delete(Cuti $cuti)
     {
-        $cr = $cuti->delete();
+        $cr = $cuti->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.cuti.index'))->with([
                 'type' => 'success',
@@ -65,17 +66,20 @@ class CutiController extends Controller
     public function store()
     {
         $rules = [
-            'kode_cuti' => 'required',
             'nama' => 'required',
+            'hari' => 'required',
         ];
-
-        if(!request('id')){
-            $rules['kode_cuti'] = 'required|unique:cuti';
-        }
 
         $data = request()->validate($rules);
 
-        $cr = Cuti::updateOrCreate(['id' => request('id')], $data);
+        if(!request('id')){
+            $data['kode_cuti'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+            $cr = Cuti::create($data);
+        }else{
+            $cr = Cuti::where('id', request('id'))->update($data);
+        }
+
 
         if ($cr) {
             return redirect(route('master.cuti.index'))->with([

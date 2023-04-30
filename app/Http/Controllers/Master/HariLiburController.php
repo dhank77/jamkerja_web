@@ -16,6 +16,7 @@ class HariLiburController extends Controller
         $hariLibur = HariLibur::when($search, function($qr, $search){
                                     $qr->where('nama', 'LIKE', "%$search%");
                                 })
+                                ->where('kode_perusahaan', kp())
                                 ->paginate($limit);
 
         $hariLibur->appends(request()->all());
@@ -38,7 +39,7 @@ class HariLiburController extends Controller
 
     public function delete(HariLibur $hariLibur)
     {
-        $cr = $hariLibur->delete();
+        $cr = $hariLibur->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.hariLibur.index'))->with([
                 'type' => 'success',
@@ -69,7 +70,13 @@ class HariLiburController extends Controller
             ]);
         }
 
-        $cr = HariLibur::updateOrCreate(['id' => request('id')], $data);
+        if(request('id')){
+            $cr = HariLibur::where('id', request('id'))->update($data);
+        }else{
+            $data['kode_perusahaan'] = kp();
+            $cr = HariLibur::create($data);
+        }
+
 
         if ($cr) {
             return redirect(route('master.hariLibur.index'))->with([

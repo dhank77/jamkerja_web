@@ -41,17 +41,11 @@ export default function Add({ errors, ijin }) {
                 <div className="card-header border-0 pt-5 flex">
                     <h3 className="card-title align-items-start flex-column">
                         <span className="card-label fw-bolder fs-3 mb-1">Tambah ijin</span>
+                        <span className='text-danger'>Ijin digunakan untuk urusan yang menyebabkan telat ke kantor</span>
                     </h3>
                 </div>
                 <div className="card-body py-3">
                     <form onSubmit={submit}>
-                        <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Kode ijin</label>
-                            <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="kode_ijin" disabled={values.id != undefined ? true : false} type="number" onChange={updateData} value={values.kode_ijin} className="form-control form-control-lg form-control-solid" />
-                            </div>
-                            {errors.kode_ijin && <div className="text-danger">{errors.kode_ijin}</div>}
-                        </div>
                         <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Nama ijin</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">

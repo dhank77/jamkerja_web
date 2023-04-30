@@ -20,6 +20,7 @@ class JamKerjaStatisController extends Controller
                             })
                             ->select('nama', 'kode_jam_kerja')
                             ->distinct('kode_jam_kerja')
+                            ->where('kode_perusahaan', kp())
                             ->paginate($limit);
 
         $jamKerjaStatis->appends(request()->all());
@@ -37,14 +38,14 @@ class JamKerjaStatisController extends Controller
 
     public function edit($kode_jam_kerja)
     {
-        $jamKerjaStatis = JamKerjaStatis::where('kode_jam_kerja', $kode_jam_kerja)->orderBy('hari')->get();
+        $jamKerjaStatis = JamKerjaStatis::where('kode_jam_kerja', $kode_jam_kerja)->where('kode_perusahaan', kp())->orderBy('hari')->get();
         return inertia('Master/JamKerjaStatis/Edit', compact('jamKerjaStatis'));
     }
 
     public function delete($kode_jam_kerja)
     {
-        JksPegawai::where('kode_jam_kerja', $kode_jam_kerja)->delete();
-        $cr = JamKerjaStatis::where('kode_jam_kerja', $kode_jam_kerja)->delete();
+        JksPegawai::where('kode_jam_kerja', $kode_jam_kerja)->where('kode_perusahaan', kp())->delete();
+        $cr = JamKerjaStatis::where('kode_jam_kerja', $kode_jam_kerja)->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.jamKerjaStatis.index'))->with([
                 'type' => 'success',
@@ -68,12 +69,13 @@ class JamKerjaStatisController extends Controller
 
         $kode_jam_kerja = request('kode_jam_kerja');
         if(!$kode_jam_kerja){
-            $kode_jam_kerja = rand(0001, 9999);
+            $kode_jam_kerja = generateUUID();
         }else{
             JamKerjaStatis::where('kode_jam_kerja', $kode_jam_kerja)->delete();
         }
         foreach (request('data') as $val) {
             $val['kode_jam_kerja'] = $kode_jam_kerja;
+            $val['kode_perusahaan'] = kp();
             $val['nama'] = request('nama');
             $cr = JamKerjaStatis::create($val);
         }

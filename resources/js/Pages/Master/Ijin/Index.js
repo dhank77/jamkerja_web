@@ -33,6 +33,7 @@ export default function Index({ ijin }) {
                     <div className="card-header border-0 pt-5">
                         <h3 className="card-title align-items-start flex-column">
                             <span className="card-label fw-bolder fs-3 mb-1">Data ijin</span>
+                            <span className='text-danger'>Ijin digunakan untuk urusan yang menyebabkan telat ke kantor</span>
                         </h3>
                     </div>
                     <div className="card-body py-3">
@@ -42,7 +43,6 @@ export default function Index({ ijin }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>Kode ijin</th>
                                         <th>Nama ijin</th>
                                         <th>Opsi</th>
                                     </tr>
@@ -52,9 +52,6 @@ export default function Index({ ijin }) {
                                         <tr key={k}>
                                             <td>
                                                 {k + 1}
-                                            </td>
-                                            <td>
-                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.kode_ijin}</span>
                                             </td>
                                             <td>
                                                 <p>{u.nama}</p>

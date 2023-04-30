@@ -42,8 +42,8 @@ export default function Index({ cuti }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>Kode Cuti</th>
                                         <th>Nama Cuti</th>
+                                        <th>Lama Cuti (dalam hari)</th>
                                         <th>Opsi</th>
                                     </tr>
                                 </thead>
@@ -54,10 +54,10 @@ export default function Index({ cuti }) {
                                                 {k + 1}
                                             </td>
                                             <td>
-                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.kode_cuti}</span>
+                                                <p>{u.nama}</p>
                                             </td>
                                             <td>
-                                                <p>{u.nama}</p>
+                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.hari} Hari</span>
                                             </td>
                                             <td>
                                                 <Dropdown>

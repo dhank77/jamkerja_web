@@ -96,7 +96,7 @@ class SelectResource extends JsonResource
         if($this->nip){
             $data['nip'] = $this->nip;
             $data['value'] = $this->nip;
-            $data['label'] = $this->name;
+            $data['label'] = $this->name_wg;
             $data['images'] = storage($this->image);
         }
 

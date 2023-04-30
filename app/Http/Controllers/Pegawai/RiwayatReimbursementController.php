@@ -81,7 +81,7 @@ class RiwayatReimbursementController extends Controller
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-reimbursement-" . request('nomor_surat') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-reimbursement-" . date('ymdhis') . ".pdf");
         }
 
         $cr = DataPengajuanReimbursement::updateOrCreate(

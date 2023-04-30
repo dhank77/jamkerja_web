@@ -82,7 +82,7 @@ class RiwayatShiftController extends Controller
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-shift-" . request('nomor_surat') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-shift-" . date('ymdhis') . ".pdf");
         }
 
         $cr = RiwayatShift::updateOrCreate(

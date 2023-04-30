@@ -8,6 +8,7 @@ export default function Add({ errors, cuti }) {
     const [values, setValues] = useState({
         kode_cuti: cuti.kode_cuti,
         nama: cuti.nama,
+        hari: cuti.hari,
         id: cuti.id,
     })
 
@@ -46,18 +47,18 @@ export default function Add({ errors, cuti }) {
                 <div className="card-body py-3">
                     <form onSubmit={submit}>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Kode Cuti</label>
-                            <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="kode_cuti" disabled={values.id != undefined ? true : false} type="number" onChange={updateData} value={values.kode_cuti} className="form-control form-control-lg form-control-solid" />
-                            </div>
-                            {errors.kode_cuti && <div className="text-danger">{errors.kode_cuti}</div>}
-                        </div>
-                        <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Nama Cuti</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <input name="nama" type="text" onChange={updateData} value={values.nama} className="form-control form-control-lg form-control-solid" />
                             </div>
                             {errors.nama && <div className="text-danger">{errors.nama}</div>}
+                        </div>
+                        <div className="row mb-6">
+                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Waktu Cuti (dalam hari)</label>
+                            <div className="col-lg-9 fv-row fv-plugins-icon-container">
+                                <input name="hari" type="number" onChange={updateData} value={values.hari} className="form-control form-control-lg form-control-solid" />
+                            </div>
+                            {errors.hari && <div className="text-danger">{errors.hari}</div>}
                         </div>
                         <div className="float-right">
                             <button type="submit" className="btn btn-primary">Simpan</button>

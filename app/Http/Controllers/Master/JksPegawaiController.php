@@ -22,7 +22,7 @@ class JksPegawaiController extends Controller
 
     public function all_free()
     {
-        $jks = User::role('pegawai')->select("users.nip", "users.name", "users.image")->leftJoin('jks_pegawai', 'jks_pegawai.nip', 'users.nip')->whereNull('jks_pegawai.id')->get();
+        $jks = User::role('pegawai')->select("users.nip", "users.name", "users.image")->leftJoin('jks_pegawai', 'jks_pegawai.nip', 'users.nip')->whereNull('jks_pegawai.id')->where('users.kode_perusahaan', kp())->get();
         SelectResource::withoutWrapping();
         $jks = SelectResource::collection($jks);
 
@@ -40,7 +40,10 @@ class JksPegawaiController extends Controller
         $kode_jam_kerja = request('kode_jam_kerja');
         foreach (request('checked') as $nip) {
             JksPegawai::updateOrCreate(
-                ['nip' => $nip],
+                [
+                    'nip' => $nip,
+                    'kode_perusahaan' => kp(),
+                ],
                 [
                     'kode_jam_kerja' => $kode_jam_kerja,
                 ]

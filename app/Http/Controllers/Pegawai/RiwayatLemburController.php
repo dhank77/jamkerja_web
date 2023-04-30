@@ -82,7 +82,7 @@ class RiwayatLemburController extends Controller
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-lembur-" . request('nomor_surat') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-lembur-" . date('ymdhis') . ".pdf");
         }
 
         $cr = DataPengajuanLembur::updateOrCreate(

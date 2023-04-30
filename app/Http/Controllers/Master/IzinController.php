@@ -18,6 +18,7 @@ class IzinController extends Controller
         $izin = Izin::when($search, function($qr, $search){
                     $qr->where('nama', 'LIKE', "%$search%");
                 })
+                ->where('kode_perusahaan', kp())
                 ->paginate($limit);
 
         $izin->appends(request()->all());
@@ -29,7 +30,7 @@ class IzinController extends Controller
 
     public function json()
     {
-        $izin = Izin::orderBy('nama')->get();
+        $izin = Izin::orderBy('nama')->where('kode_perusahaan', kp())->get();
         SelectResource::withoutWrapping();
         $izin = SelectResource::collection($izin);
 
@@ -49,7 +50,7 @@ class IzinController extends Controller
 
     public function delete(Izin $izin)
     {
-        $cr = $izin->delete();
+        $cr = $izin->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.izin.index'))->with([
                 'type' => 'success',
@@ -66,17 +67,18 @@ class IzinController extends Controller
     public function store()
     {
         $rules = [
-            'kode_izin' => 'required',
             'nama' => 'required',
         ];
 
-        if(!request('id')){
-            $rules['kode_izin'] = 'required|unique:izin';
-        }
-
         $data = request()->validate($rules);
 
-        $cr = izin::updateOrCreate(['id' => request('id')], $data);
+        if(!request('id')){
+            $data['kode_izin'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+            $cr = Izin::create($data);
+        }else{
+            $cr = Izin::where('id', request('id'))->update($data);
+        }
 
         if ($cr) {
             return redirect(route('master.izin.index'))->with([

@@ -37,6 +37,7 @@ class User extends Authenticatable
 
     protected $appends = [
         'images',
+        'name_wg'
     ];
 
     protected $casts = [
@@ -136,5 +137,11 @@ class User extends Authenticatable
     public function scopeUltah($query)
     {
         return $query->whereRaw('extract(month from tanggal_lahir) = ?', [Carbon::today()->month])->whereRaw('extract(day from tanggal_lahir) = ?', [Carbon::today()->day])->orderBy('tanggal_lahir', 'asc');
+    }
+
+
+    public function getNameWgAttribute()
+    {
+        return ($this->gelar_depan ? $this->gelar_depan . ". " : "") .  ($this->name ?? $this->nama) . ($this->gelar_belakang ? ", " . $this->gelar_belakang : "");
     }
 }
