@@ -114,13 +114,6 @@ export default function Add({ errors, lokasi, parent, lokasiDetail }) {
                 <div className="card-body py-3">
                     <form onSubmit={submit}>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Kode lokasi</label>
-                            <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="kode_lokasi" disabled={values.id != undefined ? true : false} type="number" onChange={updateData} value={values.kode_lokasi} className="form-control form-control-lg form-control-solid" />
-                            </div>
-                            {errors.kode_lokasi && <div className="text-danger">{errors.kode_lokasi}</div>}
-                        </div>
-                        <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Nama lokasi</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <input name="nama" type="text" onChange={updateData} value={values.nama} className="form-control form-control-lg form-control-solid" />

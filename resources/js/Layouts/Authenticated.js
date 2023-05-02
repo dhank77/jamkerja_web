@@ -1695,35 +1695,7 @@ export default function Authenticated({ children }) {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div
-                                                            className={`menu-item ${
-                                                                route().current(
-                                                                    "master.lokasi*"
-                                                                )
-                                                                    ? "show"
-                                                                    : ""
-                                                            }`}
-                                                        >
-                                                            <Link
-                                                                className={`menu-link ${
-                                                                    route().current(
-                                                                        "master.lokasi*"
-                                                                    )
-                                                                        ? "active"
-                                                                        : ""
-                                                                }`}
-                                                                href={route(
-                                                                    "master.lokasi.index"
-                                                                )}
-                                                            >
-                                                                <span className="menu-bullet">
-                                                                    <span className="bullet bullet-dot" />
-                                                                </span>
-                                                                <span className="menu-title">
-                                                                    Lokasi Kerja
-                                                                </span>
-                                                            </Link>
-                                                        </div>
+                                                        {/* <di */}
                                                         <div
                                                             className={`menu-item ${
                                                                 route().current(

@@ -14,10 +14,11 @@ class VisitController extends Controller
         $search = request('s');
         $limit = request('limit') ?? 10;
 
-        $visit = Visit::when($search, function($qr, $search){
-                                    $qr->where('nama', 'LIKE', "%$search%");
-                                })
-                                ->paginate($limit);
+        $visit = Visit::when($search, function ($qr, $search) {
+            $qr->where('nama', 'LIKE', "%$search%");
+        })
+            ->where('kode_perusahaan', kp())
+            ->paginate($limit);
 
         $visit->appends(request()->all());
 
@@ -39,7 +40,7 @@ class VisitController extends Controller
 
     public function delete(Visit $visit)
     {
-        $cr = $visit->delete();
+        $cr = $visit->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.visit.index'))->with([
                 'type' => 'success',
@@ -62,10 +63,14 @@ class VisitController extends Controller
         ];
 
         $data = request()->validate($rules);
-        if(!request('id')){
-             $data['kode_visit'] = (string) Str::uuid();
+        if (!request('id')) {
+            $data['kode_visit'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+            $cr = Visit::create($data);
+        } else {
+            $cr = Visit::where('id', request('id'))->update($data);
         }
-        $cr = Visit::updateOrCreate(['id' => request('id')], $data);
+
 
         if ($cr) {
             return redirect(route('master.visit.index'))->with([
