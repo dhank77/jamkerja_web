@@ -24,6 +24,9 @@ export default function Index({ lembur }) {
                         <li className="breadcrumb-item text-gray-500">Lembur</li>
                     </ul>
                 </div>
+                <div className="d-flex align-items-center py-2 py-md-1" >
+                    <Link href={route('master.payroll.lembur.add')} className="btn btn-primary"><b>Tambah</b></Link>
+                </div>
             </div>
             <div className="content">
                 <div className="card mb-5 mb-xl-8">
@@ -61,7 +64,10 @@ export default function Index({ lembur }) {
                                                 <p>{u.pengali}</p>
                                             </td>
                                             <td>
-                                                <Edit routes={route('master.payroll.lembur.edit', u.id)} />
+                                                <Dropdown>
+                                                    <Edit routes={route('master.payroll.lembur.edit', u.id)} />
+                                                    <Delete routes={route('master.payroll.lembur.delete', u.id)} />
+                                                </Dropdown>
                                             </td>
                                         </tr>
                                     ))}

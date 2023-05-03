@@ -12,6 +12,7 @@ export default function Add({ errors, lembur }) {
         kode_tunjangan: tunjangan,
         pengali: lembur.pengali,
         jam: lembur.jam,
+        id: lembur.id,
     })
 
     const updateData = (e) => {
@@ -58,14 +59,14 @@ export default function Add({ errors, lembur }) {
                         <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Jam Ke</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input disabled={true} type="number"  value={values.jam} className="form-control form-control-lg form-control-solid" />
+                                <input name='jam' onChange={updateData} disabled={values.id == undefined ? false : true} type="number"  value={values.jam} className="form-control form-control-lg form-control-solid" />
                             </div>
                             {errors.kode_lembur && <div className="text-danger">{errors.kode_lembur}</div>}
                         </div>
                         <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Pengali</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="pengali" type="text" onChange={updateData} value={values.pengali} placeholder="Contoh : 1.5 * 173" className="form-control form-control-lg form-control-solid" />
+                                <input name="pengali" type="text" onChange={updateData} value={values.pengali} placeholder="Contoh : 1.5 * 1/173" className="form-control form-control-lg form-control-solid" />
                             </div>
                             {errors.pengali && <div className="text-danger">{errors.pengali}</div>}
                         </div>

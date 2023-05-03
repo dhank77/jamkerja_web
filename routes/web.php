@@ -713,9 +713,12 @@ Route::middleware(['auth'])
                             ->name("lembur.")
                             ->group(function () {
                                 Route::get('', 'index')->name('index');
+                                Route::get('add', 'add')->name('add');
                                 Route::post('update', 'update')->name('update');
                                 Route::get('edit/{lembur}', 'edit')->name('edit');
+                                Route::delete('delete/{lembur}', 'delete')->name('delete');
                             });
+
                         Route::controller(PayrollAbsensiController::class)
                             ->prefix('absensi')
                             ->name("absensi.")
@@ -724,6 +727,7 @@ Route::middleware(['auth'])
                                 Route::post('update', 'update')->name('update');
                                 Route::get('edit/{absensi}', 'edit')->name('edit');
                             });
+
                         Route::controller(AbsensiPermenitController::class)
                             ->prefix('absensi-permenit')
                             ->name("absensiPermenit.")

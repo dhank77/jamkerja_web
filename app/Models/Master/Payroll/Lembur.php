@@ -9,5 +9,7 @@ class Lembur extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     protected $table = "ms_lembur";
 }
