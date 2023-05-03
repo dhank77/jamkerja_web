@@ -42,7 +42,6 @@ export default function Index({ tunjangan }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>Kode Tunjangan</th>
                                         <th>Nama Tunjangan</th>
                                         <th>Opsi</th>
                                     </tr>
@@ -52,9 +51,6 @@ export default function Index({ tunjangan }) {
                                         <tr key={k}>
                                             <td>
                                                 {k + 1}
-                                            </td>
-                                            <td>
-                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.kode_tunjangan}</span>
                                             </td>
                                             <td>
                                                 <p>{u.nama}</p>

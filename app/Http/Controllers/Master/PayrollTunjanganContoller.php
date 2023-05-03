@@ -18,6 +18,10 @@ class PayrollTunjanganContoller extends Controller
         $tunjangan = Tunjangan::when($search, function($qr, $search){
                         $qr->where('nama', 'LIKE', "%$search%");
                     })
+                    ->where(function($qr){
+                        $qr->where('kode_perusahaan', kp())
+                            ->orWhereNull('kode_perusahaan');
+                    })
                     ->paginate($limit);
 
         $tunjangan->appends(request()->all());
