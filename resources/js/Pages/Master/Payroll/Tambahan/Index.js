@@ -65,8 +65,8 @@ export default function Index({ tambahan }) {
                                             </td>
                                             <td>
                                                 <Dropdown>
-                                                    <Edit routes={route('master.payroll.penambahan.edit', u.id)} />
-                                                    <Delete routes={route('master.payroll.penambahan.delete', u.id)} />
+                                                    <Edit routes={route('master.payroll.penambahan.edit', u.kode_tambah)} />
+                                                    <Delete routes={route('master.payroll.penambahan.delete', u.kode_tambah)} />
                                                 </Dropdown>
                                             </td>
                                         </tr>

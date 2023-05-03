@@ -18,6 +18,7 @@ class PayrollPotonganController extends Controller
         $potongan = Potongan::when($search, function($qr, $search){
                         $qr->where('nama', 'LIKE', "%$search%");
                     })
+                    ->where('kode_perusahaan', kp())
                     ->paginate($limit);
 
         $potongan->appends(request()->all());
@@ -29,7 +30,7 @@ class PayrollPotonganController extends Controller
 
     public function json()
     {
-        $potongan = Potongan::orderBy('nama')->get();
+        $potongan = Potongan::orderBy('nama')->where('kode_perusahaan', kp())->get();
         SelectResource::withoutWrapping();
         $potongan = SelectResource::collection($potongan);
 
@@ -49,7 +50,7 @@ class PayrollPotonganController extends Controller
 
     public function delete(Potongan $potongan)
     {
-        $cr = $potongan->delete();
+        $cr = $potongan->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.payroll.potongan.index'))->with([
                 'type' => 'success',
@@ -76,7 +77,7 @@ class PayrollPotonganController extends Controller
 
         $data = request()->validate($rules);
 
-        $cr = potongan::updateOrCreate(['id' => request('id')], $data);
+        $cr = Potongan::updateOrCreate(['id' => request('id')], $data);
 
         if ($cr) {
             return redirect(route('master.payroll.potongan.index'))->with([

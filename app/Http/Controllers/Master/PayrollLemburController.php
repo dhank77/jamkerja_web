@@ -76,8 +76,7 @@ class PayrollLemburController extends Controller
             }
         }
         $data['kode_tunjangan'] = $tunjanganString;
-        $data['kode_perusahaan'] = kp();
-
+        
         if(request('id')){
             $cr = Lembur::where(['id' => request('id')])->update($data);
         }else{
@@ -85,6 +84,8 @@ class PayrollLemburController extends Controller
             if($cek){
                 $cr = Lembur::where(['jam' => request('jam')])->update($data);
             }else{
+                $data['kode_lembur'] = generateUUID();
+                $data['kode_perusahaan'] = kp();
                 $cr = Lembur::create($data);
             }
         }

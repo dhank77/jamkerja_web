@@ -19,9 +19,9 @@ function role_only($role)
 {
     $roles = auth()->user()->getRoleNames()->toArray();
 
-    if(in_array($role, $roles) && count($roles) == 1){
+    if (in_array($role, $roles) && count($roles) == 1) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
@@ -355,9 +355,9 @@ function hitung_jam_menit($start, $end)
 
 function hitung_jam_menit_detik_dari_2_jam($start, $end)
 {
-    $date = new DateTime( date("Y-m-d") . " " . $start);
+    $date = new DateTime(date("Y-m-d") . " " . $start);
     $now = new DateTime(date("Y-m-d") . " " . $end);
-    if($start > $end){
+    if ($start > $end) {
         return "-";
     }
     $interval = $now->diff($date);
@@ -377,15 +377,15 @@ function menit_to_jam_menit_detik($menit)
 {
     $jam = "00";
     $menit_ = "00";
-    if($menit > 0){
-        if($menit > 60){
+    if ($menit > 0) {
+        if ($menit > 60) {
             $jam = round($menit / 60);
             $menit_ = $menit % 60;
             return date("H:i:s", strtotime(date("Y-m-d") . " " . "$jam:$menit_:00"));
-        }else{
+        } else {
             return date("H:i:s", strtotime(date("Y-m-d") . " " . "00:$menit:00"));
         }
-    }else{
+    } else {
         return "-";
     }
 }
@@ -583,63 +583,73 @@ function getGenUsia()
     return $data;
 }
 
-function validasi_master($array)
+function validasi_master($array, $exp = 3)
 {
-    $namaModel = $array[1];
-    $id = $array[3];
-    if($namaModel == 'level'){
+
+    $namaModel = $array[$exp-2];
+    $id = $array[$exp];
+    if ($namaModel == 'level') {
         $namaModel = 'eselon';
+    }elseif($namaModel == 'penambahan'){
+        $namaModel = 'tambahan';
     }
 
-    $model = 'App\Models\Master\\' . ucfirst($namaModel);
-    if(strlen($id) >= 36){
-        if($namaModel == 'tingkat'){
+    if ($exp == 3) {
+        $model = 'App\Models\Master\\' . ucfirst($namaModel);
+    } elseif ($exp == 4) {
+        $model = 'App\Models\Master\\' . ucfirst($array[1]) . "\\" . ucfirst($namaModel);
+    }
+
+    if (strlen($id) >= 36) {
+        if ($namaModel == 'tingkat') {
             $field = 'kode_skpd';
-        }else{
+        } else if($namaModel == 'pengurangan') {
+            $field = 'kode_kurang';
+        } else if($namaModel == 'tambahan') {
+            $field = 'kode_tambah';
+        } else {
             $field = 'kode_' . strtolower($namaModel);
         }
         $kode_perusahaan = $model::where($field, $id)->value('kode_perusahaan');
-    }else{
+    } else {
         $kode_perusahaan = $model::where('id', $id)->value('kode_perusahaan');
     }
 
-    if($kode_perusahaan != auth()->user()->kode_perusahaan){
+    if ($kode_perusahaan != auth()->user()->kode_perusahaan) {
         return true;
-    }else{
+    } else {
         return false;
     }
-    
 }
 
 function validasi_data_pegawai($array)
 {
     $namaModel = $array[1];
     $nip = $array[2];
-    if(count($array) == 6){
+    if (count($array) == 6) {
         $id = is_integer($array[4]) ? $array[4] : $array[5];
-    }else{
+    } else {
         $id = $array[4];
     }
-    if($namaModel == 'level'){
+    if ($namaModel == 'level') {
         $namaModel = 'eselon';
     }
 
     // array model tanpa kata riwayat
     $modelNotRiwayat = ['keluarga'];
 
-    if(in_array($namaModel, $modelNotRiwayat)){
+    if (in_array($namaModel, $modelNotRiwayat)) {
         $model = 'App\Models\Pegawai\\' . ucfirst($namaModel);
-    }else{
+    } else {
         // saat ini hanya model yang didahului riwayat
         $model = 'App\Models\Pegawai\Riwayat' . ucfirst($namaModel);
     }
 
     $kode_perusahaan = $model::where('nip', $nip)->where('id', $id)->value('kode_perusahaan');
 
-    if($kode_perusahaan != auth()->user()->kode_perusahaan){
+    if ($kode_perusahaan != auth()->user()->kode_perusahaan) {
         return true;
-    }else{
+    } else {
         return false;
     }
-    
 }

@@ -16,6 +16,7 @@ class PayrollLemburResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'kode_lembur' => $this->kode_lembur,
             'pengali' => $this->pengali,
             'jam' => $this->jam,
             'kode_tunjangan' => $this->kode_tunjangan,

@@ -16,6 +16,7 @@ class AbsensiPermenitResource extends JsonResource
     {
         return [
             'id' => $this->id,        
+            'kode_absensi_permenit' => $this->kode_absensi_permenit,        
             'level' => $this->eselon?->nama ?? "Semua Level",        
             'potongan' => "Rp. " .  number_indo($this->potongan),        
             'keterangan' => strtoupper($this->keterangan),        

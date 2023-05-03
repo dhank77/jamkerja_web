@@ -14,6 +14,11 @@ class AbsensiPermenit extends Model
 
     protected $guarded = [];
 
+    public function getRouteKeyName()
+    {
+        return 'kode_absensi_permenit';
+    }
+
     public function eselon()
     {
         return $this->belongsTo(Eselon::class, 'kode_eselon', 'kode_eselon');

@@ -12,4 +12,9 @@ class Tambahan extends Model
     protected $table = "ms_tambahan";
 
     protected $guarded = [];
+
+    public function getRouteKeyName()
+    {
+        return 'kode_tambah';
+    }
 }

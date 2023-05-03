@@ -13,4 +13,9 @@ class Tunjangan extends Model
     protected $table = "ms_tunjangan";
 
     protected $guarded = [];
+
+    public function getRouteKeyName()
+    {
+        return 'kode_tunjangan';
+    }
 }

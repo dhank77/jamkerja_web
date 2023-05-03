@@ -42,7 +42,6 @@ export default function Index({ pengurangan }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>Kode</th>
                                         <th>Nama</th>
                                         <th>Nilai</th>
                                         <th>Opsi</th>
@@ -53,9 +52,6 @@ export default function Index({ pengurangan }) {
                                         <tr key={k}>
                                             <td>
                                                 {k + 1}
-                                            </td>
-                                            <td>
-                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.kode_kurang}</span>
                                             </td>
                                             <td>
                                                 <p>{u.nama}</p>
@@ -69,8 +65,8 @@ export default function Index({ pengurangan }) {
                                             </td>
                                             <td>
                                                 <Dropdown>
-                                                    <Edit routes={route('master.payroll.pengurangan.edit', u.id)} />
-                                                    <Delete routes={route('master.payroll.pengurangan.delete', u.id)} />
+                                                    <Edit routes={route('master.payroll.pengurangan.edit', u.kode_kurang)} />
+                                                    <Delete routes={route('master.payroll.pengurangan.delete', u.kode_kurang)} />
                                                 </Dropdown>
                                             </td>
                                         </tr>

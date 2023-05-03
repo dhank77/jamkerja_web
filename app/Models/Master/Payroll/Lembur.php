@@ -12,4 +12,9 @@ class Lembur extends Model
     protected $guarded = [];
 
     protected $table = "ms_lembur";
+
+    public function getRouteKeyName()
+    {
+        return 'kode_lembur';
+    }
 }

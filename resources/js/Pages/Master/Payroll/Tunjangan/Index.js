@@ -59,8 +59,8 @@ export default function Index({ tunjangan }) {
                                                 {
                                                     u.kode_tunjangan != 1 && u.kode_tunjangan != 2 ?
                                                     <Dropdown>
-                                                        <Edit routes={route('master.payroll.tunjangan.edit', u.id)} />
-                                                        <Delete routes={route('master.payroll.tunjangan.delete', u.id)} />
+                                                        <Edit routes={route('master.payroll.tunjangan.edit', u.kode_tunjangan)} />
+                                                        <Delete routes={route('master.payroll.tunjangan.delete', u.kode_tunjangan)} />
                                                     </Dropdown> : ''
                                                 }
                                             </td>

@@ -65,8 +65,8 @@ export default function Index({ absensiPermenit }) {
                                             </td>
                                             <td>
                                                 <Dropdown>
-                                                    <Edit routes={route('master.payroll.absensiPermenit.edit', u.id)} />
-                                                    <Delete routes={route('master.payroll.absensiPermenit.delete', u.id)} />
+                                                    <Edit routes={route('master.payroll.absensiPermenit.edit', u.kode_absensi_permenit)} />
+                                                    <Delete routes={route('master.payroll.absensiPermenit.delete', u.kode_absensi_permenit)} />
                                                 </Dropdown>
                                             </td>
                                         </tr>

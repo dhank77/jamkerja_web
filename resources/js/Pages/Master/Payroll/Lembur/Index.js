@@ -65,8 +65,8 @@ export default function Index({ lembur }) {
                                             </td>
                                             <td>
                                                 <Dropdown>
-                                                    <Edit routes={route('master.payroll.lembur.edit', u.id)} />
-                                                    <Delete routes={route('master.payroll.lembur.delete', u.id)} />
+                                                    <Edit routes={route('master.payroll.lembur.edit', u.kode_lembur)} />
+                                                    <Delete routes={route('master.payroll.lembur.delete', u.kode_lembur)} />
                                                 </Dropdown>
                                             </td>
                                         </tr>

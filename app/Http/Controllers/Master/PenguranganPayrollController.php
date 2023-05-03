@@ -18,6 +18,7 @@ class PenguranganPayrollController extends Controller
         $pengurangan = Pengurangan::when($search, function ($qr, $search) {
             $qr->where('nama', 'LIKE', "%$search%");
         })
+            ->where('kode_perusahaan', kp())
             ->paginate($limit);
 
         $pengurangan->appends(request()->all());
@@ -29,7 +30,7 @@ class PenguranganPayrollController extends Controller
 
     public function json()
     {
-        $pengurangan = Pengurangan::orderBy('nama')->get();
+        $pengurangan = Pengurangan::orderBy('nama')->where('kode_perusahaan', kp())->get();
         SelectResource::withoutWrapping();
         $pengurangan = SelectResource::collection($pengurangan);
 
@@ -52,7 +53,7 @@ class PenguranganPayrollController extends Controller
 
     public function delete(Pengurangan $pengurangan)
     {
-        $cr = $pengurangan->delete();
+        $cr = $pengurangan->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.payroll.pengurangan.index'))->with([
                 'type' => 'success',
@@ -69,15 +70,11 @@ class PenguranganPayrollController extends Controller
     public function store()
     {
         $rules = [
-            'kode_kurang' => 'required',
             'nama' => 'required',
             'satuan' => 'required',
             'nilai' => 'required',
         ];
 
-        if (!request('id')) {
-            $rules['kode_kurang'] = 'required|unique:ms_pengurangan';
-        }
         if (request('satuan') == '2') {
             $rules['kode_persen'] = 'required';
         }
@@ -91,20 +88,15 @@ class PenguranganPayrollController extends Controller
 
         $data['kode_persen'] = implode(',', $kode);
         $data['nilai'] = number_to_sql($data['nilai']);
-
-        $cek = false;
-        if(!request('id')){
-            $cek = Pengurangan::where('kode_kurang', $data['kode_kurang'])->first();
+        
+        
+        if(request('id')){
+            $cr = Pengurangan::where('id', request('id'))->update($data);
+        }else{
+            $data['kode_kurang'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+            $cr = Pengurangan::create($data);
         }
-
-        if($cek){
-            return redirect(route('master.payroll.pengurangan.index'))->with([
-                'type' => 'error',
-                'messages' => "Kode tidak boleh 1 atau kode telah ada!"
-            ]);
-        }
-
-        $cr = Pengurangan::updateOrCreate(['id' => request('id')], $data);
 
         if ($cr) {
             return redirect(route('master.payroll.pengurangan.index'))->with([

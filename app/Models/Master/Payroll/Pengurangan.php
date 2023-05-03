@@ -12,4 +12,9 @@ class Pengurangan extends Model
     protected $table = "ms_pengurangan";
 
     protected $guarded = [];
+
+    public function getRouteKeyName()
+    {
+        return 'kode_kurang';
+    }
 }
