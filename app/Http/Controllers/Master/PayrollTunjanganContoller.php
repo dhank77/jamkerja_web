@@ -48,7 +48,12 @@ class PayrollTunjanganContoller extends Controller
 
     public function jsonAll()
     {
-        $tunjangan = Tunjangan::orderBy('nama')->get();
+        $tunjangan = Tunjangan::orderBy('nama')
+                                ->where(function($qr){
+                                    $qr->where('kode_perusahaan', kp())
+                                        ->orWhereNull('kode_perusahaan');
+                                })
+                                ->get();
         SelectResource::withoutWrapping();
         $tunjangan = SelectResource::collection($tunjangan);
 

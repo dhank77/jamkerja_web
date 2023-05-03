@@ -62,7 +62,7 @@ export default function Add({ errors, absensiPermenit }) {
                             {errors.kode_eselon && <div className="text-danger">{errors.kode_eselon}</div>}
                         </div>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Potongan</label>
+                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Potongan (Rupiah)</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <NumberFormat className="form-control" name="potongan" onChange={updateData} value={values.potongan} thousandSeparator={'.'} decimalSeparator={','} />
                             </div>

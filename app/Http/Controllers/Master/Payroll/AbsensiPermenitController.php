@@ -18,6 +18,7 @@ class AbsensiPermenitController extends Controller
                             ->when($search, function($qr, $search){
                                 $qr->where('keterangan', 'LIKE', "%$search%");
                             })
+                            ->where('kode_perusahaan', kp())
                             ->paginate($limit);
 
         $absensiPermenit->appends(request()->all());
@@ -40,7 +41,7 @@ class AbsensiPermenitController extends Controller
 
     public function delete(AbsensiPermenit $absensiPermenit)
     {
-        $cr = $absensiPermenit->delete();
+        $cr = $absensiPermenit->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.payroll.absensiPermenit.index'))->with([
                 'type' => 'success',
@@ -65,8 +66,13 @@ class AbsensiPermenitController extends Controller
         $data = request()->validate($rules);
 
         $data['potongan'] = number_to_sql($data['potongan']);
+        $data['kode_perusahaan'] = kp();
 
-        $cr = AbsensiPermenit::updateOrCreate(['id' => request('id')], $data);
+        if(request('id')){
+            $cr = AbsensiPermenit::where('id', request('id'))->update($data);
+        }else{
+            $cr = AbsensiPermenit::create($data);
+        }
 
         if ($cr) {
             return redirect(route('master.payroll.absensiPermenit.index'))->with([

@@ -20,6 +20,7 @@ class PenambahanPayrollController extends Controller
         $tambahan = Tambahan::when($search, function ($qr, $search) {
             $qr->where('nama', 'LIKE', "%$search%");
         })
+            ->where('kode_perusahaan', kp())
             ->paginate($limit);
 
         $tambahan->appends(request()->all());
@@ -31,7 +32,7 @@ class PenambahanPayrollController extends Controller
 
     public function json()
     {
-        $tambahan = Tambahan::orderBy('nama')->get();
+        $tambahan = Tambahan::orderBy('nama')->where('kode_perusahaan', kp())->get();
         SelectResource::withoutWrapping();
         $tambahan = SelectResource::collection($tambahan);
 
@@ -54,7 +55,7 @@ class PenambahanPayrollController extends Controller
 
     public function delete(Tambahan $tambahan)
     {
-        $cr = $tambahan->delete();
+        $cr = $tambahan->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.payroll.penambahan.index'))->with([
                 'type' => 'success',
@@ -71,15 +72,11 @@ class PenambahanPayrollController extends Controller
     public function store()
     {
         $rules = [
-            'kode_tambah' => 'required',
             'nama' => 'required',
             'satuan' => 'required',
             'nilai' => 'required',
         ];
 
-        if (!request('id')) {
-            $rules['kode_tambah'] = 'required|unique:ms_tambahan';
-        }
         if (request('satuan') == '2') {
             $rules['kode_persen'] = 'required';
         }
@@ -94,19 +91,15 @@ class PenambahanPayrollController extends Controller
         $data['kode_persen'] = implode(',', $kode);
         $data['nilai'] = number_to_sql($data['nilai']);
 
-        $cek = false;
-        if(!request('id')){
-            $cek = Tambahan::where('kode_tambah', $data['kode_tambah'])->first();
+        
+        if(request('id')){
+            $cr = Tambahan::where('id', request('id'))->update($data);
+        }else{
+            $data['kode_tambah'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+            $cr = Tambahan::create($data);
         }
 
-        if($cek){
-            return redirect(route('master.payroll.penambahan.index'))->with([
-                'type' => 'error',
-                'messages' => "Kode tidak boleh 1 atau kode telah ada!"
-            ]);
-        }
-
-        $cr = Tambahan::updateOrCreate(['id' => request('id')], $data);
 
         if ($cr) {
             return redirect(route('master.payroll.penambahan.index'))->with([

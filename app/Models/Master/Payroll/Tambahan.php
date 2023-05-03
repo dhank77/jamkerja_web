@@ -9,7 +9,6 @@ class Tambahan extends Model
 {
     use HasFactory;
 
-
     protected $table = "ms_tambahan";
 
     protected $guarded = [];
