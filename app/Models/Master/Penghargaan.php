@@ -19,4 +19,9 @@ class Penghargaan extends Model
     {
         return $this->hasMany(RiwayatPenghargaan::class, 'kode_penghargaan', 'kode_penghargaan');
     }
+
+    public function getRouteKeyName()
+    {
+        return 'kode_penghargaan';
+    }
 }

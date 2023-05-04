@@ -42,7 +42,6 @@ export default function Index({ penghargaan }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>Kode Penghargaan</th>
                                         <th>Nama Penghargaan</th>
                                         <th>Opsi</th>
                                     </tr>
@@ -54,15 +53,12 @@ export default function Index({ penghargaan }) {
                                                 {k + 1}
                                             </td>
                                             <td>
-                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.kode_penghargaan}</span>
-                                            </td>
-                                            <td>
                                                 <p>{u.nama}</p>
                                             </td>
                                             <td>
                                                 <Dropdown>
-                                                    <Edit routes={route('master.penghargaan.edit', u.id)} />
-                                                    <Delete routes={route('master.penghargaan.delete', u.id)} />
+                                                    <Edit routes={route('master.penghargaan.edit', u.kode_penghargaan)} />
+                                                    <Delete routes={route('master.penghargaan.delete', u.kode_penghargaan)} />
                                                 </Dropdown>
                                             </td>
                                         </tr>

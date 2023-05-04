@@ -585,7 +585,6 @@ function getGenUsia()
 
 function validasi_master($array, $exp = 3)
 {
-
     $namaModel = $array[$exp-2];
     $id = $array[$exp];
     if ($namaModel == 'level') {

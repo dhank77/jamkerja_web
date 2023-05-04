@@ -17,6 +17,7 @@ class PenghargaanController extends Controller
         $penghargaan = Penghargaan::when($search, function($qr, $search){
                         $qr->where('nama', 'LIKE', "%$search%");
                     })
+                    ->where('kode_perusahaan', kp())
                     ->paginate($limit);
 
         $penghargaan->appends(request()->all());
@@ -28,7 +29,7 @@ class PenghargaanController extends Controller
 
     public function json()
     {
-        $penghargaan = Penghargaan::orderBy('nama')->get();
+        $penghargaan = Penghargaan::orderBy('nama')->where('kode_perusahaan', kp())->get();
         SelectResource::withoutWrapping();
         $penghargaan = SelectResource::collection($penghargaan);
 
@@ -48,7 +49,7 @@ class PenghargaanController extends Controller
 
     public function delete(Penghargaan $penghargaan)
     {
-        $cr = $penghargaan->delete();
+        $cr = $penghargaan->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.penghargaan.index'))->with([
                 'type' => 'success',
@@ -65,17 +66,18 @@ class PenghargaanController extends Controller
     public function store()
     {
         $rules = [
-            'kode_penghargaan' => 'required',
             'nama' => 'required',
         ];
 
-        if(!request('id')){
-            $rules['kode_penghargaan'] = 'required|unique:penghargaan';
-        }
-
         $data = request()->validate($rules);
 
-        $cr = Penghargaan::updateOrCreate(['id' => request('id')], $data);
+        if(request('id')){
+            $cr = Penghargaan::where('id', request('id'))->update($data);
+        }else{
+            $data['kode_penghargaan'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+            $cr = Penghargaan::create($data);
+        }
 
         if ($cr) {
             return redirect(route('master.penghargaan.index'))->with([

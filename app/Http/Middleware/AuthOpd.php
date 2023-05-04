@@ -44,7 +44,7 @@ class AuthOpd
             }
 
             
-            if($exp[0] == 'master' && count($exp) >= 4 && is_numeric($exp[3]) && validasi_master($exp)){
+            if($exp[0] == 'master' && count($exp) >= 4 && (is_numeric($exp[3]) || strlen($exp[3]) >= 36) && validasi_master($exp)){
                 abort(403);
             }
             if($exp[0] == 'master' && count($exp) >= 5 && strlen($exp[4]) >= 36 && validasi_master($exp, 4)){
