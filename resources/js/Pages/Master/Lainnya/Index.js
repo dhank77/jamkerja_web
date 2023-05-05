@@ -42,7 +42,6 @@ export default function Index({ lainnya }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>Kode Riwayat Lainnya</th>
                                         <th>Nama</th>
                                         <th>Opsi</th>
                                     </tr>
@@ -52,9 +51,6 @@ export default function Index({ lainnya }) {
                                         <tr key={k}>
                                             <td>
                                                 {k + 1}
-                                            </td>
-                                            <td>
-                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.kode_lainnya}</span>
                                             </td>
                                             <td>
                                                 <p>{u.nama}</p>

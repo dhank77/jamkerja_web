@@ -19,4 +19,9 @@ class Reimbursement extends Model
     {
         return $this->hasMany(DataPengajuanReimbursement::class, 'kode_reimbursement', 'kode_reimbursement');
     }
+
+    public function getRouteKeyName()
+    {
+        return 'kode_reimbursement';
+    }
 }

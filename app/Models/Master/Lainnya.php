@@ -19,4 +19,9 @@ class Lainnya extends Model
     {
         return $this->hasMany(RiwayatLainnya::class, 'kode_lainnya', 'kode_lainnya');
     }
+
+    public function getRouteKeyName()
+    {
+        return 'kode_lainnya';
+    }
 }

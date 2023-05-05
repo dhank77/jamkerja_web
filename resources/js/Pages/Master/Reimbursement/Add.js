@@ -46,13 +46,6 @@ export default function Add({ errors, reimbursement }) {
                 <div className="card-body py-3">
                     <form onSubmit={submit}>
                         <div className="row mb-6">
-                            <label className="col-lg-3 col-form-label required fw-bold fs-6">Kode Reimbursement</label>
-                            <div className="col-lg-9 fv-row fv-plugins-icon-container">
-                                <input name="kode_reimbursement" disabled={values.id != undefined ? true : false} type="number" onChange={updateData} value={values.kode_reimbursement} className="form-control form-control-lg form-control-solid" />
-                            </div>
-                            {errors.kode_reimbursement && <div className="text-danger">{errors.kode_reimbursement}</div>}
-                        </div>
-                        <div className="row mb-6">
                             <label className="col-lg-3 col-form-label required fw-bold fs-6">Nama Reimbursement</label>
                             <div className="col-lg-9 fv-row fv-plugins-icon-container">
                                 <input name="nama" type="text" onChange={updateData} value={values.nama} className="form-control form-control-lg form-control-solid" />

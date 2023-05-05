@@ -17,6 +17,7 @@ class LainnyaController extends Controller
         $lainnya = Lainnya::when($search, function($qr, $search){
                     $qr->where('nama', 'LIKE', "%$search%");
                 })
+                ->where('kode_perusahaan', kp())
                 ->paginate($limit);
 
         $lainnya->appends(request()->all());
@@ -28,7 +29,7 @@ class LainnyaController extends Controller
 
     public function json()
     {
-        $lainnya = Lainnya::orderBy('nama')->get();
+        $lainnya = Lainnya::orderBy('nama')->where('kode_perusahaan', kp())->get();
         SelectResource::withoutWrapping();
         $lainnya = SelectResource::collection($lainnya);
 
@@ -48,7 +49,7 @@ class LainnyaController extends Controller
 
     public function delete(Lainnya $lainnya)
     {
-        $cr = $lainnya->delete();
+        $cr = $lainnya->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.lainnya.index'))->with([
                 'type' => 'success',
@@ -65,17 +66,19 @@ class LainnyaController extends Controller
     public function store()
     {
         $rules = [
-            'kode_lainnya' => 'required',
             'nama' => 'required',
         ];
 
-        if(!request('id')){
-            $rules['kode_lainnya'] = 'required|unique:lainnya';
-        }
-
         $data = request()->validate($rules);
 
-        $cr = Lainnya::updateOrCreate(['id' => request('id')], $data);
+        if(request('id')){
+            $cr = Lainnya::where('id', request('id'))->update($data);
+        }else{
+            $data['kode_lainnya'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+            $cr = Lainnya::create($data);
+        }
+
 
         if ($cr) {
             return redirect(route('master.lainnya.index'))->with([

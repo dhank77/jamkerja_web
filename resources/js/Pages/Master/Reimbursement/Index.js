@@ -42,7 +42,6 @@ export default function Index({ reimbursement }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>Kode Reimbursement</th>
                                         <th>Nama Reimbursement</th>
                                         <th>Opsi</th>
                                     </tr>
@@ -54,15 +53,12 @@ export default function Index({ reimbursement }) {
                                                 {k + 1}
                                             </td>
                                             <td>
-                                                <span className="text-dark fw-bolder text-hover-primary fs-6">{u.kode_reimbursement}</span>
-                                            </td>
-                                            <td>
                                                 <p>{u.nama}</p>
                                             </td>
                                             <td>
                                                 <Dropdown>
-                                                    <Edit routes={route('master.reimbursement.edit', u.id)} />
-                                                    <Delete routes={route('master.reimbursement.delete', u.id)} />
+                                                    <Edit routes={route('master.reimbursement.edit', u.kode_reimbursement)} />
+                                                    <Delete routes={route('master.reimbursement.delete', u.kode_reimbursement)} />
                                                 </Dropdown>
                                             </td>
                                         </tr>

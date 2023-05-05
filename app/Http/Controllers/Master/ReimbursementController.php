@@ -17,6 +17,7 @@ class ReimbursementController extends Controller
         $reimbursement = Reimbursement::when($search, function($qr, $search){
                                 $qr->where('nama', 'LIKE', "%$search%");
                             })
+                            ->where('kode_perusahaan', kp())
                             ->paginate($limit);
 
         $reimbursement->appends(request()->all());
@@ -28,7 +29,7 @@ class ReimbursementController extends Controller
 
     public function json()
     {
-        $reimbursement = Reimbursement::orderBy('nama')->get();
+        $reimbursement = Reimbursement::orderBy('nama')->where('kode_perusahaan', kp())->get();
         SelectResource::withoutWrapping();
         $reimbursement = SelectResource::collection($reimbursement);
 
@@ -48,7 +49,7 @@ class ReimbursementController extends Controller
 
     public function delete(Reimbursement $reimbursement)
     {
-        $cr = $reimbursement->delete();
+        $cr = $reimbursement->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('master.reimbursement.index'))->with([
                 'type' => 'success',
@@ -65,17 +66,18 @@ class ReimbursementController extends Controller
     public function store()
     {
         $rules = [
-            'kode_reimbursement' => 'required',
             'nama' => 'required',
         ];
 
-        if(!request('id')){
-            $rules['kode_reimbursement'] = 'required|unique:reimbursement';
-        }
-
         $data = request()->validate($rules);
 
-        $cr = Reimbursement::updateOrCreate(['id' => request('id')], $data);
+        if(request('id')){
+            $cr = Reimbursement::where('id', request('id'))->update($data);
+        }else{
+            $data['kode_reimbursement'] = generateUUID();
+            $data['kode_perusahaan'] = kp();
+            $cr = Reimbursement::create($data);
+        }
 
         if ($cr) {
             return redirect(route('master.reimbursement.index'))->with([

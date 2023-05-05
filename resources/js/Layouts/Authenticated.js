@@ -1957,6 +1957,35 @@ export default function Authenticated({ children }) {
                                                                 : ""
                                                         }`}
                                                     >
+                                                         <div
+                                                            className={`menu-item ${
+                                                                route().current(
+                                                                    "master.reimbursement*"
+                                                                )
+                                                                    ? "show"
+                                                                    : ""
+                                                            }`}
+                                                        >
+                                                            <Link
+                                                                className={`menu-link ${
+                                                                    route().current(
+                                                                        "master.reimbursement*"
+                                                                    )
+                                                                        ? "active"
+                                                                        : ""
+                                                                }`}
+                                                                href={route(
+                                                                    "master.reimbursement.index"
+                                                                )}
+                                                            >
+                                                                <span className="menu-bullet">
+                                                                    <span className="bullet bullet-dot" />
+                                                                </span>
+                                                                <span className="menu-title">
+                                                                    Reimbursement
+                                                                </span>
+                                                            </Link>
+                                                        </div>
                                                         <div
                                                             className={`menu-item ${
                                                                 route().current(
@@ -1986,7 +2015,7 @@ export default function Authenticated({ children }) {
                                                                 </span>
                                                             </Link>
                                                         </div>
-                                                        <div
+                                                        {/* <div
                                                             className={`menu-item ${
                                                                 route().current(
                                                                     "master.suku*"
@@ -2014,7 +2043,7 @@ export default function Authenticated({ children }) {
                                                                     Suku
                                                                 </span>
                                                             </Link>
-                                                        </div>
+                                                        </div> */}
                                                         <div
                                                             className={`menu-item ${
                                                                 route().current(
@@ -2042,35 +2071,6 @@ export default function Authenticated({ children }) {
                                                                 <span className="menu-title">
                                                                     Riwayat
                                                                     Lainnya
-                                                                </span>
-                                                            </Link>
-                                                        </div>
-                                                        <div
-                                                            className={`menu-item ${
-                                                                route().current(
-                                                                    "master.reimbursement*"
-                                                                )
-                                                                    ? "show"
-                                                                    : ""
-                                                            }`}
-                                                        >
-                                                            <Link
-                                                                className={`menu-link ${
-                                                                    route().current(
-                                                                        "master.reimbursement*"
-                                                                    )
-                                                                        ? "active"
-                                                                        : ""
-                                                                }`}
-                                                                href={route(
-                                                                    "master.reimbursement.index"
-                                                                )}
-                                                            >
-                                                                <span className="menu-bullet">
-                                                                    <span className="bullet bullet-dot" />
-                                                                </span>
-                                                                <span className="menu-title">
-                                                                    Reimbursement
                                                                 </span>
                                                             </Link>
                                                         </div>
