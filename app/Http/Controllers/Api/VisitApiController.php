@@ -92,6 +92,7 @@ class VisitApiController extends Controller
                 'kordinat' => $kordinat,
                 'lokasi' => $lokasi,
                 'foto' => $file,
+                'kode_perusahaan' => kp()
             ];
 
 

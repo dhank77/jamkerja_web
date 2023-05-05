@@ -40,7 +40,7 @@ export default function Index({ cuti }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>No. Pegawai<br />
+                                        <th>
                                             Nama
                                         </th>
                                         <th>Jenis Cuti</th>
@@ -59,7 +59,6 @@ export default function Index({ cuti }) {
                                                 {k + 1}
                                             </td>
                                             <td>
-                                                <p>{u.nip}</p>
                                                 <div className="text-dark fw-bolder text-hover-primary fs-6">{u.nama}</div>
                                             </td>
                                             <td>

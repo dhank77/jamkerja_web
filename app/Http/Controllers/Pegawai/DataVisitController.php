@@ -56,6 +56,7 @@ class DataVisitController extends Controller
                         })
                         ->whereBetween('data_visit.tanggal', [$date, $end])
                         ->whereNull('users.deleted_at')
+                        ->where('users.kode_perusahaan', kp())
                         ->paginate($limit);
 
         $qr->appends(request()->all());
@@ -122,6 +123,7 @@ class DataVisitController extends Controller
                         ->where('is_akhir', 1);
                 });
             })
+            ->where('users.kode_perusahaan', kp())
             ->get();
 
         if ($xls) {

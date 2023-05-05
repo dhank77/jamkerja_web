@@ -32,6 +32,7 @@ class ShiftPengajuanController extends Controller
                             });
                         })
                         ->orderByDesc("riwayat_shift.created_at")
+                        ->where('users.kode_perusahaan', kp())
                         ->where("status", '!=', 99)
                         ->whereNull('users.deleted_at')
                         ->paginate($limit);

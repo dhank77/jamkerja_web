@@ -39,7 +39,7 @@ export default function Index({ ijin }) {
                                 <thead>
                                     <tr className="fw-bolder text-muted">
                                         <th>No</th>
-                                        <th>No. Pegawai<br />
+                                        <th>
                                             Nama
                                         </th>
                                         <th>Jenis ijin</th>
@@ -59,7 +59,6 @@ export default function Index({ ijin }) {
                                                 {k + 1}
                                             </td>
                                             <td>
-                                                <p>{u.nip}</p>
                                                 <div className="text-dark fw-bolder text-hover-primary fs-6">{u.nama}</div>
                                             </td>
                                             <td>

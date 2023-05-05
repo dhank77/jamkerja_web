@@ -33,6 +33,7 @@ class ReimbursementPengajuanController extends Controller
                                             });
                                         })
                                         ->orderByDesc("data_pengajuan_reimbursement.created_at")
+                                        ->where('users.kode_perusahaan', kp())
                                         ->whereNull('users.deleted_at')
                                         ->paginate($limit);
 

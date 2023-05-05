@@ -367,6 +367,7 @@ class PresensiApiController extends Controller
                 "status" => $jam_kerja->status,
                 "kordinat_$field" => $kordinat,
                 "rule_istirahat" => $jam_kerja->istirahat,
+                'kode_perusahaan' => kp()
             ];
 
             if($field == 'pulang'){
@@ -402,6 +403,7 @@ class PresensiApiController extends Controller
                 "jam_$field" => $tanggalIn,
                 "status" => $jam_kerja->status,
                 "rule_istirahat" => $jam_kerja->istirahat,
+                'kode_perusahaan' => kp()
             ];
 
             // if ($dateSend < strtotime(date("Y-m-d") . " 08:59:59")) {
@@ -420,7 +422,7 @@ class PresensiApiController extends Controller
             } else {
                 $text = "Berhasil melakukan absensi!";
             }
-            dispatch(new ProcessOneSignal($nip, "SBC Absensi!", $text));
+            dispatch(new ProcessOneSignal($nip, "JamKerja.ID", $text));
             return response()->json(['status' => 'Success', 'messages' =>  $text]);
         } else {
             return response()->json(['status' => 'Error', 'messages' => 'Jam kerja anda belum ditetapkan!']);
@@ -602,7 +604,7 @@ class PresensiApiController extends Controller
             } else {
                 $text = "Berhasil melakukan absensi, tingkat kemiripan: $confidance!";
             }
-            dispatch(new ProcessOneSignal($nip, "SBC Absensi!", $text));
+            dispatch(new ProcessOneSignal($nip, "JamKerja.ID", $text));
             return response()->json(['status' => 'Success', 'messages' =>  $text]);
         } else {
             return response()->json(['status' => 'Error', 'messages' => 'Jam kerja anda belum ditetapkan!']);

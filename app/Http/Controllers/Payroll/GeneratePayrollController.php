@@ -25,6 +25,7 @@ class GeneratePayrollController extends Controller
                         $qr->where('kode_payroll', 'LIKE', "%$search%");
                     })
                     ->latest()
+                    ->where('kode_perusahaan', kp())
                     ->paginate($limit);
 
         $payroll->appends(request()->all());
@@ -87,14 +88,15 @@ class GeneratePayrollController extends Controller
         );
 
         $pegawai = User::role('pegawai')
-            ->when($kode_skpd, function ($qr, $kode_skpd) {
-                $qr->where('riwayat_jabatan.kode_skpd', $kode_skpd);
-            })
-            ->leftJoin('riwayat_jabatan', 'riwayat_jabatan.nip', 'users.nip')
-            ->where('riwayat_jabatan.is_akhir', 1)
-            ->whereNotIn('riwayat_jabatan.kode_skpd', $whereNotIn)
-            ->select('users.nip', 'users.no_hp')
-            ->get();
+                        ->when($kode_skpd, function ($qr, $kode_skpd) {
+                            $qr->where('riwayat_jabatan.kode_skpd', $kode_skpd);
+                        })
+                        ->leftJoin('riwayat_jabatan', 'riwayat_jabatan.nip', 'users.nip')
+                        ->where('riwayat_jabatan.is_akhir', 1)
+                        ->whereNotIn('riwayat_jabatan.kode_skpd', $whereNotIn)
+                        ->select('users.nip', 'users.no_hp')
+                        ->where('users.kode_perusahaan', kp())
+                        ->get();
 
         foreach ($pegawai as $peg) {
             $jabatan = array_key_exists('0', $peg->jabatan_akhir->toArray()) ? $peg->jabatan_akhir[0] : null;
@@ -110,7 +112,7 @@ class GeneratePayrollController extends Controller
 
     public function regenerate(GeneratePayroll $generate)
     {
-        $nip = DataPayroll::where('kode_payroll', $generate->kode_payroll)->where('is_aktif', 0)->pluck('nip')->toArray();
+        $nip = DataPayroll::where('kode_payroll', $generate->kode_payroll)->where('kode_perusahaan', kp())->where('is_aktif', 0)->pluck('nip')->toArray();
 
         $pegawai = User::role('pegawai')->whereIn('nip', $nip)->get();
         foreach ($pegawai as $peg) {
@@ -126,9 +128,9 @@ class GeneratePayrollController extends Controller
 
     public function delete(GeneratePayroll $generate)
     {
-        PayrollTambah::where('kode_payroll', $generate->kode_payroll)->delete();
-        PayrollKurang::where('kode_payroll', $generate->kode_payroll)->delete();
-        DataPayroll::where('kode_payroll', $generate->kode_payroll)->delete();
+        PayrollTambah::where('kode_payroll', $generate->kode_payroll)->where('kode_perusahaan', kp())->delete();
+        PayrollKurang::where('kode_payroll', $generate->kode_payroll)->where('kode_perusahaan', kp())->delete();
+        DataPayroll::where('kode_payroll', $generate->kode_payroll)->where('kode_perusahaan', kp())->delete();
 
         $cr = $generate->delete();
         if ($cr) {
@@ -154,6 +156,7 @@ class GeneratePayrollController extends Controller
                         $qr->where('kode_payroll', 'LIKE', "%$search%");
                     })
                     ->latest()
+                    ->where('kode_perusahaan', kp())
                     ->paginate($limit);
 
         $payroll->appends(request()->all());
@@ -168,11 +171,11 @@ class GeneratePayrollController extends Controller
     public function approved(GeneratePayroll $generate, $payroll = null)
     {
         if($payroll == null){
-            $cr = DataPayroll::where('kode_payroll', $generate->kode_payroll)->update(['is_aktif', 1]);
+            $cr = DataPayroll::where('kode_payroll', $generate->kode_payroll)->where('kode_perusahaan', kp())->update(['is_aktif', 1]);
             $generate->update(['is_aktif' => 1]);
         }else{
-            $cr = DataPayroll::where('kode_payroll', $generate->kode_payroll)->where('id', $payroll)->update(['is_aktif' => 1]);
-            $count = DataPayroll::where('kode_payroll', $generate->kode_payroll)->where('is_aktif', 0)->count();
+            $cr = DataPayroll::where('kode_payroll', $generate->kode_payroll->where('kode_perusahaan', kp()))->where('id', $payroll)->update(['is_aktif' => 1]);
+            $count = DataPayroll::where('kode_payroll', $generate->kode_payroll->where('kode_perusahaan', kp()))->where('is_aktif', 0)->count();
             if($count == 0){
                 $generate->update(['is_aktif' => 1]);
             }
@@ -194,9 +197,9 @@ class GeneratePayrollController extends Controller
     public function rejected(GeneratePayroll $generate, $payroll = null)
     {
         if($payroll == null){
-            $cr = DataPayroll::where('kode_payroll', $generate->kode_payroll)->update(['is_aktif', 0]);
+            $cr = DataPayroll::where('kode_payroll', $generate->kode_payroll)->where('kode_perusahaan', kp())->update(['is_aktif', 0]);
         }else{
-            $cr = DataPayroll::where('kode_payroll', $generate->kode_payroll)->where('id', $payroll)->update(['is_aktif' => 0]);
+            $cr = DataPayroll::where('kode_payroll', $generate->kode_payroll)->where('kode_perusahaan', kp())->where('id', $payroll)->update(['is_aktif' => 0]);
         }
         $generate->update(['is_aktif' => 0]);
 
@@ -219,9 +222,9 @@ class GeneratePayrollController extends Controller
         $nip = request('nip');
         $kode_payroll = request('kode_payroll');
 
-        $payroll = DataPayroll::where('nip', $nip)->where('kode_payroll', $kode_payroll)->first();
-        $penambahan = PayrollTambah::where('nip', $nip)->where('kode_payroll', $kode_payroll)->get();
-        $potongan = PayrollKurang::where('nip', $nip)->where('kode_payroll', $kode_payroll)->get();
+        $payroll = DataPayroll::where('nip', $nip)->where('kode_payroll', $kode_payroll)->where('kode_perusahaan', kp())->first();
+        $penambahan = PayrollTambah::where('nip', $nip)->where('kode_payroll', $kode_payroll)->where('kode_perusahaan', kp())->get();
+        $potongan = PayrollKurang::where('nip', $nip)->where('kode_payroll', $kode_payroll)->where('kode_perusahaan', kp())->get();
         
 
         $pdf = PDF::loadView('laporan.slipgaji.index', compact('payroll', 'penambahan', 'potongan'))->setPaper('a4', 'landscape');

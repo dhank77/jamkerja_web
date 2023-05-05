@@ -36,6 +36,7 @@ class ReimbursementApiController extends Controller
                     'nilai' => number_to_sql($nilai),
                     'keterangan' => $keterangan,
                     'file' => $file,
+                    'kode_perusahaan' => kp()
                 ];
 
                 $cek = DataPengajuanReimbursement::where('nip', $nip)->where('status', 0)->count();

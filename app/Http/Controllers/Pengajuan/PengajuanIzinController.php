@@ -32,6 +32,7 @@ class PengajuanIzinController extends Controller
                                     });
                                 })
                                 ->orderByDesc("data_pengajuan_izin.created_at")
+                                ->where('users.kode_perusahaan', kp())
                                 ->whereNull('users.deleted_at')
                                 ->paginate($limit);
 

@@ -34,6 +34,7 @@ class ShiftApiController extends Controller
                     'kode_shift' => $kode_shift,
                     'keterangan' => $keterangan,
                     'file' => $file,
+                    'kode_perusahaan' => kp()
                 ];
 
                 $cek = RiwayatShift::where('nip', $nip)->where('status', 0)->count();

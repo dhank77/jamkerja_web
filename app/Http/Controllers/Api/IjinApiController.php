@@ -44,6 +44,7 @@ class IjinApiController extends Controller
                 'keterangan' => $keterangan,
                 'hari' => 1,
                 'file' => $file,
+                'kode_perusahaan' => kp()
             ];
 
             $cek = PengajuanIjin::where('nip', $nip)->where('status', 0)->count();

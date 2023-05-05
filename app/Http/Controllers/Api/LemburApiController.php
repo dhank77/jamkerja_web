@@ -33,6 +33,7 @@ class LemburApiController extends Controller
                 'jam_selesai' => $jam_selesai,
                 'keterangan' => $keterangan,
                 'file' => $file,
+                'kode_perusahaan' => kp()
             ];
             $cek = DataPengajuanLembur::where('nip', $nip)->where('status', 0)->count();
             if($cek > 0){

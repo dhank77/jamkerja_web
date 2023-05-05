@@ -14,11 +14,14 @@ class CutiController extends Controller
         $search = request('s');
         $limit = request('limit') ?? 10;
 
-        $cuti = Cuti::when($search, function($qr, $search){
-                    $qr->where('nama', 'LIKE', "%$search%");
-                })
-                ->where('kode_perusahaan', kp())
-                ->paginate($limit);
+        $cuti = Cuti::when($search, function ($qr, $search) {
+            $qr->where('nama', 'LIKE', "%$search%");
+        })
+            ->where(function ($qr) {
+                $qr->where('kode_perusahaan', kp())
+                    ->orWhereNull('kode_perusahaan');
+            })
+            ->paginate($limit);
 
         $cuti->appends(request()->all());
 
@@ -29,7 +32,10 @@ class CutiController extends Controller
 
     public function json()
     {
-        $cuti = Cuti::orderBy('nama')->where('kode_perusahaan', kp())->get();
+        $cuti = Cuti::orderBy('nama')->where(function ($qr) {
+            $qr->where('kode_perusahaan', kp())
+                ->orWhereNull('kode_perusahaan');
+        })->get();
         SelectResource::withoutWrapping();
         $cuti = SelectResource::collection($cuti);
 
@@ -49,7 +55,10 @@ class CutiController extends Controller
 
     public function delete(Cuti $cuti)
     {
-        $cr = $cuti->where('kode_perusahaan', kp())->delete();
+        $cr = $cuti->where(function ($qr) {
+            $qr->where('kode_perusahaan', kp())
+                ->orWhereNull('kode_perusahaan');
+        })->delete();
         if ($cr) {
             return redirect(route('master.cuti.index'))->with([
                 'type' => 'success',
@@ -72,11 +81,11 @@ class CutiController extends Controller
 
         $data = request()->validate($rules);
 
-        if(!request('id')){
+        if (!request('id')) {
             $data['kode_cuti'] = generateUUID();
             $data['kode_perusahaan'] = kp();
             $cr = Cuti::create($data);
-        }else{
+        } else {
             $cr = Cuti::where('id', request('id'))->update($data);
         }
 

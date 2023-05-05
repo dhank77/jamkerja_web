@@ -32,6 +32,7 @@ class SakitApiController extends Controller
                 'hari' => count(getBetweenDates($tanggal_mulai, $tanggal_selesai)),
                 'keterangan' => $keterangan,
                 'file' => $file,
+                'kode_perusahaan' => kp()
             ];
 
             $cek = PengajuanSakit::where('nip', $nip)->where('status', 0)->count();

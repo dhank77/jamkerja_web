@@ -52,6 +52,7 @@ class DataPresensiController extends Controller
                             });
                         })
                         ->whereBetween('presensi_free.tanggal', [$date, $end])
+                        ->where('users.kode_perusahaan', kp())
                         ->whereNull('users.deleted_at')
                         ->paginate($limit);
 
@@ -92,6 +93,7 @@ class DataPresensiController extends Controller
                                     ->where('is_akhir', 1);
                             });
                         })
+                        ->where('users.kode_perusahaan', kp())
                         ->first();
 
         if($xl){
@@ -118,6 +120,7 @@ class DataPresensiController extends Controller
         $role = role('opd');
 
         $presensi = PresensiFree::where('kode_skpd', $kode)
+                        ->where('users.kode_perusahaan', kp())
                         ->select('nip')
                         ->whereMonth('tanggal', $bulan)
                         ->groupBy('nip')
@@ -134,6 +137,7 @@ class DataPresensiController extends Controller
                                     ->where('is_akhir', 1);
                             });
                         })
+                        ->where('users.kode_perusahaan', kp())
                         ->get();
 
         if($xl){

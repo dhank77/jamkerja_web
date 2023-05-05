@@ -75,6 +75,7 @@ class CutiApiController extends Controller
                     'hari' => $hari,
                     'keterangan' => $keterangan,
                     'file' => $file,
+                    'kode_perusahaan' => kp()
                 ];
 
                 $cek = DataPengajuanCuti::where('nip', $nip)->where('status', 0)->count();

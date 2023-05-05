@@ -33,6 +33,7 @@ class LemburPengajuanController extends Controller
             })
             ->orderByDesc("data_pengajuan_lembur.created_at")
             ->whereNull('users.deleted_at')
+            ->where('users.kode_perusahaan', kp())
             ->paginate($limit);
 
         $qr->appends(request()->all());

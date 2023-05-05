@@ -47,7 +47,7 @@ function send_wa($no_hp, $pesan)
 
     if($no_hp != ""){
         try {
-$message = 'INFO! SBC ABSENSI:
+$message = 'INFO! JamKerja.ID:
 ------------------------------------------------
 ' . $pesan . '
 ------------------------------------------------

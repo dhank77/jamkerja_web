@@ -15,7 +15,7 @@ class TambahPayrollController extends Controller
         $search = request('s');
         $limit = request('limit') ?? 10;
 
-        $tambah = DaftarTambahPayroll::latest()->paginate($limit);
+        $tambah = DaftarTambahPayroll::latest()->where('kode_perusahaan', kp())->paginate($limit);
 
         $tambah->appends(request()->all());
         $tambah = TambahPayrollResource::collection($tambah);
@@ -25,7 +25,7 @@ class TambahPayrollController extends Controller
     public function add()
     {
         $tambah = new DaftarTambahPayroll();
-        $parent = Tingkat::with(str_repeat('children.', 99))->whereNull('parent_id')->get();
+        $parent = Tingkat::with(str_repeat('children.', 99))->where('kode_perusahaan', kp())->whereNull('parent_id')->get();
         SelectTingkatResource::withoutWrapping();
         $parent = SelectTingkatResource::collection($parent);
         return inertia('Payroll/Tambah/Add', compact('tambah', 'parent'));
@@ -33,7 +33,7 @@ class TambahPayrollController extends Controller
 
     public function edit(DaftarTambahPayroll $tambah)
     {
-        $parent = Tingkat::with(str_repeat('children.', 99))->whereNull('parent_id')->get();
+        $parent = Tingkat::with(str_repeat('children.', 99))->where('kode_perusahaan', kp())->whereNull('parent_id')->get();
         SelectTingkatResource::withoutWrapping();
         $parent = SelectTingkatResource::collection($parent);
         return inertia('Payroll/Tambah/Add', compact('tambah', 'parent'));
@@ -41,7 +41,7 @@ class TambahPayrollController extends Controller
 
     public function delete(DaftarTambahPayroll $tambah)
     {
-        $cr = $tambah->delete();
+        $cr = $tambah->where('kode_perusahaan', kp())->delete();
         if ($cr) {
             return redirect(route('payroll.tambah.index'))->with([
                 'type' => 'success',
@@ -100,12 +100,13 @@ class TambahPayrollController extends Controller
 
         $id = request('id');
 
-        $cr = DaftarTambahPayroll::updateOrCreate(
-                                        [
-                                            'id' => $id,
-                                        ],
-                                        $data
-                                    );
+        if($id){
+            $cr = DaftarTambahPayroll::where('id', $id)->update($data);
+        }else{
+            $data['kode_perusahaan'] = generateUUID();
+            $cr = DaftarTambahPayroll::create($data);
+        }
+
 
         if ($cr) {
             return redirect(route('payroll.tambah.index'))->with([

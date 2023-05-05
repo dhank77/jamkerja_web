@@ -30,6 +30,7 @@ class TugasController extends Controller
                     })
                     ->orderByDesc("tugas.created_at")
                     ->whereNull('users.deleted_at')
+                    ->where('users.kode_perusahaan', kp())
                     ->paginate($limit);
 
         $qr->appends(request()->all());

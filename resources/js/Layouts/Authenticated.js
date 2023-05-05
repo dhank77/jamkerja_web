@@ -2303,7 +2303,7 @@ export default function Authenticated({ children }) {
                                                         </span>
                                                     </Link>
                                                 </div>
-                                                <div
+                                                {/* <div
                                                     className={`menu-item ${
                                                         route().current(
                                                             "pengajuan.tugas*"
@@ -2331,7 +2331,7 @@ export default function Authenticated({ children }) {
                                                             Pengajuan Tugas
                                                         </span>
                                                     </Link>
-                                                </div>
+                                                </div> */}
                                                 <div
                                                     className={`menu-item ${
                                                         route().current(
