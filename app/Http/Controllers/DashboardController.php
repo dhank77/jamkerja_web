@@ -53,7 +53,7 @@ class DashboardController extends Controller
                     ->where('riwayat_jabatan.is_akhir', 1);
             });
         })
-        ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+        ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
         ->get();
         // Card
         $pegawai = $qryPegawai->count();
@@ -73,7 +73,7 @@ class DashboardController extends Controller
                                 ->where('riwayat_jabatan.is_akhir', 1);
                         });
                     })
-                    ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+                    ->where('presensi_free.kode_perusahaan', auth()->user()->kode_perusahaan)
                     ->count();
         $bulan = PresensiFree::whereMonth('presensi_free.tanggal', date("m"))
                 ->when($role, function ($qr) {
@@ -90,7 +90,7 @@ class DashboardController extends Controller
                             ->where('riwayat_jabatan.is_akhir', 1);
                     });
                 })
-                ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+                ->where('presensi_free.kode_perusahaan', auth()->user()->kode_perusahaan)
                 ->count();
         $tahun = PresensiFree::whereYear('presensi_free.tanggal', date("Y"))
                 ->when($role, function ($qr) {
@@ -107,7 +107,7 @@ class DashboardController extends Controller
                             ->where('riwayat_jabatan.is_akhir', 1);
                     });
                 })
-                ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+                ->where('presensi_free.kode_perusahaan', auth()->user()->kode_perusahaan)
                 ->count();
 
         // Grafik Jenis Kelamin
@@ -201,7 +201,7 @@ class DashboardController extends Controller
                                     ->where('is_akhir', 1);
                             });
                         })
-                        ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+                        ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
                         ->get();
         
         $jks = JamKerjaStatis::where("hari", date("w"))

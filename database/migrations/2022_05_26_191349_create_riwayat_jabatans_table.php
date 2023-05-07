@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('nip');
             $table->tinyInteger('jenis_jabatan');
             $table->string('kode_tingkat');
-            $table->string('no_sk');
-            $table->date('tanggal_sk');
-            $table->date('tanggal_tmt');
+            $table->string('no_sk')->nullable();
+            $table->date('tanggal_sk')->nullable();
+            $table->date('tanggal_tmt')->nullable();
             $table->string('sebagai')->default('defenitif');
             $table->tinyInteger('is_akhir')->default(0);
             $table->string('file')->nullable();

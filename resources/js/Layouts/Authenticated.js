@@ -2797,7 +2797,7 @@ export default function Authenticated({ children }) {
                                                 <span className="menu-arrow" />
                                             </span>
                                             <div className="menu-sub menu-sub-accordion menu-active-bg">
-                                                {auth.role.some((ar) =>
+                                                {/* {auth.role.some((ar) =>
                                                     ["owner"].includes(ar)
                                                 ) && (
                                                     <div
@@ -2829,7 +2829,7 @@ export default function Authenticated({ children }) {
                                                             </span>
                                                         </Link>
                                                     </div>
-                                                )}
+                                                )} */}
                                                 <div
                                                     className={`menu-item ${
                                                         route().current(

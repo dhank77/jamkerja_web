@@ -18,7 +18,7 @@ $logo = get_logo();
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
-    <link rel="shortcut icon" href="{{ asset("storage/$logo") }}" />
+    <link rel="shortcut icon" href="{{ $logo ? asset("storage/$logo") : "/logo.png" }}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <link href="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet"
         type="text/css" />

@@ -511,12 +511,12 @@ function kp()
 
 function getPerusahaan()
 {
-    return Perusahaan::where('kode_perusahaan', kp())->first() ?? new Perusahaan();
+    return auth()->user() ? Perusahaan::where('kode_perusahaan', kp())->first() : new Perusahaan();
 }
 
 function get_logo()
 {
-    return Perusahaan::where('kode_perusahaan', kp())->value('logo');
+    return auth()->user() ? Perusahaan::where('kode_perusahaan', kp())->value('logo') : "";
 }
 
 // DepthHelpoer

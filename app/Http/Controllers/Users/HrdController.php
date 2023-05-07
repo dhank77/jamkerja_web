@@ -19,6 +19,8 @@ class HrdController extends Controller
                 $qr->where('name', 'LIKE', "%$search%");
             })
             ->orderBy('name')
+            ->where('kode_perusahaan', kp())
+            ->where('id', '!=', auth()->user()->id)
             ->paginate($limit);
 
         $users->appends(request()->all());
@@ -34,6 +36,7 @@ class HrdController extends Controller
         $users = User::role('pegawai')
                     ->orderBy('name')
                     ->whereNotIn('id', $admin)
+                    ->where('kode_perusahaan', kp())
                     ->get();
         SelectResource::withoutWrapping();
         $users = SelectResource::collection($users);
@@ -48,17 +51,17 @@ class HrdController extends Controller
         if(count($pegawai) > 0){
 
             foreach ($pegawai as $p) {
-                $user = User::where('nip', $p['value'])->first();
+                $user = User::where('nip', $p['value'])->where('kode_perusahaan', kp())->first();
                 $user->assignRole('admin');
             }
 
-            return redirect(route('users.direksi.index'))->with([
+            return redirect(route('users.hrd.index'))->with([
                 'type' => 'success',
                 'messages' => "Berhasil, Menambahkan Data!"
             ]);
         }
 
-        return redirect(route('users.direksi.index'))->with([
+        return redirect(route('users.hrd.index'))->with([
             'type' => 'error',
             'messages' => "Gagal!"
         ]);

@@ -12,6 +12,8 @@ export default function Index({ users }) {
 
     const { data, meta } = users
 
+    console.log(users);
+
     return (
         <div>
             <div className="toolbar mb-5 mb-lg-7 d-flex justify-content-between">
@@ -47,8 +49,6 @@ export default function Index({ users }) {
                                             Foto
                                         </th>
                                         <th>
-                                            No. Pegawai
-                                            <br />
                                             Nama Lengkap
                                         </th>
                                         <th>
@@ -78,7 +78,6 @@ export default function Index({ users }) {
                                                 </div>
                                             </td>
                                             <td>
-                                                {u.nip} <br />
                                                 {u.name}
                                             </td>
                                             <td>

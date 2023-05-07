@@ -38,7 +38,7 @@ class PegawaiController extends Controller
                         ->where('is_akhir', 1);
                 });
             })
-            ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+            ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
             ->paginate($limit);
 
         $pegawai->appends(request()->all());
@@ -69,7 +69,7 @@ class PegawaiController extends Controller
             ->where('tingkat.kode_skpd', $skpd)
             ->orderBy('name')
             ->whereNull('riwayat_jabatan.deleted_at')
-            ->where('kode_perusahaan', auth()->user()->kode_perusahaan)
+            ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
             ->get();
         SelectResource::withoutWrapping();
         $pegawai = SelectResource::collection($pegawai);

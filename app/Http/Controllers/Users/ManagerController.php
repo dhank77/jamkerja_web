@@ -18,6 +18,7 @@ class ManagerController extends Controller
             ->when($search, function ($qr, $search) {
                 $qr->where('name', 'LIKE', "%$search%");
             })
+            ->where('kode_perusahaan', kp())
             ->orderBy('name')
             ->paginate($limit);
 
@@ -33,6 +34,7 @@ class ManagerController extends Controller
 
         $users = User::role('pegawai')
                     ->orderBy('name')
+                    ->where('kode_perusahaan', kp())
                     ->whereNotIn('id', $opd)
                     ->get();
         SelectResource::withoutWrapping();
@@ -48,7 +50,7 @@ class ManagerController extends Controller
         if(count($pegawai) > 0){
 
             foreach ($pegawai as $p) {
-                $user = User::where('nip', $p['value'])->first();
+                $user = User::where('nip', $p['value'])->where('kode_perusahaan', kp())->first();
                 $jabatanAkhir = optional($user)->jabatan_akhir;
                 $jabatan = array_key_exists('0', $jabatanAkhir->toArray()) ? $jabatanAkhir[0] : null;
                 $skpd = '';
