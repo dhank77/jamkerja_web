@@ -94,7 +94,7 @@ export default function Index({ perusahaan }) {
                                             </td>
                                             <td>
                                                 <Dropdown>
-                                                    <Edit routes={route('perusahaan.edit', u.id)} />
+                                                    <Edit routes={route('perusahaan.edit', u.kode_perusahaan)} />
                                                 </Dropdown>
                                             </td>
                                         </tr>

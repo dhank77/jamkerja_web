@@ -11,20 +11,17 @@ use Illuminate\Support\Facades\Storage;
 
 class PengumumanController extends Controller
 {
-    const DS = DIRECTORY_SEPARATOR;
     public function index()
     {
-        // $scriptPath = app_path('Console' . self::DS . 'Scripts' . self::DS . '66');
-        // if(!is_dir($scriptPath)){
-        //     return ['confidence' => 101, 'id' => 'no_face'];
-        // }
-        // die('as');
         $search = request('s');
         $limit = request('limit') ?? 10;
 
         $pengumuman = Pengumuman::when($search, function ($qr, $search) {
-                        $qr->where('nama', 'LIKE', "%$search%")->orWhere('kode', 'LIKE', "%$search%");
-                    })->paginate($limit);
+                        $qr->where('judul', 'LIKE', "%$search%")
+                            ->orWhere('deskripsi', 'LIKE', "%$search%");
+                    })
+                    ->where('kode_perusahaan', kp())
+                    ->paginate($limit);
         $pengumuman->appends(request()->all());
 
         $pengumuman = PengumumanResource::collection($pengumuman);
@@ -58,6 +55,7 @@ class PengumumanController extends Controller
 
         if(request('id') == ''){
             $data['file'] = request()->file('file') ? request()->file('file')->store('uploads/pengumuman') : '';
+            $data['kode_perusahaan'] = kp();
             dispatch(new ProcessOneSignalAllMember("Pengumuman!", request("judul")));
             $up = Pengumuman::create($data);
         }else{
@@ -86,7 +84,7 @@ class PengumumanController extends Controller
         if($pengumuman->file){
             Storage::delete($pengumuman->file);
         }
-        $pengumuman->delete();
+        $pengumuman->where('kode_perusahaan', kp())->delete();
         return redirect(route('pengumuman.index'))->with([
             'type' => 'success',
             'messages' => 'Berhasil!'

@@ -10,6 +10,7 @@ use App\Models\Pegawai\RiwayatJabatan;
 use App\Models\Pegawai\RiwayatKgb;
 use App\Models\Pegawai\RiwayatPotongan;
 use App\Models\Pegawai\RiwayatTunjangan;
+use App\Models\Perusahaan;
 use App\Models\User;
 
 function get_masa_kerja($tanggal, $singkat = false)
@@ -248,4 +249,16 @@ function get_kode_level_by_nip($nip)
 function get_nip_from_ktp($no_ktp)
 {
     return User::where('nik', $no_ktp)->value('nip');
+}
+
+function check_jumlah_pegawai()
+{
+    $jumlah_sekarang = User::role('pegawai')->where('kode_perusahaan', kp())->count();
+    $maksimal_pegawai = Perusahaan::where('kode_perusahaan', kp())->value('jumlah_pegawai');
+
+    if($jumlah_sekarang < $maksimal_pegawai){
+        return true;
+    }else{
+        return false;
+    }
 }

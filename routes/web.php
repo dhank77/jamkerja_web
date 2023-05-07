@@ -106,7 +106,7 @@ Route::middleware(['auth'])
         Route::prefix('pengumuman')
             ->controller(PengumumanController::class)
             ->name("pengumuman.")
-            ->middleware('role:admin|owner')
+            ->middleware(['role:admin|owner', 'auth_opd'])
             ->group(function () {
                 Route::get('', 'index')->name('index');
                 Route::get('add', 'add')->name('add');
@@ -118,7 +118,7 @@ Route::middleware(['auth'])
         Route::prefix('perusahaan')
             ->controller(PerusahaanController::class)
             ->name("perusahaan.")
-            ->middleware('role:admin|owner')
+            ->middleware(['role:admin|owner', 'auth_opd'])
             ->group(function () {
                 Route::get('', 'index')->name('index');
                 Route::get('add', 'add')->name('add');

@@ -43,7 +43,9 @@ class AuthOpd
                 abort(403);
             }
 
-            
+            if($exp[0] == 'pengumuman' && count($exp) >= 3 && get_kode_perusahaan_pengumuman($nip) != auth()->user()->kode_perusahaan){
+                abort(403);
+            }
             if($exp[0] == 'master' && count($exp) >= 4 && (is_numeric($exp[3]) || strlen($exp[3]) >= 36) && validasi_master($exp)){
                 abort(403);
             }
@@ -51,6 +53,10 @@ class AuthOpd
                 abort(403);
             }
             if($exp[0] == 'pegawai' && count($exp) >= 5 && $exp[3] != 0 && validasi_data_pegawai($exp)){
+                abort(403);
+            }
+            
+            if($exp[0] == 'perusahaan' && count($exp) >= 5 && $exp[3] != 0 && validasi_data_pegawai($exp)){
                 abort(403);
             }
         }

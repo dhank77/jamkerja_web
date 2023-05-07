@@ -140,6 +140,15 @@ class PegawaiController extends Controller
         $data = request()->validate($rules);
         
         if (!request('id')) {
+            $cek_pegawai = check_jumlah_pegawai();
+
+            if(!$cek_pegawai){
+                return redirect()->back()->with([
+                    'type' => 'error',
+                    'messages' => "Gagal, Jumlah maksimum pegawai telah cukup!"
+                ]);
+            }
+
             $data['nip'] = generateUUID();
             $data['kode_perusahaan'] = auth()->user()->kode_perusahaan;
             $data['password'] = password_hash(request('email'), PASSWORD_BCRYPT);

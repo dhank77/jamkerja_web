@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Master\Tingkat;
+use App\Models\Pengumuman;
 use App\Models\Perusahaan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -651,4 +652,9 @@ function validasi_data_pegawai($array)
     } else {
         return false;
     }
+}
+
+function get_kode_perusahaan_pengumuman($id)
+{
+    return Pengumuman::where('id', $id)->value('kode_perusahaan');
 }

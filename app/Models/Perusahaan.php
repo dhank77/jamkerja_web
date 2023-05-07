@@ -12,4 +12,9 @@ class Perusahaan extends Model
     protected $table = "perusahaan";
 
     protected $guarded = [];
+
+    public function getRouteKeyName()
+    {
+        return 'kode_perusahaan';
+    }
 }
