@@ -11,7 +11,9 @@ class PerusahaanApiController extends Controller
 {
     public function index()
     {
-        $perusahaan = Perusahaan::find(1);
+
+        $kode_perusahaan = request('kode_perusahaan');
+        $perusahaan = Perusahaan::where('kode_perusahaan', $kode_perusahaan)->first();
 
         $perusahaan = PerusahaanApiResource::make($perusahaan);
 

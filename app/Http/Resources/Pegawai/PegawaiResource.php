@@ -22,6 +22,7 @@ class PegawaiResource extends JsonResource
 
         $data = [
             'nip' => $this->nip,
+            'kode_perusahaan' => $this->kode_perusahaan,
             'no_hp' => $this->no_hp ?? "",
             'email' => $this->email ?? "",
             'name' => ($this->gelar_depan ? $this->gelar_depan .". " : "") . $this->name . ($this->gelar_belakang ? ", " . $this->gelar_belakang : ""),

@@ -24,7 +24,7 @@ class AuthController extends Controller
             if(!$user || !password_verify($request->password, $user->password)){
                 return response()->json([
                     'status' => FALSE,
-                    'message' => 'Nomor pegawai atau password tidak benar.',
+                    'message' => 'Email atau password tidak benar.',
                 ], 422);
             }
         }
@@ -45,11 +45,17 @@ class AuthController extends Controller
                 Imei::create([
                     'nip' => $user->nip,
                     'kode' => $imei,
+                    'kode_perusahaan' => $user->kode_perusahaan,
                 ]);
             }
         }
+        $cek_device = Device::where('player_id', $player_id)->first();
+        if($cek_device){
+            Device::where('player_id', $player_id)->update(['nip' => $user->nip]);
+        }else{
+            Device::create(['nip' => $user->nip, 'player_id' => $player_id, 'kode_perusahaan' => $user->kode_perusahaan]);
+        }
 
-        Device::updateOrCreate(['player_id' => $player_id], ['nip' => $user->nip]);
 
         $authToken = $user->createToken('auth-token')->plainTextToken;
         return response()->json([
