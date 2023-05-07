@@ -17,7 +17,7 @@ function send_onesignal($sql, $data, $title, $message)
         );
 
         $fields = array(
-            'app_id' => 'e286c21c-5f18-4464-bbc0-4a944b7ba371',
+            'app_id' => 'f704606c-6d70-4d3c-ac27-07bd10652d53',
             'include_player_ids' => $dataUser,
             'data' => array('uniqueId' => $data),
             'contents' => $content,
