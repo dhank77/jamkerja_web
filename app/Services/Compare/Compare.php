@@ -10,7 +10,7 @@ class Compare
     {
         $output = $this->runScript($image1, $image2);
 
-        return json_decode($output[0], TRUE);
+        return $output;
     }
 
     private function runScript($image1, $image2)
