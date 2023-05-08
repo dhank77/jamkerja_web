@@ -269,166 +269,6 @@ class PresensiApiController extends Controller
         return response()->json($arr);
     }
 
-    public function store_free()
-    {
-        $nip = request('nip');
-        $kordinat = request('kordinat');
-        $field = request('field');
-
-        $date = request('date');
-        $toler1Min = strtotime("-5 minutes");
-        $dateSend = strtotime($date);
-
-        $image_64 = request('image');
-        if ($image_64) {
-            $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
-            $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
-            $image = str_replace($replace, '', $image_64);
-            $image = str_replace(' ', '+', $image);
-            $imageName = date("YmdHis") . Str::random(10) . '.' . $extension;
-
-            $foto = "presensi/$nip/$imageName";
-            Storage::disk('public')->put("/$foto", base64_decode($image));
-        } else {
-            $foto = "";
-        }
-
-        $timeZone = request('timezone') ?? 'WITA';
-        if ($timeZone == 'WIB') {
-            $tanggalIn = date('H:i:s', strtotime(date('Y-m-d H:i:s')) - (60 * 60));
-            $dateSend = strtotime($date) + (60 * 60);
-        } elseif ($timeZone == 'WIT') {
-            $tanggalIn = date('H:i:s', strtotime(date('Y-m-d H:i:s')) + (60 * 60));
-            $dateSend = strtotime($date) - (60 * 60);
-        } else {
-            $tanggalIn = date('H:i:s');
-        }
-
-        // comment if dev
-        if ($dateSend < $toler1Min) {
-            return response()->json(['status' => 'Error', 'messages' => 'Harap memperbaiki jam Handphone Anda!']);
-        }
-
-        $user = User::where('nip', $nip)->first();
-        if (!$user) {
-            return response()->json(['status' => 'Error', 'messages' => 'User tidak ditemukan!']);
-        }
-
-        $cek = PresensiFree::whereDate("tanggal", date("Y-m-d"))->where("jam_$field", "!=", null)->where('nip', $nip)->first();
-        if ($cek) {
-            return response()->json(['status' => 'Error', 'messages' => 'Anda telah melakukan presensi atau istirahat hari ini!']);
-        }
-
-        $jam_kerja = jam_kerja_nip($nip);
-        if (!$jam_kerja) {
-            return response()->json(['status' => 'Error', 'messages' => 'Jam kerja anda belum ditetapkan!']);
-        }
-
-        $rwJabatan = array_key_exists('0', $user->jabatan_akhir->toArray()) ? $user->jabatan_akhir[0] : null;
-        $kode_skpd = $rwJabatan?->kode_skpd;
-
-        $telat = 0;
-        if ($field == "datang" || $field == "pulang") {
-            $nameField = "jam_$field";
-            $nameToleransi = "toleransi_$field";
-            if ($field == "pulang") {
-                if (strtotime($jam_kerja->jam_datang) > strtotime($jam_kerja->jam_pulang)) {
-                    $cekDatang = PresensiFree::whereDate('tanggal', date("Y-m-d", strtotime('-1 days')))->where("jam_datang", '!=', null)->whereNull('jam_pulang')->where('nip', $nip)->value('id');
-                } else {
-                    $cekDatang = PresensiFree::whereDate('tanggal', date("Y-m-d"))->where("jam_datang", '!=', null)->where('nip', $nip)->value('id');
-                }
-                if (!$cekDatang) {
-                    return response()->json(['status' => 'Error', 'messages' => 'Anda belum melakukan check in!']);
-                }
-            }
-
-            if ($jam_kerja->$nameToleransi > 0) {
-                $rule_jam = date("H:i", strtotime(date("Y-m-d") . " " . $jam_kerja->$nameField  . " +" . $jam_kerja->$nameToleransi . "minutes"));
-            } else {
-                $rule_jam = $jam_kerja->$nameField;
-            }
-
-            if($field == 'datang'){
-                $menit_telat = menit_dari_2jam($rule_jam, $tanggalIn);
-                if ($menit_telat > 0) {
-                    $telat = $menit_telat;
-                }
-            }else{
-                $menit_telat = menit_dari_2jam($tanggalIn, $rule_jam);
-                if ($menit_telat > 0) {
-                    $telat = $menit_telat;
-                }
-            }
-            $data = [
-                "kode_skpd" => $kode_skpd,
-                "jam_$field" => $tanggalIn,
-                "rule_$field" => $rule_jam,
-                "image_$field" => $foto,
-                "status" => $jam_kerja->status,
-                "kordinat_$field" => $kordinat,
-                "rule_istirahat" => $jam_kerja->istirahat,
-                'kode_perusahaan' => kp()
-            ];
-
-            if($field == 'pulang'){
-                // check jam pulang dibawah jam 9 pagi
-                if (strtotime($jam_kerja->jam_datang) > strtotime($jam_kerja->jam_pulang)) {
-                    $cekMasuk = PresensiFree::whereDate('tanggal', date("Y-m-d", strtotime('-1 days')))->where('nip', $nip)->first();
-                    $cr = $cekMasuk->update($data);
-                } else {
-                    $cr = PresensiFree::updateOrCreate(['tanggal' => date("Y-m-d"), 'nip' => $nip], $data);
-                }
-
-            }else{
-                $cr = PresensiFree::updateOrCreate(['tanggal' => date("Y-m-d"), 'nip' => $nip], $data);
-            }
-        } else {
-            if ($field == "istirahat_selesai") {
-                // if ($dateSend < strtotime(date("Y-m-d") . " 08:59:59")) {
-                //     $cekBreak = PresensiFree::whereDate("tanggal", date("Y-m-d", strtotime('-1 days')))->where("jam_istirahat_mulai", '!=', null)->where('nip', $nip)->value('id');
-                // }else{
-                    $cekBreak = PresensiFree::whereDate("tanggal", date("Y-m-d"))->where("jam_istirahat_mulai", '!=', null)->where('nip', $nip)->value('id');
-                // }
-                if (!$cekBreak) {
-                    return response()->json(['status' => 'Error', 'messages' => 'Anda belum melakukan presensi break!']);
-                }
-                $istirahat_mulai = PresensiFree::whereDate("tanggal", date("Y-m-d"))->where("jam_istirahat_mulai", "!=", null)->where('nip', $nip)->value("jam_istirahat_mulai") ?? 0;
-                $menit_istirahat = menit_dari_2jam($istirahat_mulai, $tanggalIn);
-                if ($menit_istirahat > $jam_kerja->istirahat) {
-                    $telat = ($menit_istirahat - $jam_kerja->istirahat);
-                }
-            }
-            $data = [
-                "kode_skpd" => $kode_skpd,
-                "jam_$field" => $tanggalIn,
-                "status" => $jam_kerja->status,
-                "rule_istirahat" => $jam_kerja->istirahat,
-                'kode_perusahaan' => kp()
-            ];
-
-            // if ($dateSend < strtotime(date("Y-m-d") . " 08:59:59")) {
-            //     $cr = PresensiFree::updateOrCreate(['tanggal' => date("Y-m-d"), 'nip' => $nip], $data);
-            // }else{
-                $cr = PresensiFree::updateOrCreate(['tanggal' => date("Y-m-d"), 'nip' => $nip], $data);
-            // }
-        }
-        if ($cr) {
-            if ($telat > 0) {
-                if($field == 'pulang'){
-                    $text = "Berhasil melakukan absensi, Akan tetapi anda pulang cepat $telat menit!";
-                }else{
-                    $text = "Berhasil melakukan absensi, Akan tetapi anda telat $telat menit!";
-                }
-            } else {
-                $text = "Berhasil melakukan absensi!";
-            }
-            dispatch(new ProcessOneSignal($nip, "JamKerja.ID", $text));
-            return response()->json(['status' => 'Success', 'messages' =>  $text]);
-        } else {
-            return response()->json(['status' => 'Error', 'messages' => 'Jam kerja anda belum ditetapkan!']);
-        }
-    }
-
     public function store_free_face()
     {
         $nip = request('nip');
@@ -465,28 +305,25 @@ class PresensiApiController extends Controller
             $tanggalIn = date('H:i:s');
         }
 
-        $confidance = 0;
-
-        $data = recog_image($nip, $foto);
+        
+        // $confidance = 0;
+        // $data = recog_image($nip, $foto);
         // var_dump($data); die;
-        // $wajah = Wajah::where('nip', $nip)->value('file');
-        // if($wajah == ""){
-        //     return response()->json(['status' => 'Error', 'messages' => "Wajah acuan belum ada!"]);
+        $wajah = Wajah::where('nip', $nip)->value('file');
+        if($wajah == ""){
+            return response()->json(['status' => 'Error', 'messages' => "Wajah acuan belum ada!"]);
+        }
+        $data = compare_images($wajah, $foto);
+        if($data['mirip'] != 'true'){
+            Storage::delete($foto);
+            return response()->json(['status' => 'Error', 'messages' => "Wajah tidak dikenali, silahkan coba lagi!"]);
+        }
+        // if($data['confidence'] < 50){
+        //     Storage::delete($foto);
+        //     $persen = round($data['confidence'], 2);
+        //     return response()->json(['status' => 'Error', 'messages' => "Tingkat kemiripan hanya $persen%, silahkan coba lagi!"]);
         // }
-        // $data = compare_images('faces/006/006-face-20230131083935.jpg', $foto);
-        // return $data;
-        if($data['status'] != 'success'){
-            Storage::delete($foto);
-            $status = $data['status'];
-            return response()->json(['status' => 'Error', 'messages' => "Wajah tidak dikenali, status : $status, silahkan coba lagi!"]);
-        }
-        if($data['confidence'] < 50){
-            Storage::delete($foto);
-            $persen = round($data['confidence'], 2);
-            return response()->json(['status' => 'Error', 'messages' => "Tingkat kemiripan hanya $persen%, silahkan coba lagi!"]);
-        }
 
-        $confidance = $data['confidence'];
 
         // comment if dev
         if ($dateSend < $toler1Min) {
@@ -597,252 +434,17 @@ class PresensiApiController extends Controller
         if ($cr) {
             if ($telat > 0) {
                 if($field == 'pulang'){
-                    $text = "Berhasil melakukan absensi, Akan tetapi anda pulang cepat $telat menit, tingkat kemiripan: $confidance!";
+                    $text = "Berhasil melakukan absensi, Akan tetapi anda pulang cepat $telat menit!";
                 }else{
-                    $text = "Berhasil melakukan absensi, Akan tetapi anda telat $telat menit, tingkat kemiripan: $confidance!";
+                    $text = "Berhasil melakukan absensi, Akan tetapi anda telat $telat menit!";
                 }
             } else {
-                $text = "Berhasil melakukan absensi, tingkat kemiripan: $confidance!";
+                $text = "Berhasil melakukan absensi!";
             }
             dispatch(new ProcessOneSignal($nip, "JamKerja.ID", $text));
             return response()->json(['status' => 'Success', 'messages' =>  $text]);
         } else {
             return response()->json(['status' => 'Error', 'messages' => 'Jam kerja anda belum ditetapkan!']);
-        }
-    }
-
-    public function store()
-    {
-        $nip = request('nip');
-        $kordinat = request('kordinat');
-        $kode_shift = request('kode_shift');
-        $kode_tingkat = request('kode_tingkat');
-
-        $image_64 = request('image');
-        $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
-        $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
-        $image = str_replace($replace, '', $image_64);
-        $image = str_replace(' ', '+', $image);
-        $imageName = date("YmdHis") . Str::random(10) . '.' . $extension;
-
-        $date = request('date');
-        $toler1Min = strtotime("-5 minutes");
-        $dateSend = strtotime($date);
-
-        if ($image_64) {
-            $foto = "presensi/$nip/$imageName";
-            Storage::disk('public')->put("/$foto", base64_decode($image));
-        } else {
-            $foto = "";
-        }
-
-        $timeZone = request('timezone') ?? 'WITA';
-
-        if ($dateSend < $toler1Min) {
-            return response()->json(['status' => 'Error', 'messages' => 'Harap memperbaiki jam Handphone Anda!']);
-        }
-
-        if ($timeZone == 'WIB') {
-            $tanggalIn = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) - (60 * 60));
-            $dateSend = strtotime($date) + (60 * 60);
-        } elseif ($timeZone == 'WIT') {
-            $tanggalIn = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) + (60 * 60));
-            $dateSend = strtotime($date) - (60 * 60);
-        } else {
-            $tanggalIn = date('Y-m-d H:i:s');
-        }
-
-        $user = User::where('nip', $nip)->first();
-        if (!$user) {
-            return response()->json(['status' => 'Error', 'messages' => 'User tidak ditemukan!']);
-        }
-
-        // blok perizinan
-        // $perizinan = perizinan_pegawai($nip, date('Y-m-d'));
-        // if ($perizinan) {
-        //     return response()->json(['status' => 'Error', 'messages' => 'Anda sedang dalam masa perizinan!']);
-        // }
-
-        $shift = Shift::where('kode_shift', $kode_shift)->first();
-
-
-        $bukaPagiTime = strtotime(date('Y-m-d') . " " . $shift->jam_buka_datang);
-        $tutupPagiTime = strtotime(date('Y-m-d') . " " . $shift->jam_tutup_datang);
-
-        $bukaSiangTime = strtotime(date('Y-m-d') . " " . $shift->jam_buka_istirahat);
-        $tutupSiangTime = strtotime(date('Y-m-d') . " " . $shift->jam_tutup_istirahat);
-
-        $bukaSoreTime = strtotime(date('Y-m-d') . " " . $shift->jam_buka_pulang);
-        $tutupSoreTime = strtotime(date('Y-m-d') . " " . $shift->jam_tutup_pulang);
-
-
-        if ($dateSend >= $bukaPagiTime && $dateSend <= $tutupPagiTime) {
-            $cek = DataPresensi::where('nip', $nip)->whereDate('tanggal_datang', date('Y-m-d'))->count();
-            if ($cek > 0) {
-                return response()->json(['status' => 'Error', 'messages' => 'Anda Telah melakukan presensi pagi ini!']);
-            } else {
-                $data = [
-                    'nip' => $nip,
-                    'kordinat_datang' => $kordinat,
-                    'foto_datang' => $foto,
-                    'kode_tingkat' => $kode_tingkat,
-                    'kode_shift' => $kode_shift,
-                    'tanggal_datang' => $tanggalIn
-                ];
-                $cr = DataPresensi::create($data);
-                if ($cr) {
-                    if ($user->no_hp != "") {
-                        //Telat 
-                        if (strtotime($tanggalIn) > strtotime(date("Y-m-d", strtotime($tanggalIn)) . $shift->jam_tepat_datang)) {
-                            $dateTimeObject1 = date_create(date("Y-m-d", strtotime($tanggalIn)) . " " . $shift->jam_tepat_datang);
-                            $dateTimeObject2 = date_create($tanggalIn);
-
-                            $difference = date_diff($dateTimeObject1, $dateTimeObject2);
-
-                            $telat_pagi = $difference->h * 60;
-                            $telat_pagi += $difference->i;
-
-                            if ($telat_pagi > 0) {
-                                dispatch(new ProcessWaNotif($user->no_hp, "Hallo, Anda Berhasil Melakukan Absensi, Sayangnya anda telat $telat_pagi menit! :("));
-                            } else {
-                                dispatch(new ProcessWaNotif($user->no_hp, 'Hallo, Anda Berhasil Melakukan Absensi Tepat Waktu Pagi ini! :D'));
-                            }
-                        } else {
-                            dispatch(new ProcessWaNotif($user->no_hp, 'Hallo, Anda Berhasil Melakukan Absensi Tepat Waktu Pagi ini! :D'));
-                        }
-                    }
-                    return response()->json(['status' => 'Success', 'messages' => 'Berhasil Melakukan Absensi!', 'keterangan' => 'pagi']);
-                } else {
-                    return response()->json(['status' => 'Error', 'messages' => 'Terjadi Kesalahan!']);
-                }
-            }
-        } else if ($dateSend >= $bukaSiangTime && $dateSend <= $tutupSiangTime) {
-            $cek = DataPresensi::where('nip', $nip)->whereDate('tanggal_datang', date('Y-m-d'))->first();
-            if ($cek) {
-                $cekSiang = DataPresensi::where('nip', $nip)->whereDate('tanggal_istirahat', date('Y-m-d'))->count();
-                if ($cekSiang > 0) {
-                    return response()->json(['status' => 'Error', 'messages' => 'Anda Telah melakukan presensi siang ini!']);
-                } else {
-                    $data = [
-                        'kordinat_istirahat' => $kordinat,
-                        'foto_istirahat' => $foto,
-                        'tanggal_istirahat' => $tanggalIn
-                    ];
-                    $cr = $cek->update($data);
-                    if ($cr) {
-                        return response()->json(['status' => 'Success', 'messages' => 'Berhasil Melakukan Absensi!', 'keterangan' => 'siang']);
-                    } else {
-                        return response()->json(['status' => 'Error', 'messages' => 'Terjadi Kesalahan!']);
-                    }
-                }
-            } else {
-                $cekSiang2 = DataPresensi::where('nip', $nip)->whereDate('tanggal_istirahat', date('Y-m-d'))->count();
-                if ($cekSiang2 > 0) {
-                    return response()->json(['status' => 'Error', 'messages' => 'Anda Telah melakukan presensi siang ini!']);
-                } else {
-                    $data = [
-                        'nip' => $nip,
-                        'kordinat_istirahat' => $kordinat,
-                        'foto_istirahat' => $foto,
-                        'kode_tingkat' => $kode_tingkat,
-                        'kode_shift' => $kode_shift,
-                        'tanggal_istirahat' => $tanggalIn
-                    ];
-                    $cr = DataPresensi::create($data);
-                    if ($cr) {
-                        return response()->json([
-                            'status' => 'Success', 'messages' => 'Berhasil Melakukan Absensi!',
-                            'keterangan' => 'siang'
-                        ]);
-                    } else {
-                        return response()->json(['status' => 'Error', 'messages' => 'Terjadi Kesalahan!']);
-                    }
-                }
-            }
-        } else if ($dateSend >= $bukaSoreTime && $dateSend <= $tutupSoreTime) {
-            $cek = DataPresensi::where('nip', $nip)->whereDate('tanggal_datang', date('Y-m-d'))->first();
-            $cekSiang = DataPresensi::where('nip', $nip)->whereDate('tanggal_istirahat', date('Y-m-d'))->first();
-            if ($cek) {
-                $cekSore = DataPresensi::where('nip', $nip)->whereDate('tanggal_pulang', date('Y-m-d'))->count();
-                if ($cekSore > 0) {
-                    return response()->json(['status' => 'Error', 'messages' => 'Anda Telah melakukan presensi sore ini!']);
-                } else {
-                    $data = [
-                        'kordinat_pulang' => $kordinat,
-                        'foto_pulang' => $foto,
-                        'tanggal_pulang' => $tanggalIn
-                    ];
-                    $cr = $cek->update($data);
-                    if ($cr) {
-                        if ($user->no_hp != "") {
-                            $telatSore = telat_sore($tanggalIn, $shift->jam_tepat_pulang);
-                            if ($telatSore > 0) {
-                                dispatch(new ProcessWaNotif($user->no_hp, "Hallo, Anda Berhasil Melakukan Absensi, Sayangnya anda lebih cepat $telatSore menit! :("));
-                            } else {
-                                dispatch(new ProcessWaNotif($user->no_hp, 'Hallo, Anda Berhasil Melakukan Absensi Tepat Waktu Sore ini! :D'));
-                            }
-                        }
-                        return response()->json(['status' => 'Success', 'messages' => 'Berhasil Melakukan Absensi!', 'keterangan' => 'sore']);
-                    } else {
-                        return response()->json(['status' => 'Error', 'messages' => 'Terjadi Kesalahan!']);
-                    }
-                }
-            } elseif ($cekSiang) {
-                $cekSore3 = DataPresensi::where('nip', $nip)->whereDate('tanggal_pulang', date('Y-m-d'))->count();
-                if ($cekSore3 > 0) {
-                    return response()->json(['status' => 'Error', 'messages' => 'Anda Telah melakukan presensi sore ini!']);
-                } else {
-                    $data = [
-                        'kordinat_pulang' => $kordinat,
-                        'foto_pulang' => $foto,
-                        'tanggal_pulang' => $tanggalIn
-                    ];
-                    $cr = $cekSiang->update($data);
-                    if ($cr) {
-                        if ($user->no_hp != "") {
-                            $telatSore = telat_sore($tanggalIn, $shift->jam_tepat_pulang);
-                            if ($telatSore > 0) {
-                                dispatch(new ProcessWaNotif($user->no_hp, "Hallo, Anda Berhasil Melakukan Absensi, Sayangnya anda lebih cepat $telatSore menit! :("));
-                            } else {
-                                dispatch(new ProcessWaNotif($user->no_hp, 'Hallo, Anda Berhasil Melakukan Absensi Tepat Waktu Sore ini! :D'));
-                            }
-                        }
-                        return response()->json(['status' => 'Success', 'messages' => 'Berhasil Melakukan Absensi!', 'keterangan' => 'sore']);
-                    } else {
-                        return response()->json(['status' => 'Error', 'messages' => 'Terjadi Kesalahan!']);
-                    }
-                }
-            } else {
-                $cekSore2 = DataPresensi::where('nip', $nip)->whereDate('tanggal_pulang', date('Y-m-d'))->count();
-                if ($cekSore2 > 0) {
-                    return response()->json(['status' => 'Error', 'messages' => 'Anda Telah melakukan presensi sore ini!']);
-                } else {
-                    $data = [
-                        'nip' => $nip,
-                        'kordinat_pulang' => $kordinat,
-                        'foto_pulang' => $foto,
-                        'kode_tingkat' => $kode_tingkat,
-                        'kode_shift' => $kode_shift,
-                        'tanggal_pulang' => $tanggalIn
-                    ];
-                    $cr = DataPresensi::create($data);
-                    if ($cr) {
-                        if ($user->no_hp != "") {
-                            $telatSore = telat_sore($tanggalIn, $shift->jam_tepat_pulang);
-                            if ($telatSore > 0) {
-                                dispatch(new ProcessWaNotif($user->no_hp, "Hallo, Anda Berhasil Melakukan Absensi, Sayangnya anda lebih cepat $telatSore menit! :("));
-                            } else {
-                                dispatch(new ProcessWaNotif($user->no_hp, 'Hallo, Anda Berhasil Melakukan Absensi Tepat Waktu Sore ini! :D'));
-                            }
-                        }
-                        return response()->json(['status' => 'Success', 'messages' => 'Berhasil Melakukan Absensi!', 'keterangan' => 'sore']);
-                    } else {
-                        return response()->json(['status' => 'Error', 'messages' => 'Terjadi Kesalahan!']);
-                    }
-                }
-            }
-        } else {
-            return response()->json(['status' => 'Error', 'messages' => 'Anda tidak berada diwaktu presensi']);
         }
     }
 
