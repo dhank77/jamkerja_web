@@ -586,13 +586,9 @@ function getGenUsia()
 
 function validasi_master($array, $exp = 3)
 {
-    $namaModel = $array[$exp-2];
+    $namaModel = ex_model($array[$exp-2]);
     $id = $array[$exp];
-    if ($namaModel == 'level') {
-        $namaModel = 'eselon';
-    }elseif($namaModel == 'penambahan'){
-        $namaModel = 'tambahan';
-    }
+   
 
     if ($exp == 3) {
         $model = 'App\Models\Master\\' . ucfirst($namaModel);
@@ -601,15 +597,7 @@ function validasi_master($array, $exp = 3)
     }
 
     if (strlen($id) >= 36) {
-        if ($namaModel == 'tingkat') {
-            $field = 'kode_skpd';
-        } else if($namaModel == 'pengurangan') {
-            $field = 'kode_kurang';
-        } else if($namaModel == 'tambahan') {
-            $field = 'kode_tambah';
-        } else {
-            $field = 'kode_' . strtolower($namaModel);
-        }
+        $field = ex_field($namaModel);
         $kode_perusahaan = $model::where($field, $id)->value('kode_perusahaan');
     } else {
         $kode_perusahaan = $model::where('id', $id)->value('kode_perusahaan');
@@ -652,6 +640,36 @@ function validasi_data_pegawai($array)
     } else {
         return false;
     }
+}
+
+function ex_model($namaModel)
+{
+    if ($namaModel == 'level') {
+        $namaModel = 'eselon';
+    }elseif($namaModel == 'penambahan'){
+        $namaModel = 'tambahan';
+    }elseif($namaModel == 'jam-kerja-pegawai'){
+        $namaModel = 'jksPegawai';
+    }
+
+    return $namaModel;
+}
+
+function ex_field($namaModel)
+{
+    if ($namaModel == 'tingkat') {
+        $field = 'kode_skpd';
+    } else if($namaModel == 'pengurangan') {
+        $field = 'kode_kurang';
+    } else if($namaModel == 'tambahan') {
+        $field = 'kode_tambah';
+    } else if($namaModel == 'jksPegawai') {
+        $field = 'kode_jam_kerja';
+    } else {
+        $field = 'kode_' . strtolower($namaModel);
+    }
+
+    return $field;
 }
 
 function get_kode_perusahaan_pengumuman($id)
