@@ -315,9 +315,10 @@ class PresensiApiController extends Controller
         }
         $data = compare_images($wajah, $foto);
         
-        if($data == "[]"){
+        if($data == []){
             return response()->json(['status' => 'Error', 'messages' => "Wajah tidak terdeteksi!"]);
         }
+        return $data;
         $data = json_decode($data[0], TRUE);
         if($data['mirip'] != 'true'){
             Storage::delete($foto);
