@@ -314,16 +314,15 @@ class PresensiApiController extends Controller
             return response()->json(['status' => 'Error', 'messages' => "Wajah acuan belum ada!"]);
         }
         $data = compare_images($wajah, $foto);
+        
+        if($data == "[]"){
+            return response()->json(['status' => 'Error', 'messages' => "Wajah tidak terdeteksi!"]);
+        }
+        $data = json_decode($data[0], TRUE);
         if($data['mirip'] != 'true'){
             Storage::delete($foto);
             return response()->json(['status' => 'Error', 'messages' => "Wajah tidak dikenali, silahkan coba lagi!"]);
         }
-        // if($data['confidence'] < 50){
-        //     Storage::delete($foto);
-        //     $persen = round($data['confidence'], 2);
-        //     return response()->json(['status' => 'Error', 'messages' => "Tingkat kemiripan hanya $persen%, silahkan coba lagi!"]);
-        // }
-
 
         // comment if dev
         if ($dateSend < $toler1Min) {
@@ -381,6 +380,7 @@ class PresensiApiController extends Controller
                 }
             }
             $data = [
+                "kode_perusahaan" => $user->kode_perusahaan,
                 "kode_skpd" => $kode_skpd,
                 "jam_$field" => $tanggalIn,
                 "rule_$field" => $rule_jam,

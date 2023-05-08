@@ -21,7 +21,7 @@ class DashboardController extends Controller
 {
     public function __invoke()
     {
-        // $data = compare_images('faces/006/006-face-20230131083935.jpg', 'presensi/101/kakak.jpg');
+        // $data = compare_images('presensi/45309e6d-17aa-4f87-8463-b566e01ef353/20230509070503H7J9yIvMeP.png', 'faces/45309e6d-17aa-4f87-8463-b566e01ef353/45309e6d-17aa-4f87-8463-b566e01ef353-foto.jpeg');
         // dd($data);
         // $data = train_image('111');
         // dd($data);
