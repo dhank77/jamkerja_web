@@ -20,7 +20,8 @@ class Compare
         $pathScript = 'Console' . self::DS . 'Scripts' .
             self::DS . 'face_compare.py';
         $scriptAppPath = app_path($pathScript);
-        $console = env('PYTHON_PATH3') . " $scriptAppPath $image1 $image2";
+        $path = env('PYTHON_PATH3') ?? "/usr/bin/python3";
+        $console = $path . " $scriptAppPath $image1 $image2";
         // var_dump($console); die;
         try {
             exec(escapeshellcmd($console), $result);
