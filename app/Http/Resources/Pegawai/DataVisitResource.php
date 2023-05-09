@@ -17,7 +17,7 @@ class DataVisitResource extends JsonResource
         return [
             'id' => $this->id,
             'nip' => $this->nip,
-            'nama' => $this->user?->nama,
+            'nama' => $this->user?->name,
             'kode_visit' => $this->kode_visit,
             'visit' => $this->visit?->nama,
             'judul' => $this->judul,
