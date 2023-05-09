@@ -126,11 +126,11 @@ function get_rule_lembur($jam)
 function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $tahun)
 {
     $cek = DataPayroll::where([
-                        'kode_payroll' => $kode_payroll,
-                        'bulan' => $bulan,
-                        'tahun' => $tahun,
-                        'nip' => $nip,
-                        'is_aktif' => 1,
+                        ['kode_payroll' => $kode_payroll],
+                        ['bulan' => $bulan],
+                        ['tahun' => $tahun],
+                        ['nip' => $nip],
+                        ['is_aktif' => 1],
                     ])->first();
 
     if($cek){
@@ -156,9 +156,11 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
     $total_penambahan += $tunjangan_jabatan;
 
 
+
     // Payroll Dasar Gapok
     DataPayroll::updateOrCreate(
         [
+            'kode_perusahaan' => kp(),
             'kode_payroll' => $kode_payroll,
             'bulan' => $bulan,
             'tahun' => $tahun,
@@ -180,6 +182,7 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
         $total_penambahan += $tunj->nilai;
         PayrollTambah::updateOrCreate(
             [
+                'kode_perusahaan' => kp(),
                 'kode_payroll' => $kode_payroll,
                 'nip' => $nip,
                 'kode_tambahan' => $tunj->kode_tunjangan,
@@ -221,6 +224,7 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
  
          PayrollKurang::updateOrCreate(
              [
+                'kode_perusahaan' => kp(),
                  'kode_payroll' => $kode_payroll,
                  'nip' => $nip,
                  'kode_kurang' => $pot->kode_kurang,
@@ -263,6 +267,7 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
 
         PayrollTambah::updateOrCreate(
             [
+                'kode_perusahaan' => kp(),
                 'kode_payroll' => $kode_payroll,
                 'nip' => $nip,
                 'kode_tambahan' => $tunj->kode_tambah,
@@ -304,6 +309,7 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
  
          PayrollKurang::updateOrCreate(
              [
+                'kode_perusahaan' => kp(),
                  'kode_payroll' => $kode_payroll,
                  'nip' => $nip,
                  'kode_kurang' => $pot->kode_kurang,
@@ -346,6 +352,7 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
 
         PayrollTambah::updateOrCreate(
             [
+                'kode_perusahaan' => kp(),
                 'kode_payroll' => $kode_payroll,
                 'nip' => $nip,
                 'kode_tambahan' => $tunj->kode_tambah,
@@ -387,6 +394,7 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
 
         PayrollKurang::updateOrCreate(
             [
+                'kode_perusahaan' => kp(),
                 'kode_payroll' => $kode_payroll,
                 'nip' => $nip,
                 'kode_kurang' => $pot->kode_kurang,
@@ -432,6 +440,7 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
 
         PayrollTambah::updateOrCreate(
             [
+                'kode_perusahaan' => kp(),
                 'kode_payroll' => $kode_payroll,
                 'nip' => $nip,
                 'kode_tambahan' => 'lembur-' . $lembur->tanggal,
@@ -507,6 +516,7 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
         $total_potongan += $total_presensi;
         PayrollKurang::updateOrCreate(
             [
+                'kode_perusahaan' => kp(),
                 'kode_payroll' => $kode_payroll,
                 'nip' => $nip,
                 'kode_kurang' => 'potongan-absensi-' . $bulan . $tahun,
@@ -519,10 +529,10 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
     }
 
      DataPayroll::where([
-            'kode_payroll' => $kode_payroll,
-            'bulan' => $bulan,
-            'tahun' => $tahun,
-            'nip' => $nip,
+            ['kode_payroll' => $kode_payroll],
+            ['bulan' => $bulan],
+            ['tahun' => $tahun],
+            ['nip' => $nip],
         ])->update([
             'total' => $total,
             'total_potongan' => $total_potongan,
