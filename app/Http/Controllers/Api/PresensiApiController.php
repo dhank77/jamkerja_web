@@ -318,7 +318,6 @@ class PresensiApiController extends Controller
         if($data == []){
             return response()->json(['status' => 'Error', 'messages' => "Wajah tidak terdeteksi!"]);
         }
-        return $data;
         $data = json_decode($data[0], TRUE);
         if($data['mirip'] != 'true'){
             Storage::delete($foto);
@@ -420,6 +419,7 @@ class PresensiApiController extends Controller
                 }
             }
             $data = [
+                "kode_perusahaan" => $user->kode_perusahaan,
                 "kode_skpd" => $kode_skpd,
                 "jam_$field" => $tanggalIn,
                 "status" => $jam_kerja->status,
