@@ -17,7 +17,7 @@ class VisitResource extends JsonResource
         return [
             'id' => $this->id,
             'kode_visit' => $this->kode_visit,
-            'nama' => $this->nama,
+            'nama' => $this?->user?->nama,
             'kordinat' => $this->kordinat,
             'jarak' => $this->jarak,
             'qr' => "data:image/png;base64, " . base64_encode(QrCode::format('png')->size(100)->generate($this->kode_visit)),
