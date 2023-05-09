@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('divisi')->nullable();
             $table->double('gaji_pokok');
             $table->double('tunjangan')->nullable();
+            $table->double('total')->nullable();
             $table->double('total_penambahan')->nullable();
             $table->double('total_potongan')->nullable();
             $table->tinyInteger('is_aktif')->default(0);
