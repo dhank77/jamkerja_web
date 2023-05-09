@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('kode_perusahaan');
             $table->string('nip');
             $table->string('kode_ijin');
-            $table->date('tanggal_mulai');
-            $table->date('tanggal_selesai');
+            $table->timestamp('tanggal_mulai');
+            $table->timestamp('tanggal_selesai');
             $table->string('keterangan')->nullable();
             $table->string('file')->nullable();
             $table->string('status')->default(0);
