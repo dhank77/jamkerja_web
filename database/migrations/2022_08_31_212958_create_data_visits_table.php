@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode_perusahaan');
             $table->string('nip');
-            $table->string('kode_visit');
+            $table->string('kode_visit')->nullable();
             $table->timestamp('tanggal');
             $table->string('kordinat')->nullable();
             $table->string('foto')->nullable();

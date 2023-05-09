@@ -91,6 +91,7 @@ class VisitApiController extends Controller
                 'keterangan' => $keterangan,
                 'kordinat' => $kordinat,
                 'lokasi' => $lokasi,
+                'tanggal' => date("Y-m-d"),
                 'foto' => $file,
                 'kode_perusahaan' => kp()
             ];
