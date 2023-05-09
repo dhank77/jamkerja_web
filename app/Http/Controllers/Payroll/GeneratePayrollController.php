@@ -78,6 +78,7 @@ class GeneratePayrollController extends Controller
 
         GeneratePayroll::updateOrCreate(
             [
+                'kode_perusahaan' => kp(),
                 'kode_payroll' => $kode_payroll,
             ],
             [
