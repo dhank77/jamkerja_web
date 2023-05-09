@@ -42,6 +42,11 @@ function storageTest($file)
     return $file ? "https://sbcjombang.com/storage/$file" : "";
 }
 
+function get_day_from_date($date)
+{
+    return date("m", strtotime($date));
+}
+
 function jenis_jabatan($kode)
 {
     switch ($kode) {

@@ -80,6 +80,7 @@ class PerusahaanController extends Controller
                 'kode_perusahaan' => $uuid,
                 'name' => $data['nama'],
                 'email' => $data['email'],
+                'nip' => $data['email'],
                 'password' => password_hash($data['email'], PASSWORD_BCRYPT),
                 'status_perusahaan' => $data['status'],
             ];

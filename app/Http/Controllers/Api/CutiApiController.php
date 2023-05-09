@@ -66,7 +66,16 @@ class CutiApiController extends Controller
                 if ($file == "") {
                     return response()->json(['status' => FALSE, 'messages' => 'Gambar Wajib dilampirkan!']);
                 }
-                $hari = count(getBetweenDates($tanggal_mulai, $tanggal_selesai));
+                $hari = 0;
+                foreach (getBetweenDates($tanggal_mulai, $tanggal_selesai) as $h) {
+                    $md = get_day_from_date($h);
+                    if($md != 0 && $md != 6){
+                        $hari +=1;
+                    }
+                }
+                if($hari <= 0){
+                    return response()->json(['status' => FALSE, 'messages' => 'Cuti minimal 1 hari kerja!']);
+                }
                 $data = [
                     'nip' => $nip,
                     'kode_cuti' => $kode_cuti,
