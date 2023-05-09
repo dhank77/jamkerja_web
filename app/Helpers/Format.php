@@ -44,7 +44,7 @@ function storageTest($file)
 
 function get_day_from_date($date)
 {
-    return date("m", strtotime($date));
+    return date("w", strtotime($date));
 }
 
 function jenis_jabatan($kode)
