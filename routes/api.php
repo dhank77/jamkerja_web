@@ -127,6 +127,7 @@ Route::middleware('auth:sanctum')->group(function(){
             ->prefix('lembur')
             ->group(function () {
                 Route::get('lists', 'lists');
+                Route::get('getHariIni', 'getHariIni');
                 Route::post('store',  'store');
                 Route::get('detail',  'detail');
             });

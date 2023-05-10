@@ -76,6 +76,30 @@ class LemburApiController extends Controller
         }
     }
 
+    public function getHariIni()
+    {
+        $nip = request('nip');
+        $tanggal = date("Y-m-d");
+        if($nip){
+            $dpc = DataPengajuanLembur::where('nip', $nip)->where('tanggal', $tanggal)->where("status", 1)->first();
+            if($dpc){
+                $user = User::where('nip', $dpc->nip)->first();
+                if($user){
+                    return response()->json([
+                        'user' => PegawaiResource::make($user),
+                        'data' => LemburPengajuanResource::make($dpc),
+                    ]);
+                }else{
+                    return response()->json(['status' => FALSE ]);
+                }
+            }else{
+                return response()->json(['status' => FALSE ]);
+            }
+        }else{
+            return response()->json(['status' => FALSE ]);
+        }
+    }
+
     public function lists()
     {
         $nip = request('nip');
