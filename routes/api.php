@@ -129,6 +129,7 @@ Route::middleware('auth:sanctum')->group(function(){
                 Route::get('lists', 'lists');
                 Route::get('getHariIni', 'getHariIni');
                 Route::post('store',  'store');
+                Route::post('presensi',  'presensi');
                 Route::get('detail',  'detail');
             });
 
