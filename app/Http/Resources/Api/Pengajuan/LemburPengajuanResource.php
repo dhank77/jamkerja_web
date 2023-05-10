@@ -21,6 +21,7 @@ class LemburPengajuanResource extends JsonResource
             'time_jam_mulai' => strtotime("$this->tanggal $this->jam_mulai"),
             'time_jam_selesai' => strtotime("$this->tanggal $this->jam_selesai"),
             'tanggal' => tanggal_indo($this->tanggal),
+            'tanggal_ymd' => $this->tanggal,
             'keterangan' => $this->keterangan ?? "",
             'status' => status($this->status),
             'komentar' => $this->komentar ?? "",
