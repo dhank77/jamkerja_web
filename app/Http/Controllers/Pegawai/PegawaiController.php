@@ -151,6 +151,7 @@ class PegawaiController extends Controller
 
             $data['nip'] = generateUUID();
             $data['kode_perusahaan'] = auth()->user()->kode_perusahaan;
+            $data['cuti_tahunan'] = '12';
             $data['password'] = password_hash(request('email'), PASSWORD_BCRYPT);
             $cr = User::create($data);
             $cr->assignRole('pegawai');
