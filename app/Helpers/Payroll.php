@@ -409,8 +409,8 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
     //  Penambahan Lembur
     $data_lembur = get_lembur($nip, $bulan, $tahun);
     foreach ($data_lembur as $lembur) {
-        $waktu_mulai = $lembur->tanggal . " " . ($lembur->jam_mulai);
-        $waktu_selesai = $lembur->tanggal . " " . ($lembur->jam_selesai);
+        $waktu_mulai = $lembur->tanggal . " " . ($lembur->jam_masuk);
+        $waktu_selesai = $lembur->tanggal . " " . ($lembur->jam_keluar);
 
         $jam = hitung_jam_menit($waktu_mulai, $waktu_selesai);
 
@@ -454,48 +454,6 @@ function generate_payroll_nip($nip, $no_hp, $jabatan, $kode_payroll, $bulan, $ta
 
     // Potongan Telat & Cepat Pulang
     $presensi = kehadiran_free($nip, $bulan, $tahun);
-    // Perhitungan berdasarkan potongan persumber gaji
-    // $hari_kerja = $presensi['hari_kerja'];
-    // $total_izin = $presensi['total_izin'];
-    // $total_alfa = $presensi['total_alfa'];
-
-    // $nilai_telat = 0;
-    // $nilai_alpha = 0;
-    // foreach ($presensi['total_telat_datang'] as $k => $telat) {
-    //     $sumber = 0;
-    //     $kode_tunjangan = explode(',', $telat->kode_tunjangan);
-    //     foreach ($kode_tunjangan as $kt) {
-    //         if($kt == 1){
-    //             $sumber += $gapok;
-    //         }elseif($kt == 2){
-    //             $sumber += $tunjangan_jabatan;
-    //         }else{
-    //             $nilai_tunjangan = get_nilai_tunjangan($nip, $kt);
-    //             $sumber += $nilai_tunjangan;
-    //         }
-    //     }
-
-    //     $nilai_telat += $sumber * $telat->pengali / 100;
-    // }
-
-    // $nilai_telat_pulang = 0;
-    // foreach ($presensi['total_telat_pulang'] as $telat) {
-    //     $sumber = 0;
-    //     $kode_tunjangan = explode(',', $telat->kode_tunjangan);
-    //     foreach ($kode_tunjangan as $kt) {
-    //         if($kt == 1){
-    //             $sumber += $gapok;
-    //         }elseif($kt == 2){
-    //             $sumber += $tunjangan_jabatan;
-    //         }else{
-    //             $nilai_tunjangan = get_nilai_tunjangan($nip, $kt);
-    //             $sumber += $nilai_tunjangan;
-    //         }
-    //     }
-
-    //     $nilai_telat_pulang += $sumber * $telat->pengali / 100;
-    // }
-
     // Perhitungan potongan permenit
     $ap = AbsensiPermenit::where('keterangan', 'permenit')->whereNull('kode_eselon')->first() ??  new AbsensiPermenit();
     if(!$ap){
