@@ -3,6 +3,7 @@ import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import React, { useMemo, useRef, useState } from 'react'
 import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import ReactLeafletGoogleLayer from 'react-leaflet-google-layer';
 import { InputNumber, Slider } from 'rsuite';
 import "leaflet/dist/leaflet.css";
 
@@ -13,18 +14,20 @@ export default function Add({ errors, skpd }) {
         nama: skpd.nama,
         singkatan: skpd.singkatan,
         istilah: skpd.istilah,
-        kordinat: skpd.kordinat ?? "-4.008427, 119.622869",
+        kordinat: skpd.kordinat,
         latitude: skpd.latitude,
         longitude: skpd.longitude,
-        jarak: skpd.jarak ?? 100,
+        jarak: skpd.jarak ?? 0,
         id: skpd.id,
     })
 
     const updateData = (e) => {
         if (e.target.name == 'kordinat') {
             let arr = e.target.value.split(",");
-            setValues({ ...values, [e.target.name]: e.target.value, latitude: parseFloat(arr[0].trim()), longitude: parseFloat(arr[1].trim()) })
-            setMarkerPosition([parseFloat(arr[0].trim()), parseFloat(arr[1].trim())])
+            if(arr.length > 1 && arr[0] != "" && arr[1] != "" && arr[0] != " " && arr[1] != " "){
+                setValues({ ...values, [e.target.name]: e.target.value, latitude: parseFloat(arr[0].trim()), longitude: parseFloat(arr[1].trim()) })
+                setMarkerPosition([parseFloat(arr[0].trim()), parseFloat(arr[1].trim())])
+            }
         } else {
             setValues({ ...values, [e.target.name]: e.target.value })
         }
@@ -47,7 +50,6 @@ export default function Add({ errors, skpd }) {
 
     const markerRef = useRef(null)
     const circleRef = useRef(null)
-    const kode_skpdRef = useRef(null)
     const namaRef = useRef(null)
     const singkatanRef = useRef(null)
     const eventHandlers = useMemo(
@@ -55,7 +57,6 @@ export default function Add({ errors, skpd }) {
             dragend() {
                 const marker = markerRef.current
                 const circle = circleRef.current
-                const skpd = kode_skpdRef.current.value
                 const nama = namaRef.current.value
                 const singkatan = singkatanRef.current.value
                 if (marker != null) {
@@ -66,7 +67,6 @@ export default function Add({ errors, skpd }) {
                         latitude: marker.getLatLng().lat,
                         longitude: marker.getLatLng().lng,
                         jarak: circle.getRadius(),
-                        kode_skpd: skpd,
                         nama: nama,
                         singkatan: singkatan,
                     })
@@ -119,11 +119,8 @@ export default function Add({ errors, skpd }) {
                         <div className="row mb-6">
                             <label className="form-label">Lokasi Divisi</label>
                             <div>
-                                <MapContainer center={position} zoom={13} scrollWheelZoom={false} style={{ height: "600px", width: "100%" }}>
-                                    <TileLayer
-                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    />
+                                <MapContainer center={position} zoom={5} scrollWheelZoom={false} style={{ height: "600px", width: "100%" }}>
+                                    <ReactLeafletGoogleLayer apiKey='AIzaSyA1MgLuZuyqR_OGY3ob3M52N46TDBRI_9k' type={'roadmap'} />
                                     <Marker
                                         position={markerPosition}
                                         icon={icon}

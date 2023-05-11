@@ -6,6 +6,7 @@ import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import React, { useMemo, useRef, useState } from 'react'
 import { Circle, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import ReactLeafletGoogleLayer from 'react-leaflet-google-layer';
 import { Cascader, InputNumber, Slider } from 'rsuite';
 import "leaflet/dist/leaflet.css";
 import NumberFormat from 'react-number-format';
@@ -30,8 +31,10 @@ export default function Add({ errors, tingkat, parent }) {
     const updateKordinat = (e) => {
         if (e.target.name == 'kordinat') {
             let arr = e.target.value.split(",");
-            setKordinat({ ...kordinat, [e.target.name]: e.target.value, latitude: parseFloat(arr[0].trim()), longitude: parseFloat(arr[1].trim()) })
-            setMarkerPosition([parseFloat(arr[0].trim()), parseFloat(arr[1].trim())])
+            if(arr.length > 1 && arr[0] != "" && arr[1] != "" && arr[0] != " " && arr[1] != " "){
+                setKordinat({ ...kordinat, [e.target.name]: e.target.value, latitude: parseFloat(arr[0].trim()), longitude: parseFloat(arr[1].trim()) })
+                setMarkerPosition([parseFloat(arr[0].trim()), parseFloat(arr[1].trim())])
+            }
         } else {
             setKordinat({ ...kordinat, [e.target.name]: e.target.value })
         }
@@ -170,11 +173,8 @@ export default function Add({ errors, tingkat, parent }) {
                         <div className="row mb-6">
                             <label className="form-label">Lokasi</label>
                             <div>
-                                <MapContainer center={position} zoom={13} scrollWheelZoom={false} style={{ height: "600px", width: "100%" }}>
-                                    <TileLayer
-                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    />
+                                <MapContainer center={position} zoom={5} scrollWheelZoom={false} style={{ height: "600px", width: "100%" }}>
+                                    <ReactLeafletGoogleLayer apiKey='AIzaSyA1MgLuZuyqR_OGY3ob3M52N46TDBRI_9k' type={'roadmap'} />
                                     <Marker
                                         position={markerPosition}
                                         icon={icon}

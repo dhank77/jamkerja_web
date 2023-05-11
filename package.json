@@ -39,6 +39,7 @@
         "react-esri-leaflet": "^2.0.1",
         "react-iframe": "^1.8.0",
         "react-leaflet": "^4.0.0",
+        "react-leaflet-google-layer": "^2.2.0",
         "react-number-format": "^4.9.3",
         "react-select": "^5.3.2",
         "react-use": "^17.4.0",
