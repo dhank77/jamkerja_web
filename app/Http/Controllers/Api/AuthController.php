@@ -103,8 +103,11 @@ class AuthController extends Controller
             }
             Storage::disk('public')->put("/$imageName", base64_decode($image));
             $cr = $cek->update(['image' => $imageName]);
+            
+            $user = User::where('nip', $nip)->first();
+            
             if($cr){
-                return response()->json(['status' => 'Success', 'messages' => 'Berhasil mengubah foto profil!']);
+                return response()->json(['status' => 'Success', 'messages' => 'Berhasil mengubah foto profil!', 'user' => PegawaiResource::make($user)]);
             }else{
                 return response()->json(['status' => 'Error', 'messages' => 'Terjadi Kesalahan!']);
             }
