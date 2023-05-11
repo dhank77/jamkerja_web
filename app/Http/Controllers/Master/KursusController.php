@@ -69,13 +69,18 @@ class KursusController extends Controller
             'nama' => 'required',
         ];
 
+        $id = request('id');
         if(!request('id')){
             $rules['kode_kursus'] = 'required|unique:kursus';
         }
 
         $data = request()->validate($rules);
 
-        $cr = Kursus::updateOrCreate(['id' => request('id')], $data);
+        if($id){
+            $cr = Kursus::where('id', $id)->update($data);
+        }else{
+            $cr = Kursus::create($data);
+        }
 
         if ($cr) {
             return redirect(route('master.kursus.index'))->with([

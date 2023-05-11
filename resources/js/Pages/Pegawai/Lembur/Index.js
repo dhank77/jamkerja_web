@@ -22,9 +22,9 @@ export default function Index({ pegawai, Rlembur }) {
                         <h3 className="fw-bolder mb-1">Data Lembur</h3>
                         <div className="fs-6 text-gray-400">Data riwayat Lembur</div>
                     </div>
-                    <div class="card-toolbar">
+                    {/* <div class="card-toolbar">
                         <Link preserveScroll href={route('pegawai.lembur.add', pegawai.nip)} class="btn btn-primary fw-bolder me-auto px-4 py-3">Tambah</Link>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="card-body py-3">
                     <Search />
@@ -63,11 +63,11 @@ export default function Index({ pegawai, Rlembur }) {
                                             <Download file={u.file} />
                                         </td>
                                         <td>
-                                            <Dropdown>
                                                 <Logs model_type="App\Models\Pegawai\DataPengajuanLembur" model_id={u.id} />
+                                            {/* <Dropdown>
                                                 <Edit routes={route('pegawai.lembur.edit', { 'pegawai': u.nip, 'Rlembur': u.id })} />
                                                 <Delete routes={route('pegawai.lembur.delete', { 'pegawai': u.nip, 'Rlembur': u.id })} />
-                                            </Dropdown>
+                                            </Dropdown> */}
                                         </td>
                                     </tr>
                                 ))}

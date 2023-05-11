@@ -112,13 +112,14 @@ class RiwayatPotonganController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-potongan-" . generateRandomString(5) . ".pdf");
         }
 
-        $cr = RiwayatPotongan::updateOrCreate(
-                                    [
-                                        'id' => $id,
-                                        'nip' => $pegawai->nip,
-                                    ],
-                                    $data
-                                );
+        if($id){
+            $cr = RiwayatPotongan::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatPotongan::create($data);
+        }
+
         if (!$id) {
             tambah_log($pegawai->nip, "App\Models\Pegawai\RiwayatPotongan", $cr->id, 'ditambahkan');
         }

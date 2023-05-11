@@ -83,13 +83,13 @@ class RiwayatOrganisasiController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-organisasi-" . date("ymdhis") . ".pdf");
         }
 
-        $cr = RiwayatOrganisasi::updateOrCreate(
-                                [
-                                    'id' => $id,
-                                    'nip' => $pegawai->nip,
-                                ],
-                                $data
-                            );
+        if($id){
+            $cr = RiwayatOrganisasi::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatOrganisasi::create($data);
+        }
 
         if ($cr) {
             return redirect(route('pegawai.organisasi.index', $pegawai->nip))->with([

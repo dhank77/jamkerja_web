@@ -61,7 +61,7 @@ function jenis_jabatan($kode)
             break;
 
         default:
-            return "Err";
+            return "";
             break;
     }
 }
@@ -80,7 +80,7 @@ function status($kode)
             break;
 
         default:
-            return "Err";
+            return "";
             break;
     }
 }
@@ -102,7 +102,7 @@ function status_web($kode)
             break;
 
         default:
-            return "Err";
+            return "";
             break;
     }
 }
@@ -124,7 +124,7 @@ function status_tugas($kode)
             break;
 
         default:
-            return "Err";
+            return "";
             break;
     }
 }
@@ -140,7 +140,7 @@ function is_aktif($kode)
             break;
 
         default:
-            return "Err";
+            return "";
             break;
     }
 }
@@ -605,7 +605,11 @@ function validasi_master($array, $exp = 3)
         $field = ex_field($namaModel);
         $kode_perusahaan = $model::where($field, $id)->value('kode_perusahaan');
     } else {
-        $kode_perusahaan = $model::where('id', $id)->value('kode_perusahaan');
+        if(!in_array($namaModel, ['jurusan', 'kursus', 'pendidikan'])){
+            $kode_perusahaan = $model::where('id', $id)->value('kode_perusahaan');
+        }else{
+            return false;
+        }
     }
 
     if ($kode_perusahaan != auth()->user()->kode_perusahaan) {
@@ -622,7 +626,7 @@ function validasi_data_pegawai($array)
     if (count($array) == 6) {
         $id = is_integer($array[4]) ? $array[4] : $array[5];
     } else {
-        $id = $array[4];
+        $id = is_integer($array[4]) ? $array[4] : false;
     }
     if ($namaModel == 'level') {
         $namaModel = 'eselon';
@@ -638,7 +642,7 @@ function validasi_data_pegawai($array)
         $model = 'App\Models\Pegawai\Riwayat' . ucfirst($namaModel);
     }
 
-    $kode_perusahaan = $model::where('nip', $nip)->where('id', $id)->value('kode_perusahaan');
+    $kode_perusahaan = $model::where('nip', $nip)->when($id, function($qr, $id){$qr->where('id', $id);})->value('kode_perusahaan');
 
     if ($kode_perusahaan != auth()->user()->kode_perusahaan) {
         return true;

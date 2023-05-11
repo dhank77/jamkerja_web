@@ -108,13 +108,13 @@ class RiwayatPendidikanController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-pendidikan-" . date("ymdhis") . ".pdf");
         }
 
-        $cr = RiwayatPendidikan::updateOrCreate(
-                                [
-                                    'id' => $id,
-                                    'nip' => $pegawai->nip,
-                                ],
-                                $data
-                            );
+        if($id){
+            $cr = RiwayatPendidikan::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatPendidikan::create($data);
+        }
 
         if ($cr) {
             return redirect(route('pegawai.pendidikan.index', $pegawai->nip))->with([

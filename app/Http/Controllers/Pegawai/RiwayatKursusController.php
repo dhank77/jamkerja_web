@@ -85,13 +85,15 @@ class RiwayatKursusController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-kursus-" . date("ymdhis") . ".pdf");
         }
 
-        $cr = RiwayatKursus::updateOrCreate(
-                                [
-                                    'id' => $id,
-                                    'nip' => $pegawai->nip,
-                                ],
-                                $data
-                            );
+
+        if($id){
+            $cr = RiwayatKursus::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatKursus::create($data);
+        }
+
 
         if ($cr) {
             return redirect(route('pegawai.kursus.index', $pegawai->nip))->with([

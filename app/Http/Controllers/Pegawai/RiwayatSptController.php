@@ -87,13 +87,13 @@ class RiwayatSptController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-spt-" . date("ymdhis") . ".pdf");
         }
 
-        $cr = RiwayatSpt::updateOrCreate(
-            [
-                'id' => $id,
-                'nip' => $pegawai->nip,
-            ],
-            $data
-        );
+        if($id){
+            $cr = RiwayatSpt::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatSpt::create($data);
+        }
 
         if ($cr) {
             return redirect(route('pegawai.spt.index', $pegawai->nip))->with([

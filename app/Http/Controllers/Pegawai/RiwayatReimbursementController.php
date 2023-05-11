@@ -84,13 +84,13 @@ class RiwayatReimbursementController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-reimbursement-" . date('ymdhis') . ".pdf");
         }
 
-        $cr = DataPengajuanReimbursement::updateOrCreate(
-            [
-                'id' => $id,
-                'nip' => $pegawai->nip,
-            ],
-            $data
-        );
+        if($id){
+            $cr = DataPengajuanReimbursement::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = DataPengajuanReimbursement::create($data);
+        }
 
         if(!$id){
             tambah_log($pegawai->nip, "App\Models\Pegawai\DataPengajuanReimbursement", $cr->id, 'ditambahkan');

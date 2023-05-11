@@ -81,13 +81,13 @@ class RiwayatLainnyaController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-lainnya-" . date("ymdhis") . ".pdf");
         }
 
-        $cr = RiwayatLainnya::updateOrCreate(
-            [
-                'id' => $id,
-                'nip' => $pegawai->nip,
-            ],
-            $data
-        );
+        if($id){
+            $cr = RiwayatLainnya::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatLainnya::create($data);
+        }
 
         if ($cr) {
             return redirect(route('pegawai.lainnya.index', $pegawai->nip))->with([

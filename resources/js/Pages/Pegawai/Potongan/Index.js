@@ -37,7 +37,7 @@ export default function Index({ pegawai, Rpotongan }) {
                                     <th>Nomor SK</th>
                                     <th>Tanggal SK</th>
                                     <th>Status</th>
-                                    <th>Private ?</th>
+                                    {/* <th>Private ?</th> */}
                                     <th>Berkas</th>
                                     <th>Opsi</th>
                                 </tr>
@@ -60,13 +60,13 @@ export default function Index({ pegawai, Rpotongan }) {
                                         <td>
                                             <div dangerouslySetInnerHTML={{ __html: u.status }} />
                                         </td>
-                                        <td>
+                                        {/* <td>
                                             {
                                                 u.is_private == 0 ?
                                                 <span className='badge badge-danger'>Tidak</span> :
                                                 <span className='badge badge-success'>Ya</span>
                                             }
-                                        </td>
+                                        </td> */}
                                         <td>
                                             <Download file={u.file} />
                                         </td>

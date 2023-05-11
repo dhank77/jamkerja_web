@@ -325,8 +325,8 @@ Route::middleware(['auth'])
                     ->name("lembur.")
                     ->group(function () {
                         Route::get('', 'index')->name('index');
-                        Route::get('add', 'add')->name('add');
-                        Route::post('store', 'store')->name('store');
+                        // Route::get('add', 'add')->name('add');
+                        // Route::post('store', 'store')->name('store');
                         Route::get('edit/{Rlembur}', 'edit')->name('edit');
                         Route::delete('delete/{Rlembur}', 'delete')->name('delete');
                     });
@@ -938,7 +938,7 @@ Route::middleware(['auth'])
                     ->group(function () {
                         Route::get('', 'index')->name('index');
                         Route::get('add', 'add')->name('add');
-                        Route::get('json/{pendidikan?}', 'json')->name('json');
+                        Route::get('json/{pendidikan?}', 'json')->name('json')->withoutMiddleware('role:admin|owner');
                         Route::post('store', 'store')->name('store');
                         Route::get('edit/{jurusan}', 'edit')->name('edit');
                         Route::delete('delete/{jurusan}', 'delete')->name('delete');

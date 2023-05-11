@@ -116,13 +116,14 @@ class RiwayatTunjanganController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-tunjangan-" . date("Ymdhis") . ".pdf");
         }
 
-        $cr = RiwayatTunjangan::updateOrCreate(
-                                    [
-                                        'id' => $id,
-                                        'nip' => $pegawai->nip,
-                                    ],
-                                    $data
-                                );
+        if($id){
+            $cr = RiwayatTunjangan::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatTunjangan::create($data);
+        }
+
         if (!$id) {
             tambah_log($pegawai->nip, "App\Models\Pegawai\RiwayatTunjangan", $cr->id, 'ditambahkan');
         }

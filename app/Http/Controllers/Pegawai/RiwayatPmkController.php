@@ -83,16 +83,16 @@ class RiwayatPmkController extends Controller
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-pmk-" . date("His") . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-pmk-" . date("ymdhis") . ".pdf");
         }
 
-        $cr = RiwayatPmk::updateOrCreate(
-                                [
-                                    'id' => $id,
-                                    'nip' => $pegawai->nip,
-                                ],
-                                $data
-                            );
+        if($id){
+            $cr = RiwayatPmk::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatPmk::create($data);
+        }
 
         if ($cr) {
             return redirect(route('pegawai.pmk.index', $pegawai->nip))->with([

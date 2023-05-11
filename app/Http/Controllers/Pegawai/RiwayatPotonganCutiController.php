@@ -85,13 +85,14 @@ class RiwayatPotonganCutiController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-potongan-" . generateRandomString(5) . ".pdf");
         }
 
-        $cr = RiwayatPotonganCuti::updateOrCreate(
-                                    [
-                                        'id' => $id,
-                                        'nip' => $pegawai->nip,
-                                    ],
-                                    $data
-                                );
+        if($id){
+            $cr = RiwayatPotonganCuti::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatPotonganCuti::create($data);
+        }
+
         if (!$id) {
             tambah_log($pegawai->nip, "App\Models\Pegawai\RiwayatPotonganCuti", $cr->id, 'ditambahkan');
         }

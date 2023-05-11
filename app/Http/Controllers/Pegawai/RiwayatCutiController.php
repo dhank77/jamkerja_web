@@ -82,13 +82,14 @@ class RiwayatCutiController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-cuti-" . date('ymdhis') . ".pdf");
         }
 
-        $cr = DataPengajuanCuti::updateOrCreate(
-                                [
-                                    'id' => $id,
-                                    'nip' => $pegawai->nip,
-                                ],
-                                $data
-                            );
+        if($id){
+            $cr = DataPengajuanCuti::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = DataPengajuanCuti::create($data);
+        }
+
 
         if ($cr) {
             return redirect(route('pegawai.cuti.index', $pegawai->nip))->with([

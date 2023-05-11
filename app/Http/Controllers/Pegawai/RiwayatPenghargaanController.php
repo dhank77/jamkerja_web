@@ -80,13 +80,14 @@ class RiwayatPenghargaanController extends Controller
             $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-penghargaan-" . date("ymdhis") . ".pdf");
         }
 
-        $cr = RiwayatPenghargaan::updateOrCreate(
-                                [
-                                    'id' => $id,
-                                    'nip' => $pegawai->nip,
-                                ],
-                                $data
-                            );
+
+        if($id){
+            $cr = RiwayatPenghargaan::where('id', $id)->where('nip', $pegawai->nip)->update($data);
+        }else{
+            $data['nip'] = $pegawai->nip;
+            $data['kode_perusahaan'] = kp();
+            $cr = RiwayatPenghargaan::create($data);
+        }
 
         if ($cr) {
             return redirect(route('pegawai.penghargaan.index', $pegawai->nip))->with([
