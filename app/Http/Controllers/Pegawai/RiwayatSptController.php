@@ -84,7 +84,7 @@ class RiwayatSptController extends Controller
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-spt-" . request('tahun') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-spt-" . date("ymdhis") . ".pdf");
         }
 
         $cr = RiwayatSpt::updateOrCreate(

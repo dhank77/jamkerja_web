@@ -8,6 +8,7 @@ use App\Models\Master\Device;
 use App\Models\Pegawai\Imei;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -79,5 +80,37 @@ class AuthController extends Controller
         $user = PegawaiResource::make($user);
 
         return response()->json($user);
+    }
+
+    public function updateFoto()
+    {
+        $nip = request('nip');
+        $image_64 = request('image');
+        if ($image_64) {
+            $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
+            $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
+            $image = str_replace($replace, '', $image_64);
+            $image = str_replace(' ', '+', $image);
+            $imageName = $nip . "/" . $nip . "-foto" . '.' . $extension;
+
+            if(!in_array($extension, ['jpg', 'png', 'jpeg', 'gif'])){
+                return response()->json(['status' => 'Error', 'messages' => 'File yang dimasukkan harus berupa gambar!']);
+            }
+            
+            $cek = User::where('nip', $nip)->first();
+            if ($cek && $cek->image) {
+                Storage::delete($cek->image);
+            }
+            Storage::disk('public')->put("/$imageName", base64_decode($image));
+            $cr = $cek->update(['image' => $imageName]);
+            if($cr){
+                return response()->json(['status' => 'Success', 'messages' => 'Berhasil mengubah foto profil!']);
+            }else{
+                return response()->json(['status' => 'Error', 'messages' => 'Terjadi Kesalahan!']);
+            }
+        } else {
+            return response()->json(['status' => 'Error', 'messages' => 'Anda harus melakukan foto terlebih dahulu!']);
+        }
+        
     }
 }

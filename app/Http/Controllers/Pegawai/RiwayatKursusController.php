@@ -76,13 +76,13 @@ class RiwayatKursusController extends Controller
             if(request()->file('file')){
                 $file = RiwayatKursus::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-kursus-" . request('no_sertifikat') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-kursus-" . date("ymdhis") . ".pdf");
         }
 
         $cr = RiwayatKursus::updateOrCreate(

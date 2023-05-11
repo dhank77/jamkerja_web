@@ -78,7 +78,7 @@ class RiwayatLainnyaController extends Controller
 
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-lainnya-" . request('tanggal_sk') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-lainnya-" . date("ymdhis") . ".pdf");
         }
 
         $cr = RiwayatLainnya::updateOrCreate(

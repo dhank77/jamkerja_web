@@ -99,13 +99,13 @@ class RiwayatPendidikanController extends Controller
             if(request()->file('file')){
                 $file = RiwayatPendidikan::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-pendidikan-" . request('nomor_ijazah') . request('kode_pendidikan') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-pendidikan-" . date("ymdhis") . ".pdf");
         }
 
         $cr = RiwayatPendidikan::updateOrCreate(

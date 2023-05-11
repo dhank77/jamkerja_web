@@ -69,13 +69,13 @@ class RiwayatLhkasnController extends Controller
             if(request()->file('file')){
                 $file = RiwayatLhkasn::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-lhkasn-" . request('tanggal_pelaporan') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-lhkasn-" . date("ymdhis") . ".pdf");
         }
 
         $cr = RiwayatLhkasn::updateOrCreate(

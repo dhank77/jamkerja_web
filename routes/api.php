@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('getUser', [AuthController::class, 'getUser']);
+    Route::post('updateFoto', [AuthController::class, 'updateFoto']);
 
 
     Route::controller(PerusahaanApiController::class)

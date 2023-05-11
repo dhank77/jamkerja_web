@@ -73,8 +73,8 @@ class RiwayatCutiController extends Controller
             if(request()->file('file')){
                 $file = DataPengajuanCuti::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
 

@@ -77,13 +77,13 @@ class RiwayatPmkController extends Controller
             if(request()->file('file')){
                 $file = RiwayatPmk::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-pmk-" . request('jenis_pmk') . date("His") . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-pmk-" . date("His") . ".pdf");
         }
 
         $cr = RiwayatPmk::updateOrCreate(

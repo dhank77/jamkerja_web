@@ -97,12 +97,12 @@ class RiwayatStatusController extends Controller
             if(request()->file('file')){
                 $file = RiwayatStatus::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-status-" . request('no_sk') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-status-" . date("ymdhis") . ".pdf");
         }
 
         $cr = RiwayatStatus::updateOrCreate(

@@ -69,13 +69,13 @@ class RiwayatBahasaController extends Controller
             if(request()->file('file')){
                 $file = RiwayatBahasa::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-bahasa-" . request('no_sertifikat') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-bahasa-" . date("Ymdhis") . ".pdf");
         }
 
         $cr = RiwayatBahasa::updateOrCreate(

@@ -76,13 +76,13 @@ class RiwayatDiklatController extends Controller
             if(request()->file('file')){
                 $file = RiwayatDiklat::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-diklat-struktural-" . request('no_sertifikat') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-diklat-struktural-" . date("ymdhis") . ".pdf");
         }
 
         $cr = RiwayatDiklat::updateOrCreate(

@@ -70,13 +70,13 @@ class RiwayatLhkpnController extends Controller
             if(request()->file('file')){
                 $file = RiwayatLhkpn::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-lhkpn-" . request('tanggal_pelaporan') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-lhkpn-" . date("ymdhis") . ".pdf");
         }
 
         $cr = RiwayatLhkpn::updateOrCreate(

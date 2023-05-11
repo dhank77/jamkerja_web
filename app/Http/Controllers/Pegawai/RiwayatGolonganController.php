@@ -102,13 +102,13 @@ class RiwayatGolonganController extends Controller
             if(request()->file('file')){
                 $file = RiwayatGolongan::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-golongan-" . request('no_sk') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-golongan-" . date("ymdhis") . ".pdf");
         }
 
         $cr = RiwayatGolongan::updateOrCreate(

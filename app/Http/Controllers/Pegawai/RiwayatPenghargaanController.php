@@ -71,13 +71,13 @@ class RiwayatPenghargaanController extends Controller
             if(request()->file('file')){
                 $file = RiwayatPenghargaan::where('id', $id)->where('nip', $pegawai->nip)->value('file');
                 if($file){
-            Storage::delete($file);
-        }
+                    Storage::delete($file);
+                }
             }
         }
 
         if (request()->file('file')) {
-            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-penghargaan-" . request('nomor_sk') . ".pdf");
+            $data['file'] = request()->file('file')->storeAs($pegawai->nip, $pegawai->nip . "-penghargaan-" . date("ymdhis") . ".pdf");
         }
 
         $cr = RiwayatPenghargaan::updateOrCreate(
