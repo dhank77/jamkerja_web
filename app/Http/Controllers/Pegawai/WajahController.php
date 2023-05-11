@@ -69,9 +69,6 @@ class WajahController extends Controller
 
         $wajah = Wajah::where('nip', $pegawai->nip)->first();
         if($wajah){
-            if ($wajah->file) {
-                Storage::delete($wajah->file);
-            }
             $cr = Wajah::where('nip', $pegawai->nip)->update([
                 'file' => $file,
             ]);

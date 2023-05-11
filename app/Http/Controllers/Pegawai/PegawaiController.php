@@ -8,6 +8,7 @@ use App\Http\Resources\Select\SelectResource;
 use App\Models\Master\Device;
 use App\Models\Pegawai\Imei;
 use App\Models\Pegawai\RiwayatPotonganCuti;
+use App\Models\Pegawai\Wajah;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
@@ -95,6 +96,79 @@ class PegawaiController extends Controller
         return inertia('Pegawai/Pegawai/Detail', compact('pegawai'));
     }
 
+    public function verifikasi()
+    {
+        $role = role('opd');
+
+        $pegawai = User::role('pegawai')
+            ->when($role, function ($qr) {
+                $user = auth()->user()->jabatan_akhir;
+                $jabatan = array_key_exists('0', $user->toArray()) ? $user[0] : null;
+                $skpd = '';
+                if ($jabatan) {
+                    $skpd = $jabatan->kode_skpd;
+                }
+
+                $qr->join('riwayat_jabatan', function ($qt) use ($skpd) {
+                    $qt->on('riwayat_jabatan.nip', 'users.nip')
+                        ->where('kode_skpd', $skpd)
+                        ->where('is_akhir', 1);
+                });
+            })
+            ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
+            ->get();
+
+        PegawaiResource::withoutWrapping();
+        $pegawai = PegawaiResource::collection($pegawai);
+        return inertia('Pegawai/Pegawai/Verifikasi', compact('pegawai'));
+    }
+
+    public function update_wajah()
+    {
+        $role = role('opd');
+
+        $pegawai = User::role('pegawai')
+            ->when($role, function ($qr) {
+                $user = auth()->user()->jabatan_akhir;
+                $jabatan = array_key_exists('0', $user->toArray()) ? $user[0] : null;
+                $skpd = '';
+                if ($jabatan) {
+                    $skpd = $jabatan->kode_skpd;
+                }
+
+                $qr->join('riwayat_jabatan', function ($qt) use ($skpd) {
+                    $qt->on('riwayat_jabatan.nip', 'users.nip')
+                        ->where('kode_skpd', $skpd)
+                        ->where('is_akhir', 1);
+                });
+            })
+            ->where('users.kode_perusahaan', auth()->user()->kode_perusahaan)
+            ->get();
+
+        foreach ($pegawai as $p) {
+            $file = "faces/" . $p->image;
+            Storage::copy($p->image, $file);
+
+            $wajah = Wajah::where('nip', $p->nip)->first();
+            if ($wajah) {
+                Wajah::where('nip', $p->nip)->update([
+                    'file' => $file,
+                ]);
+            } else {
+                Wajah::create([
+                    'kode_perusahaan' => kp(),
+                    'nip' => $p->nip,
+                    'file' => $file,
+                ]);
+            }
+        }
+
+        return redirect()->back()->with([
+            'type' => 'success',
+            'messages' => "Berhasil, mengubah seluruh foto presensi!"
+        ]);
+    }
+
     public function delete(User $pegawai)
     {
         $cr = $pegawai->delete();
@@ -135,14 +209,14 @@ class PegawaiController extends Controller
         if (!request('id')) {
             $rules['nik'] = 'required|unique:users,deleted_at,NULL';
         }
-        
-        
+
+
         $data = request()->validate($rules);
-        
+
         if (!request('id')) {
             $cek_pegawai = check_jumlah_pegawai();
 
-            if(!$cek_pegawai){
+            if (!$cek_pegawai) {
                 return redirect()->back()->with([
                     'type' => 'error',
                     'messages' => "Gagal, Jumlah maksimum pegawai telah cukup!"
@@ -230,9 +304,9 @@ class PegawaiController extends Controller
         $total = $pegawai->cuti_tahunan;
         $potongan = RiwayatPotonganCuti::where('nip', $pegawai->nip)->where('tahun', date('Y'))->get();
         foreach ($potongan as $p) {
-            if($p->keterangan == 'potongan'){
+            if ($p->keterangan == 'potongan') {
                 $total -= $p->hari;
-            }else{
+            } else {
                 $total += $p->hari;
             }
         }

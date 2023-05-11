@@ -49,7 +49,19 @@ export default function Detail({ pegawai, children }) {
     }, [key]);
 
     const updateWajah = () => {
-        Inertia.post(route('pegawai.wajah.update', pegawai.nip));
+        Swal.fire({
+            title: 'Apakah anda yakin menghapus data ini?',
+            text: "Data tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Inertia.post(route('pegawai.wajah.update', pegawai.nip));
+            }
+        })
     }
 
     return (

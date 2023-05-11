@@ -145,7 +145,9 @@ Route::middleware(['auth'])
                         Route::post('cuti_update/{pegawai}', 'cuti_update')->name('cuti_update');
                         Route::post('store', 'store')->name('store');
                         Route::post('upload', 'upload')->name('upload');
+                        Route::post('update_wajah', 'update_wajah')->name('update_wajah');
                         Route::get('edit/{pegawai}', 'edit')->name('edit');
+                        Route::get('verifikasi', 'verifikasi')->name('verifikasi');
                         Route::get('detail/{pegawai}', 'detail')->name('detail');
                         Route::delete('delete/{pegawai}', 'delete')->name('delete');
                     });

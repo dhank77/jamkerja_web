@@ -38,6 +38,7 @@ export default function Index({ pegawai }) {
                 {
                     auth.role.some(ar => ['admin', 'owner'].includes(ar)) &&
                     <div className="d-flex align-items-center py-2 py-md-1" >
+                        <Link href={route('pegawai.pegawai.verifikasi')} className="btn btn-success mr-2"><b>Verifikasi Wajah</b></Link>
                         <Link href={route('pegawai.pegawai.add')} className="btn btn-primary"><b>Tambah</b></Link>
                     </div>
                 }
