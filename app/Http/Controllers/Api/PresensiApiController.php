@@ -15,6 +15,8 @@ use App\Models\Master\JamKerjaStatis;
 use App\Models\Master\JkdJadwal;
 use App\Models\Master\JkdMaster;
 use App\Models\Master\JksPegawai;
+use App\Models\Master\Kelompok;
+use App\Models\Master\KelompokDetail;
 use App\Models\Master\Lokasi;
 use App\Models\Master\Shift;
 use App\Models\Pegawai\DataPresensi;
@@ -32,6 +34,7 @@ class PresensiApiController extends Controller
 
         $user = User::where('nip', $nip)->first();
 
+        // lokasi user
         if ($user && $user->kordinat != "" && $user->longitude != "" && $user->latitude != "" && $user->jarak > 0) {
             return response()->json([
                 'kordinat' => $user->kordinat,
@@ -40,6 +43,21 @@ class PresensiApiController extends Controller
                 'jarak' => $user->jarak,
                 'keterangan' => 'Pegawai'
             ]);
+        }
+
+        // kelompok Presensi
+        $kelompok = KelompokDetail::where('nip', $nip)->first();
+        if ($kelompok) {
+            $dataKelompok = Kelompok::where('kode_kelompok', $kelompok->kode_kelompok)->first();
+            if($dataKelompok){
+                return response()->json([
+                    'kordinat' => $dataKelompok->kordinat,
+                    'latitude' => $dataKelompok->lat,
+                    'longitude' => $dataKelompok->long,
+                    'jarak' => $dataKelompok->jarak,
+                    'keterangan' => 'Lokasi Kelompok'
+                ]);
+            }
         }
 
         $rwJabatan = array_key_exists('0', $user->jabatan_akhir->toArray()) ? $user->jabatan_akhir[0] : null;
@@ -84,53 +102,54 @@ class PresensiApiController extends Controller
             }
         }
 
+        // Not Used
         // Lokasi Pegawai
-        $lokasiPegawai = Lokasi::select('*')
-            ->leftJoin('lokasi_detail', 'lokasi_detail.kode_lokasi', 'lokasi.kode_lokasi')
-            ->whereRaw("(lokasi.keterangan = 1 AND lokasi_detail.keterangan_id = '$nip')")
-            ->whereNull('lokasi_detail.deleted_at')
-            ->first();
-        if ($lokasiPegawai && $lokasiPegawai->kordinat != "" && $lokasiPegawai->longitude != "" && $lokasiPegawai->latitude != "" && $lokasiPegawai->jarak > 0) {
-            return response()->json([
-                'kordinat' => $lokasiPegawai->kordinat,
-                'latitude' => $lokasiPegawai->latitude,
-                'longitude' => $lokasiPegawai->longitude,
-                'jarak' => $lokasiPegawai->jarak,
-                'keterangan' => 'Lokasi Pegawai'
-            ]);
-        }
+        // $lokasiPegawai = Lokasi::select('*')
+        //     ->leftJoin('lokasi_detail', 'lokasi_detail.kode_lokasi', 'lokasi.kode_lokasi')
+        //     ->whereRaw("(lokasi.keterangan = 1 AND lokasi_detail.keterangan_id = '$nip')")
+        //     ->whereNull('lokasi_detail.deleted_at')
+        //     ->first();
+        // if ($lokasiPegawai && $lokasiPegawai->kordinat != "" && $lokasiPegawai->longitude != "" && $lokasiPegawai->latitude != "" && $lokasiPegawai->jarak > 0) {
+        //     return response()->json([
+        //         'kordinat' => $lokasiPegawai->kordinat,
+        //         'latitude' => $lokasiPegawai->latitude,
+        //         'longitude' => $lokasiPegawai->longitude,
+        //         'jarak' => $lokasiPegawai->jarak,
+        //         'keterangan' => 'Lokasi Pegawai'
+        //     ]);
+        // }
 
-        // Lokasi Tingkat
-        $lokasiTingkat = Lokasi::select('*')
-            ->leftJoin('lokasi_detail', 'lokasi_detail.kode_lokasi', 'lokasi.kode_lokasi')
-            ->whereRaw("(lokasi.keterangan = 2 AND lokasi_detail.keterangan_id = '$kode_tingkat')")
-            ->whereNull('lokasi_detail.deleted_at')
-            ->first();
-        if ($lokasiTingkat && $lokasiTingkat->kordinat != "" && $lokasiTingkat->longitude != "" && $lokasiTingkat->latitude != "" && $lokasiTingkat->jarak > 0) {
-            return response()->json([
-                'kordinat' => $lokasiTingkat->kordinat,
-                'latitude' => $lokasiTingkat->latitude,
-                'longitude' => $lokasiTingkat->longitude,
-                'jarak' => $lokasiTingkat->jarak,
-                'keterangan' => 'Lokasi Tingkat'
-            ]);
-        }
+        // // Lokasi Tingkat
+        // $lokasiTingkat = Lokasi::select('*')
+        //     ->leftJoin('lokasi_detail', 'lokasi_detail.kode_lokasi', 'lokasi.kode_lokasi')
+        //     ->whereRaw("(lokasi.keterangan = 2 AND lokasi_detail.keterangan_id = '$kode_tingkat')")
+        //     ->whereNull('lokasi_detail.deleted_at')
+        //     ->first();
+        // if ($lokasiTingkat && $lokasiTingkat->kordinat != "" && $lokasiTingkat->longitude != "" && $lokasiTingkat->latitude != "" && $lokasiTingkat->jarak > 0) {
+        //     return response()->json([
+        //         'kordinat' => $lokasiTingkat->kordinat,
+        //         'latitude' => $lokasiTingkat->latitude,
+        //         'longitude' => $lokasiTingkat->longitude,
+        //         'jarak' => $lokasiTingkat->jarak,
+        //         'keterangan' => 'Lokasi Tingkat'
+        //     ]);
+        // }
 
-        // Lokasi Divisi
-        $lokasiDivisi = Lokasi::select('*')
-            ->leftJoin('lokasi_detail', 'lokasi_detail.kode_lokasi', 'lokasi.kode_lokasi')
-            ->whereRaw("(lokasi.keterangan = 3 AND lokasi_detail.keterangan_id = '$kode_skpd')")
-            ->whereNull('lokasi_detail.deleted_at')
-            ->first();
-        if ($lokasiDivisi && $lokasiDivisi->kordinat != "" && $lokasiDivisi->longitude != "" && $lokasiDivisi->latitude != "" && $lokasiDivisi->jarak > 0) {
-            return response()->json([
-                'kordinat' => $lokasiDivisi->kordinat,
-                'latitude' => $lokasiDivisi->latitude,
-                'longitude' => $lokasiDivisi->longitude,
-                'jarak' => $lokasiDivisi->jarak,
-                'keterangan' => 'Lokasi Divisi'
-            ]);
-        }
+        // // Lokasi Divisi
+        // $lokasiDivisi = Lokasi::select('*')
+        //     ->leftJoin('lokasi_detail', 'lokasi_detail.kode_lokasi', 'lokasi.kode_lokasi')
+        //     ->whereRaw("(lokasi.keterangan = 3 AND lokasi_detail.keterangan_id = '$kode_skpd')")
+        //     ->whereNull('lokasi_detail.deleted_at')
+        //     ->first();
+        // if ($lokasiDivisi && $lokasiDivisi->kordinat != "" && $lokasiDivisi->longitude != "" && $lokasiDivisi->latitude != "" && $lokasiDivisi->jarak > 0) {
+        //     return response()->json([
+        //         'kordinat' => $lokasiDivisi->kordinat,
+        //         'latitude' => $lokasiDivisi->latitude,
+        //         'longitude' => $lokasiDivisi->longitude,
+        //         'jarak' => $lokasiDivisi->jarak,
+        //         'keterangan' => 'Lokasi Divisi'
+        //     ]);
+        // }
 
         return response()->json([
             'kordinat' => 0,

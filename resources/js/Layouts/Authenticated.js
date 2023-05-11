@@ -1424,6 +1424,9 @@ export default function Authenticated({ children }) {
                                                             "master.jamKerja*"
                                                         ) ||
                                                         route().current(
+                                                            "master.kelompok*"
+                                                        ) ||
+                                                        route().current(
                                                             "master.hariLibur*"
                                                         )
                                                             ? "hover show"
@@ -1449,6 +1452,9 @@ export default function Authenticated({ children }) {
                                                             ) ||
                                                             route().current(
                                                                 "master.visit*"
+                                                            ) ||
+                                                            route().current(
+                                                                "master.kelompok*"
                                                             ) ||
                                                             route().current(
                                                                 "master.hariLibur*"
@@ -1699,7 +1705,7 @@ export default function Authenticated({ children }) {
                                                         <div
                                                             className={`menu-item ${
                                                                 route().current(
-                                                                    "master.visit*"
+                                                                    "master.kelompok*"
                                                                 )
                                                                     ? "show"
                                                                     : ""
@@ -1708,21 +1714,20 @@ export default function Authenticated({ children }) {
                                                             <Link
                                                                 className={`menu-link ${
                                                                     route().current(
-                                                                        "master.visit*"
+                                                                        "master.kelompok*"
                                                                     )
                                                                         ? "active"
                                                                         : ""
                                                                 }`}
                                                                 href={route(
-                                                                    "master.visit.index"
+                                                                    "master.kelompok.index"
                                                                 )}
                                                             >
                                                                 <span className="menu-bullet">
                                                                     <span className="bullet bullet-dot" />
                                                                 </span>
                                                                 <span className="menu-title">
-                                                                    Lokasi
-                                                                    Kunjungan
+                                                                    Kelompok Presensi
                                                                 </span>
                                                             </Link>
                                                         </div>

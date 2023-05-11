@@ -17,6 +17,7 @@ use App\Http\Controllers\Master\JkdJadwalController;
 use App\Http\Controllers\Master\JkdMasterController;
 use App\Http\Controllers\Master\JksPegawaiController;
 use App\Http\Controllers\Master\JurusanController;
+use App\Http\Controllers\Master\KelompokPresensiController;
 use App\Http\Controllers\Master\KursusController;
 use App\Http\Controllers\Master\LainnyaController;
 use App\Http\Controllers\Master\LokasiController;
@@ -893,6 +894,18 @@ Route::middleware(['auth'])
                         Route::post('store', 'store')->name('store');
                         Route::get('edit/{lokasi}', 'edit')->name('edit');
                         Route::delete('delete/{lokasi}', 'delete')->name('delete');
+                    });
+
+                Route::controller(KelompokPresensiController::class)
+                    ->prefix('kelompok')
+                    ->name("kelompok.")
+                    ->group(function () {
+                        Route::get('', 'index')->name('index');
+                        Route::get('add', 'add')->name('add');
+                        Route::get('json', 'json')->name('json')->withoutMiddleware('role:admin|owner');
+                        Route::post('store', 'store')->name('store');
+                        Route::get('edit/{kelompok}', 'edit')->name('edit');
+                        Route::delete('delete/{kelompok}', 'delete')->name('delete');
                     });
 
                 Route::controller(StatusPegawaiController::class)
