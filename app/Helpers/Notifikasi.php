@@ -28,7 +28,7 @@ function send_onesignal($sql, $data, $title, $message)
         $fields = json_encode($fields);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://onesignal.com/api/v1/notifications');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8', 'Authorization: Basic NjJlZWUyMGEtNjczMi00NmExLTlmNTktZWZiODU0NWQzMTEz'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8', 'Authorization: Basic OGNjMDVmMDUtZGQwNy00ZWE2LWFmOTktYmNjYWY4Y2FiYTBh'));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         curl_setopt($ch, CURLOPT_POST, TRUE);
