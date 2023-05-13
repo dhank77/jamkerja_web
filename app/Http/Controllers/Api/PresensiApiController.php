@@ -298,19 +298,36 @@ class PresensiApiController extends Controller
         $toler1Min = strtotime("-5 minutes");
         $dateSend = strtotime($date);
 
-        $image_64 = request('image');
-        if ($image_64) {
-            $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
-            $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
-            $image = str_replace($replace, '', $image_64);
-            $image = str_replace(' ', '+', $image);
-            $imageName = date("YmdHis") . Str::random(10) . '.' . $extension;
+        $foto = "";
+        if($field == 'datang' || $field == 'pulang'){
+            $image_64 = request('image');
+            if ($image_64) {
+                $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
+                $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
+                $image = str_replace($replace, '', $image_64);
+                $image = str_replace(' ', '+', $image);
+                $imageName = date("YmdHis") . Str::random(10) . '.' . $extension;
+    
+                $foto = "presensi/$nip/$imageName";
+                Storage::disk('public')->put("/$foto", base64_decode($image));
 
-            $foto = "presensi/$nip/$imageName";
-            Storage::disk('public')->put("/$foto", base64_decode($image));
-        } else {
-            $foto = "";
-            return response()->json(['status' => 'Error', 'messages' => 'Anda harus melakukan foto terlebih dahulu!']);
+                $wajah = Wajah::where('nip', $nip)->value('file');
+                if($wajah == ""){
+                    return response()->json(['status' => 'Error', 'messages' => "Wajah acuan belum ada!"]);
+                }
+                $data = compare_images($wajah, $foto);
+                
+                if($data == []){
+                    return response()->json(['status' => 'Error', 'messages' => "Wajah tidak terdeteksi!"]);
+                }
+                $data = json_decode($data[0], TRUE);
+                if($data['mirip'] != 'true'){
+                    Storage::delete($foto);
+                    return response()->json(['status' => 'Error', 'messages' => "Wajah tidak dikenali, silahkan coba lagi!"]);
+                }
+            } else {
+                return response()->json(['status' => 'Error', 'messages' => 'Anda harus melakukan foto terlebih dahulu!']);
+            }
         }
 
         $timeZone = request('timezone') ?? 'WITA';
@@ -322,25 +339,6 @@ class PresensiApiController extends Controller
             $dateSend = strtotime($date) - (60 * 60);
         } else {
             $tanggalIn = date('H:i:s');
-        }
-
-        
-        // $confidance = 0;
-        // $data = recog_image($nip, $foto);
-        // var_dump($data); die;
-        $wajah = Wajah::where('nip', $nip)->value('file');
-        if($wajah == ""){
-            return response()->json(['status' => 'Error', 'messages' => "Wajah acuan belum ada!"]);
-        }
-        $data = compare_images($wajah, $foto);
-        
-        if($data == []){
-            return response()->json(['status' => 'Error', 'messages' => "Wajah tidak terdeteksi!"]);
-        }
-        $data = json_decode($data[0], TRUE);
-        if($data['mirip'] != 'true'){
-            Storage::delete($foto);
-            return response()->json(['status' => 'Error', 'messages' => "Wajah tidak dikenali, silahkan coba lagi!"]);
         }
 
         // comment if dev
