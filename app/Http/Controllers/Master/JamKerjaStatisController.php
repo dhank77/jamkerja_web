@@ -44,8 +44,8 @@ class JamKerjaStatisController extends Controller
 
     public function delete($kode_jam_kerja)
     {
-        JksPegawai::where('kode_jam_kerja', $kode_jam_kerja)->where('kode_perusahaan', kp())->delete();
-        $cr = JamKerjaStatis::where('kode_jam_kerja', $kode_jam_kerja)->where('kode_perusahaan', kp())->delete();
+        JksPegawai::where('kode_jam_kerja', $kode_jam_kerja)->delete();
+        $cr = JamKerjaStatis::where('kode_jam_kerja', $kode_jam_kerja)->delete();
         if ($cr) {
             return redirect(route('master.jamKerjaStatis.index'))->with([
                 'type' => 'success',

@@ -57,8 +57,8 @@ export default function Index({ lainnya }) {
                                             </td>
                                             <td>
                                                 <Dropdown>
-                                                    <Edit routes={route('master.lainnya.edit', u.id)} />
-                                                    <Delete routes={route('master.lainnya.delete', u.id)} />
+                                                    <Edit routes={route('master.lainnya.edit', u.kode_lainnya)} />
+                                                    <Delete routes={route('master.lainnya.delete', u.kode_lainnya)} />
                                                 </Dropdown>
                                             </td>
                                         </tr>

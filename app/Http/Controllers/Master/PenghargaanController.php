@@ -49,7 +49,7 @@ class PenghargaanController extends Controller
 
     public function delete(Penghargaan $penghargaan)
     {
-        $cr = $penghargaan->where('kode_perusahaan', kp())->delete();
+        $cr = $penghargaan->delete();
         if ($cr) {
             return redirect(route('master.penghargaan.index'))->with([
                 'type' => 'success',

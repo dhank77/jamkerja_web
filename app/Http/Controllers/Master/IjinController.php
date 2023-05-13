@@ -49,7 +49,7 @@ class IjinController extends Controller
 
     public function delete(Ijin $ijin)
     {
-        $cr = $ijin->where('kode_perusahaan', kp())->delete();
+        $cr = $ijin->delete();
         if ($cr) {
             return redirect(route('master.ijin.index'))->with([
                 'type' => 'success',

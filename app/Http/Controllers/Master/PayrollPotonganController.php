@@ -50,7 +50,7 @@ class PayrollPotonganController extends Controller
 
     public function delete(Potongan $potongan)
     {
-        $cr = $potongan->where('kode_perusahaan', kp())->delete();
+        $cr = $potongan->delete();
         if ($cr) {
             return redirect(route('master.payroll.potongan.index'))->with([
                 'type' => 'success',

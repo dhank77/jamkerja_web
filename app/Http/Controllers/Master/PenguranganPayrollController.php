@@ -53,7 +53,7 @@ class PenguranganPayrollController extends Controller
 
     public function delete(Pengurangan $pengurangan)
     {
-        $cr = $pengurangan->where('kode_perusahaan', kp())->delete();
+        $cr = $pengurangan->delete();
         if ($cr) {
             return redirect(route('master.payroll.pengurangan.index'))->with([
                 'type' => 'success',

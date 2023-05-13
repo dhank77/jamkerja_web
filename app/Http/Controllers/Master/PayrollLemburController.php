@@ -44,7 +44,7 @@ class PayrollLemburController extends Controller
 
     public function delete(Lembur $lembur)
     {
-        $cr = $lembur->where('kode_perusahaan', kp())->delete();
+        $cr = $lembur->delete();
         if ($cr) {
             return redirect(route('master.payroll.lembur.index'))->with([
                 'type' => 'success',

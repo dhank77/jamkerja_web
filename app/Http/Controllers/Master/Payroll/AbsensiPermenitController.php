@@ -41,7 +41,7 @@ class AbsensiPermenitController extends Controller
 
     public function delete(AbsensiPermenit $absensiPermenit)
     {
-        $cr = $absensiPermenit->where('kode_perusahaan', kp())->delete();
+        $cr = $absensiPermenit->delete();
         if ($cr) {
             return redirect(route('master.payroll.absensiPermenit.index'))->with([
                 'type' => 'success',

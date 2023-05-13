@@ -41,7 +41,7 @@ class TambahPayrollController extends Controller
 
     public function delete(DaftarTambahPayroll $tambah)
     {
-        $cr = $tambah->where('kode_perusahaan', kp())->delete();
+        $cr = $tambah->delete();
         if ($cr) {
             return redirect(route('payroll.tambah.index'))->with([
                 'type' => 'success',

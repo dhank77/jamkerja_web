@@ -41,7 +41,7 @@ class KurangPayrollController extends Controller
 
     public function delete(DaftarKurangPayroll $kurang)
     {
-        $cr = $kurang->where('kode_perusahaan', kp())->delete();
+        $cr = $kurang->delete();
         if ($cr) {
             return redirect(route('payroll.kurang.index'))->with([
                 'type' => 'success',

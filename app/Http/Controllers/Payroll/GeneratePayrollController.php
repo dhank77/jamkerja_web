@@ -129,9 +129,9 @@ class GeneratePayrollController extends Controller
 
     public function delete(GeneratePayroll $generate)
     {
-        PayrollTambah::where('kode_payroll', $generate->kode_payroll)->where('kode_perusahaan', kp())->delete();
-        PayrollKurang::where('kode_payroll', $generate->kode_payroll)->where('kode_perusahaan', kp())->delete();
-        DataPayroll::where('kode_payroll', $generate->kode_payroll)->where('kode_perusahaan', kp())->delete();
+        PayrollTambah::where('kode_payroll', $generate->kode_payroll)->delete();
+        PayrollKurang::where('kode_payroll', $generate->kode_payroll)->delete();
+        DataPayroll::where('kode_payroll', $generate->kode_payroll)->delete();
 
         $cr = $generate->delete();
         if ($cr) {

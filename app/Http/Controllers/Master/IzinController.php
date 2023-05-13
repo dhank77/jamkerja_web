@@ -50,7 +50,7 @@ class IzinController extends Controller
 
     public function delete(Izin $izin)
     {
-        $cr = $izin->where('kode_perusahaan', kp())->delete();
+        $cr = $izin->delete();
         if ($cr) {
             return redirect(route('master.izin.index'))->with([
                 'type' => 'success',

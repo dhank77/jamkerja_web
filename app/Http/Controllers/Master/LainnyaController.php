@@ -49,7 +49,7 @@ class LainnyaController extends Controller
 
     public function delete(Lainnya $lainnya)
     {
-        $cr = $lainnya->where('kode_perusahaan', kp())->delete();
+        $cr = $lainnya->delete();
         if ($cr) {
             return redirect(route('master.lainnya.index'))->with([
                 'type' => 'success',

@@ -55,7 +55,7 @@ class PenambahanPayrollController extends Controller
 
     public function delete(Tambahan $tambahan)
     {
-        $cr = $tambahan->where('kode_perusahaan', kp())->delete();
+        $cr = $tambahan->delete();
         if ($cr) {
             return redirect(route('master.payroll.penambahan.index'))->with([
                 'type' => 'success',

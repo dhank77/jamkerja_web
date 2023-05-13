@@ -42,7 +42,7 @@ class JkdMasterController extends Controller
 
     public function delete(JkdMaster $jkdMaster)
     {
-        $cr = $jkdMaster->where('kode_perusahaan', kp())->delete();
+        $cr = $jkdMaster->delete();
         if ($cr) {
             return redirect(route('master.jamKerjaDinamis.jkdMaster.index'))->with([
                 'type' => 'success',

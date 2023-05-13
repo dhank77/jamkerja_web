@@ -40,7 +40,7 @@ class VisitController extends Controller
 
     public function delete(Visit $visit)
     {
-        $cr = $visit->where('kode_perusahaan', kp())->delete();
+        $cr = $visit->delete();
         if ($cr) {
             return redirect(route('master.visit.index'))->with([
                 'type' => 'success',

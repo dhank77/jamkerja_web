@@ -49,7 +49,7 @@ class ReimbursementController extends Controller
 
     public function delete(Reimbursement $reimbursement)
     {
-        $cr = $reimbursement->where('kode_perusahaan', kp())->delete();
+        $cr = $reimbursement->delete();
         if ($cr) {
             return redirect(route('master.reimbursement.index'))->with([
                 'type' => 'success',

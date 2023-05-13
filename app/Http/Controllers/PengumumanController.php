@@ -84,7 +84,7 @@ class PengumumanController extends Controller
         if($pengumuman->file){
             Storage::delete($pengumuman->file);
         }
-        $pengumuman->where('kode_perusahaan', kp())->delete();
+        $pengumuman->delete();
         return redirect(route('pengumuman.index'))->with([
             'type' => 'success',
             'messages' => 'Berhasil!'

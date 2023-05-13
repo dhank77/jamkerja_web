@@ -39,7 +39,7 @@ class HariLiburController extends Controller
 
     public function delete(HariLibur $hariLibur)
     {
-        $cr = $hariLibur->where('kode_perusahaan', kp())->delete();
+        $cr = $hariLibur->delete();
         if ($cr) {
             return redirect(route('master.hariLibur.index'))->with([
                 'type' => 'success',
