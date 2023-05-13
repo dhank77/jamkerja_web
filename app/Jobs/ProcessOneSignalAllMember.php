@@ -25,7 +25,7 @@ class ProcessOneSignalAllMember implements ShouldQueue
 
     public function handle()
     {
-        $device = Device::get()->pluck("player_id")->toArray();
+        $device = Device::where('kode_perusahaan', kp())->get()->pluck("player_id")->toArray();
         send_onesignal($device, [], $this->title, $this->pesan);
     }
 }
